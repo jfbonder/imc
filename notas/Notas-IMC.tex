@@ -327,6 +327,8 @@ En estas notas, el modelado continuo no se presenta como un fin en sí mismo, si
 
 El curso se ubica en el cuarto año de la licenciatura y los prerrequisitos para cursarlo incluyen una base sólida de álgebra lineal, cálculo en una y varias variables, una introducción a las ecuaciones diferenciales ordinarias, una buena formación en fundamentos de análisis y, adicionalmente, una sólida experiencia en programación. Si bien no es estrictamente necesario, contar con una base en probabilidad resulta útil para la comprensión de parte del material. Los conceptos de estadística (ajuste de modelos a datos, validación) que aparecen en el laboratorio se usan en su forma más elemental: mínimos cuadrados como problema de optimización.
 
+Algunas partes de estas notas siguen de cerca presentaciones ya clásicas, y corresponde decirlo: la organización de la Parte I (modelos poblacionales, sistemas lineales, Hartman--Grobman, Lyapunov, Poincaré--Bendixson y bifurcaciones) debe mucho al libro de Lynch \cite{Lynch}, y el ejercicio de las placas conductoras de la Parte II está adaptado del libro de Griffiths \cite{Griffiths}. Las figuras se generan con los notebooks del repositorio de la materia, salvo los esquemas indicados, y los datos que se usan tienen la fuente y la licencia indicadas allí.
+
 El programa del curso está dividido en tres partes fundamentales:
 \begin{itemize}
 \item \textbf{Dinámica no lineal.}
@@ -6321,8 +6323,8 @@ Sean dos placas metálicas infinitas conectadas a tierra ubicadas paralelas al p
 \end{enumerate}
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.6\textwidth]{ejemplo3-3-griffiths.png}
-    \caption{Ejercicio \ref{ej:griffiths}. (Figura tomada de \cite{Griffiths}; a reemplazar por un esquema propio.)}
+    \includegraphics[width=0.6\textwidth]{ranura-placas.png}
+    \caption{Ejercicio \ref{ej:griffiths}: dos placas a tierra en $y=0$ e $y=a$, cerradas en $x=0$ por una franja a potencial $V_0(y)$ (problema adaptado de \cite{Griffiths}).}
     \label{fig:griffiths}
 \end{figure}
 \end{ejer}
@@ -7662,7 +7664,7 @@ coincide con la pendiente $7.90$ observada numéricamente. Vale la pena notar qu
 
 \section{Volvemos al problema: la temperatura del suelo}\label{sec:volvemos-suelo}
 
-Consideremos ahora el primer problema conductor de la Sección \ref{sec:conductores-III}. Sea $x\ge 0$ la profundidad y $u(x,t)$ la temperatura del suelo, que suponemos homogéneo con difusividad térmica $D$. Si la temperatura en la superficie es una función conocida $T_s(t)$ (la temperatura del aire, en primera aproximación), el modelo es
+Consideremos ahora el primer problema conductor de la Sección \ref{sec:conductores-III}. Sea $x\ge 0$ la profundidad y $u(x,t)$ la temperatura del suelo, que suponemos homogéneo con difusividad térmica $D$. Si la temperatura en la superficie es una función conocida $T_s(t)$ (la temperatura del aire, en primera aproximación; los datos de la Figura \ref{fig:suelo-datos} muestran que la capa superficial oscila incluso más que el aire, porque el suelo se calienta por radiación directa, así que el forzado correcto es la temperatura de la superficie misma), el modelo es
 \begin{equation}\label{eq:suelo}
 \begin{cases}
 u_t = D u_{xx}, & x>0,\ t>0,\\
@@ -8427,7 +8429,7 @@ lo que determina completamente la solución.
 
 \medskip
 
-Este procedimiento permite interpretar la ecuación de Poisson de manera muy clara: resolver $-\Delta u = f$ equivale a descomponer la fuente en modos de Fourier y dividir cada modo por su autovalor correspondiente. Como los autovalores crecen con la frecuencia, los modos de alta frecuencia quedan fuertemente amortiguados, lo que explica una vez más el carácter suavizante del operador elíptico.
+Este procedimiento permite interpretar la ecuación de Poisson de manera muy clara: resolver $-\Delta u = f$ equivale a descomponer la fuente en modos de Fourier y dividir cada modo por su autovalor correspondiente. Como los autovalores crecen con la frecuencia, los modos de alta frecuencia quedan fuertemente amortiguados, lo que explica una vez más el carácter suavizante del operador elíptico. Esto tiene una consecuencia práctica: la serie de $u$ converge mucho más rápido que la de $f$; en el ejemplo que sigue, con 20 modos la solución ya es exacta a menos de $10^{-3}$, mientras que la serie de senos de la fuente (que no se anula en el borde) todavía muestra el fenómeno de Gibbs.
 
 En la Figura~\ref{fig:poisson-fourier} se muestra una aproximación de la solución de la ecuación de Poisson con condiciones de Dirichlet homogéneas y fuente $f(x,y)=-x\,e^{x+y}$, obtenida truncando la serie de Fourier a los primeros 20 modos. Observamos que, dado que la fuente es negativa, el principio del máximo implica que la solución también es negativa, en completo acuerdo con la simulación numérica.
 

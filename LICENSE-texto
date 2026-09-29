@@ -1,0 +1,23 @@
+Notas de Introducción al Modelado Continuo
+© 2026 Julián Fernández Bonder
+
+El texto (carpeta notas/) y las figuras (carpeta figuras/) se distribuyen bajo
+la licencia Creative Commons Atribución-NoComercial-CompartirIgual 4.0
+Internacional (CC BY-NC-SA 4.0).
+
+Esto significa que se puede copiar, redistribuir, adaptar y construir sobre
+este material, siempre que:
+  - se dé el crédito correspondiente al autor, con un enlace a la licencia e
+    indicando si se hicieron cambios (Atribución);
+  - no se use con fines comerciales (NoComercial);
+  - las obras derivadas se distribuyan con la misma licencia (CompartirIgual).
+
+Texto legal completo: https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.es
+Resumen: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es
+
+Forma sugerida de citar:
+  J. Fernández Bonder, "Introducción al Modelado Continuo. Notas de clase",
+  Departamento de Matemática, FCEN-UBA, 2026. https://github.com/jfbonder/imc
+
+Excepciones: los datos de la carpeta datos/ tienen cada uno su propia licencia
+(ver datos/README.md); el código tiene licencia MIT (ver LICENSE).

@@ -58,3 +58,4 @@ Se definió también el entorno `volvemos` (`\begin{volvemos}{la epidemia} … \
 
 ## 2026-09-29 — Poincaré en tres escalones
 - Teorema de Poincaré enunciado con la constante elemental $1/d^2$ y demostrado con Cauchy–Schwarz (Lema 1D con $(b-a)^2$); Wirtinger ($\pi^2/d^2$) pasa a una observación y su demostración por series de senos a un ejercicio guiado de la Parte III (`ejer:wirtinger`); la comparación numérica del cuadrado muestra las tres cotas: $0.2$, $1.97$ y la óptima $7.90$, que coincide con la medida.
+- Figura del ejercicio de las placas redibujada (`ranura-placas.png`); nota de atribución a Lynch y Griffiths en la introducción; archivos `LICENSE` (MIT para el código) y `LICENSE-texto` (CC BY-NC-SA 4.0) en la raíz del repositorio.

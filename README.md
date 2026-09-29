@@ -55,4 +55,6 @@ Cada notebook se abre directamente en Google Colab con el botón; la primera cel
 
 ## Licencia
 
-Texto y figuras: CC BY-NC-SA 4.0. Código: MIT. Los datos tienen la licencia que indica `datos/README.md`.
+Texto y figuras: [CC BY-NC-SA 4.0](LICENSE-texto). Código (`imc/`, `tools/`, `notebooks/`): [MIT](LICENSE). Los datos tienen la licencia que indica `datos/README.md`.
+
+Algunas partes de las notas siguen presentaciones clásicas: la organización de la Parte I debe mucho a S. Lynch, *Dynamical Systems with Applications using Python*, y un ejercicio de la Parte II está adaptado de D. J. Griffiths, *Introduction to Electrodynamics*.

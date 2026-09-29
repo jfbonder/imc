@@ -50,8 +50,8 @@ Las figuras de los capítulos 18–20 salen de `notebooks/09-calor`, `10-laplace
 - Caption de `sup-min`: sin la nota "(Figura a rehacer)".
 - Caption de `reflexion-pulso`: se menciona el instante en que la cuerda queda plana (toda la energía cinética).
 
-## Observaciones sin aplicar
+## Observaciones (aplicadas el 2026-09-29)
 
-- §19.5: con 20 modos la serie de $u$ es exacta a $5\cdot10^{-4}$, pero $-\Delta u_{20}-f$ es $O(1)$ junto al borde porque $f\ne0$ en $\partial\Omega$ (Gibbs en la serie de senos de $f$); podría comentarse junto a "modos de alta frecuencia fuertemente amortiguados".
-- La capa 0–7 cm tiene amplitud diaria mayor que el aire (4.0 vs 2.8 °C): la superficie se calienta por radiación; el texto dice "la temperatura del aire, en primera aproximación" como forzado, lo cual queda bien como aproximación pero el lab puede discutirlo.
-- `ejemplo3-3-griffiths.png` sigue siendo el escaneo: redibujar en tikz.
+- §19.5: frase sobre la convergencia rápida de la serie de $u$ frente al Gibbs de la serie de $f$.
+- §18.6: frase sobre el forzado: la capa superficial oscila más que el aire (radiación); el forzado correcto es la temperatura de la superficie.
+- `ejemplo3-3-griffiths.png` (escaneo) reemplazado por `ranura-placas.png` (`tools/fig_ranura.py`, matplotlib).
