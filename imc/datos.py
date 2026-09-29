@@ -12,7 +12,7 @@ from __future__ import annotations
 import os
 import urllib.request
 
-REPO = "jfbonder/imc"   
+REPO = "jfbonder/imc"
 RAMA = "main"
 
 _RAW = "https://raw.githubusercontent.com/{repo}/{rama}/datos/{archivo}"
