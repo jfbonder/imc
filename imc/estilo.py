@@ -45,7 +45,7 @@ def activar(tamano=(ANCHO, ALTO), fuente=11):
     mpl.rcParams.update({
         "figure.figsize": tamano,
         "figure.dpi": 100,
-        "savefig.dpi": 200,
+        "savefig.dpi": 150,
         "savefig.bbox": "tight",
         "font.size": fuente,
         "axes.labelsize": fuente,

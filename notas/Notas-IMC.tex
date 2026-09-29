@@ -6375,9 +6375,14 @@ El segundo problema es el más antiguo de la física matemática: una cuerda ten
 \item ¿Por qué una misma nota suena distinto en una guitarra y en un piano, si la frecuencia fundamental es la misma? ¿Qué determina el \emph{timbre}?
 \item Si grabamos el sonido de una cuerda y calculamos su espectro con las herramientas de la Parte II, ¿qué esperamos ver? ¿Y qué vemos en realidad? ¿Qué le falta al modelo?
 \end{enumerate}
-El modelo es la ecuación de ondas en un intervalo, y su solución por series de Fourier es una superposición de \emph{modos normales} con frecuencias múltiplos enteros de una fundamental. La comparación entre ese espectro ideal y el espectro medido de una cuerda real (que no es exactamente armónico, y cuyos armónicos decaen a distinta velocidad) es el tema del laboratorio.
+El modelo es la ecuación de ondas en un intervalo, y su solución por series de Fourier es una superposición de \emph{modos normales} con frecuencias múltiplos enteros de una fundamental. La comparación entre ese espectro ideal y el espectro medido de una cuerda real (que no es exactamente armónico, y cuyos armónicos decaen a distinta velocidad) es el tema del laboratorio (Figura \ref{fig:espectro-cuerda}).
 
-\figpendiente{Espectro de una cuerda real}{Espectro de potencia de la grabación de una cuerda de guitarra pulsada, con las frecuencias $k f_1$ marcadas para comparar con la predicción del modelo.}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.95\textwidth]{espectro-cuerda.png}
+  \caption{Grabación de una cuerda de guitarra pulsada (la tercera cuerda, Sol) y su espectro de amplitudes calculado con los primeros dos segundos. Las líneas de trazos marcan los múltiplos $kf_1$ de la fundamental medida, $f_1=195.8$ Hz: los picos están casi exactamente allí, pero el desvío crece con $k$ (inarmonicidad) y las amplitudes de los armónicos altos son mucho menores. Los datos están en el repositorio de la materia (\texttt{datos/cuerda\_guitarra.wav}).}
+  \label{fig:espectro-cuerda}
+\end{figure}
 
 \section{EDPs y ciencias de datos}
 
