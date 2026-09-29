@@ -6,7 +6,7 @@ Notas de clase, guías y notebooks de la materia *Introducción al Modelado Cont
 
 | Carpeta | Qué hay |
 | --- | --- |
-| `notas/` | `Notas-IMC.tex` (fuente LaTeX de las notas), `Notas-IMC.pdf` (última compilación), `biblio.bib`, `CAMBIOS.md` (registro de la revisión), `FIGURAS-parte-I.md` (figuras generadas por los notebooks y dónde van) |
+| `notas/` | `Notas-IMC.tex` (fuente LaTeX de las notas), `Notas-IMC.pdf` (última compilación), `biblio.bib`, `CAMBIOS.md` (registro de la revisión), `FIGURAS-parte-I.md`, `FIGURAS-parte-II.md` (figuras generadas por los notebooks y dónde van) |
 | `figuras/` | Figuras de las notas. Las genera cada notebook con `estilo.guardar(fig, "nombre")` |
 | `imc/` | Módulo Python común a los notebooks (estilo, retratos de fase, espectros, esquemas numéricos, datos) |
 | `notebooks/` | Notebooks del texto (uno por capítulo) y de laboratorio (uno por problema conductor) |
@@ -27,9 +27,9 @@ Cada notebook se abre directamente en Google Colab con el botón; la primera cel
 | `03-lineales-HG` | 4–5. Flujo, sistemas lineales, Hartman–Grobman | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/03-lineales-HG.ipynb) |
 | `04-lyapunov-global` | 6–7. Lyapunov, Poincaré–Bendixson, competencia, Lorenz | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/04-lyapunov-global.ipynb) |
 | `05-bifurcaciones` | 8. Bifurcaciones | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/05-bifurcaciones.ipynb) |
-| `06-series` | 11–12. Series de Fourier y convergencia | (pendiente) |
-| `07-transformada-DFT` | 13–14. Transformada de Fourier, DFT, FFT | (pendiente) |
-| `08-aplicaciones` | 15. Filtrado, ventanas, compresión | (pendiente) |
+| `06-series` | 11–12. Series de Fourier y convergencia | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/06-series.ipynb) |
+| `07-transformada-DFT` | 13–14. Transformada de Fourier, DFT, FFT | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/07-transformada-DFT.ipynb) |
+| `08-aplicaciones` | 15. Filtrado, ventanas, compresión | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/08-aplicaciones.ipynb) |
 | `09-calor` | 18. Ecuación de difusión | (pendiente) |
 | `10-laplace` | 19. Laplace/Poisson | (pendiente) |
 | `11-ondas` | 20. Ecuación de ondas | (pendiente) |

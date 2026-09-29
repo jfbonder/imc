@@ -6,11 +6,70 @@
   componente ``A_k cos(2 pi xi_k t + phi_k)`` (es decir ``2|hat f[k]|/N`` para
   ``0<k<N/2``), que es lo que se compara con los coeficientes de Fourier.
 * ``periodograma(x, dt, ventana=None)`` devuelve el espectro de potencia.
+
+Series de Fourier (Capítulos 11 y 12): ``coeficientes(x, L, N)`` y
+``coeficientes_funcion(f, L, N)`` calculan los coeficientes ``c_k`` de la
+definición (coef.fourier) aproximando la integral por la suma de Riemann
+``<f, e_k>_n`` sobre una grilla uniforme del período; ``coeficientes_reales``
+da los ``a_k, b_k`` de la serie en senos y cosenos y ``suma_parcial`` evalúa
+``S_N[f](t)``.
 """
 
 from __future__ import annotations
 
 import numpy as np
+
+
+# ----------------------------------------------------------------------------
+# Series de Fourier
+# ----------------------------------------------------------------------------
+
+def coeficientes(x, L=1.0, N=None):
+    """Coeficientes de Fourier ``c_k``, ``|k| <= N``, de una señal ``L``-periódica
+    muestreada uniformemente en un período: ``x[j] = f(j L / n)``, ``j = 0..n-1``.
+
+    Aproxima ``c_k = (1/L) int_0^L f(t) e^{-i w_k t} dt`` por la suma de Riemann
+    ``(1/n) sum_j x[j] e^{-2 pi i k j / n}`` (el producto interno ``<f, e_k>_n`` de
+    las notas), que es exacta para polinomios trigonométricos de grado ``< n/2``.
+    Por defecto ``N = n // 2 - 1``.  Devuelve ``(k, c)`` con ``k = -N..N``.
+    """
+    x = np.asarray(x)
+    n = len(x)
+    if N is None:
+        N = n // 2 - 1
+    if 2 * N + 1 > n:
+        raise ValueError(f"hacen falta al menos 2N+1 = {2 * N + 1} muestras (hay {n})")
+    X = np.fft.fft(x) / n           # X[k] = (1/n) sum_j x[j] e^{-2 pi i k j/n}
+    k = np.arange(-N, N + 1)
+    return k, X[k % n]
+
+
+def coeficientes_funcion(f, L=1.0, N=50, n=2 ** 16):
+    """``coeficientes`` para una función ``f`` dada como callable, muestreada en
+    ``n`` puntos ``t_j = j L / n`` del período ``[0, L)``.  Devuelve ``(k, c)``."""
+    t = np.arange(n) * L / n
+    return coeficientes(f(t), L, N)
+
+
+def coeficientes_reales(x, L=1.0, N=None):
+    """Coeficientes ``a_k`` (``k = 0..N``) y ``b_k`` (``b_0 = 0``) de la serie de
+    Fourier real ``a_0/2 + sum_k a_k cos(w_k t) + b_k sin(w_k t)`` de una señal
+    real muestreada como en ``coeficientes``.  Usa ``a_k = 2 Re c_k``,
+    ``b_k = -2 Im c_k``.  Devuelve ``(k, a, b)``."""
+    k, c = coeficientes(x, L, N)
+    c = c[k >= 0]
+    k = k[k >= 0]
+    return k, 2 * c.real, -2 * c.imag
+
+
+def suma_parcial(k, c, L, t):
+    """Suma parcial ``S_N[f](t) = sum_k c_k e^{i 2 pi k t / L}`` en los puntos ``t``
+    (``k`` y ``c`` como los devuelve ``coeficientes``).  Devuelve la parte real."""
+    t = np.asarray(t, dtype=float)
+    S = np.zeros(t.shape, dtype=complex)
+    for kk, ck in zip(k, c):
+        S += ck * np.exp(2j * np.pi * kk * t / L)
+    return S.real
 
 
 def dft(x, dt=1.0):

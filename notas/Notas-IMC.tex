@@ -3589,7 +3589,14 @@ Para fijar ideas, tomemos una señal concreta que nos va a acompañar en toda es
 \end{enumerate}
 La misma señal reaparece en la Parte III: la temperatura en la superficie del suelo es la ``condición de borde'' que fuerza la difusión del calor hacia abajo, y lo que aprendamos sobre su contenido de frecuencias va a determinar qué tan profundo llega cada ciclo.
 
-\figpendiente{Serie horaria de temperatura}{Un año de temperatura horaria (datos reales de una estación meteorológica), con un zoom sobre una semana para ver el ciclo diario.}
+La Figura \ref{fig:serie-temperatura} muestra la señal con la que vamos a trabajar: un año de temperatura horaria en Aeroparque (Buenos Aires); los datos están en el repositorio de la materia (\texttt{datos/temperatura\_horaria.csv}, tres años, 2021--2023).
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.95\textwidth]{serie-temperatura.png}
+  \caption{Un año de temperatura horaria del aire (Aeroparque, 2023; reanálisis ERA5 vía Open-Meteo) y detalle de una semana de enero, donde se ve el ciclo diario superpuesto a la variabilidad irregular.}
+  \label{fig:serie-temperatura}
+\end{figure}
+
 
 \section{Contenido del curso}
 
@@ -3992,7 +3999,15 @@ La relación entre la serie de Fourier en senos y cosenos y la serie de Fourier 
 
 \begin{volvemos}{la señal de temperatura}
 Si suponemos que la temperatura $T(t)$ es, en primera aproximación, periódica de período $L=1$ año, la serie de Fourier real nos dice cómo escribirla como suma de oscilaciones: la componente $k$ tiene frecuencia $k$ ciclos por año, amplitud $A_k = \sqrt{a_k^2+b_k^2}$ y fase $\phi_k$, con $a_k\cos(\omega_kt)+b_k\sin(\omega_kt) = A_k\cos(\omega_k t+\phi_k)$ y $\tan\phi_k = -b_k/a_k$, como en la Sección \ref{sec:ondas-fundamentales}. El ciclo anual corresponde a $k=1$; el ciclo diario a $k=365$. La fase $\phi_1$ dice en qué día del año se alcanza la temperatura máxima media, y la amplitud $A_1$ cuánto difiere ese máximo de la media anual $a_0/2$. Esto responde, en principio, la primera pregunta de la Sección \ref{sec:conductor-senal}. Quedan dos dificultades, que son el tema de los capítulos siguientes: en qué sentido la serie ``recupera'' la señal (Capítulo \ref{chap:conv.Fourier}), y cómo calcular los coeficientes cuando en lugar de una función tenemos $8760$ números (Capítulo \ref{chap:DFT}).
+Con los datos de 2023 (Figura \ref{fig:temperatura-serie-fourier}): la media anual es $18{,}2$ °C, $A_1\approx 6{,}9$ °C con máximo medio el 25 de enero, $A_{365}\approx 2{,}8$ °C con máximo diario cerca de las 15:45 h, y la media más esos dos términos y el armónico de 12 h ($k=730$) explican el $70\%$ de la varianza de la señal.
 \end{volvemos}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\textwidth]{temperatura-serie-fourier.png}
+  \caption{Serie de Fourier real de la temperatura de 2023 ($L=1$ año). Arriba: amplitudes $A_k$; sobresalen el ciclo anual ($k=1$, $A_1\approx6{,}9$ °C), el diario ($k=365$, $A_{365}\approx2{,}8$ °C) y su primer armónico ($k=730$). Abajo: dos semanas de enero y la reconstrucción con sólo la media y esos tres términos, que explican el $70\%$ de la varianza.}
+  \label{fig:temperatura-serie-fourier}
+\end{figure}
 
 \chapter{Convergencia de la serie de Fourier}\label{chap:conv.Fourier}
 
@@ -4202,7 +4217,7 @@ A la función $D_N(t)$ se la llama {\em núcleo de Dirichlet} (ver Figura \ref{f
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.6\textwidth]{nucleo-dirichlet.png}
-  \caption{Núcleo de Dirichlet para $N=10$ y $L=2\pi$ (en la figura, sin el factor $1/L$).}
+  \caption{Núcleo de Dirichlet para $N=10$ y $L=2\pi$; $D_N(0)=(2N+1)/L$.}
   \label{fig:nucleo-dirichlet}
 \end{figure}
 Para obtener una expresión más simple de $D_N(t)$, observemos que, si llamamos $r=e^{i\frac{2\pi}{L}t}$, entonces tenemos que
@@ -4376,6 +4391,14 @@ Luego tenemos el siguiente resultado.
 \begin{prop}\label{prop.unif}
 Sea $f\colon \R\to\C$ una función $L-$periódica, dos veces diferenciable con $f'$ $L-$periódica y $f''$ integrable en el $[0,L]$. Entonces la serie de Fourier de $f$ converge absoluta y uniformemente a $f$ en $[0,L]$.
 \end{prop}
+La Figura \ref{fig:decaimiento-coeficientes} muestra el decaimiento de $|c_k|$ para tres funciones de distinta regularidad.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.7\textwidth]{decaimiento-coeficientes.png}
+  \caption{Decaimiento de los coeficientes de Fourier según la regularidad de la señal: la función signo (salto) decae como $1/k$, $t^2$ extendida periódicamente (continua con un quiebre) como $1/k^2$ y $e^{\sin(2\pi t)}$ ($C^\infty$) más rápido que cualquier potencia.}
+  \label{fig:decaimiento-coeficientes}
+\end{figure}
 
 \begin{proof}
 El resultado es una consecuencia inmediata del Corolario \ref{cor.unif} y la estimación \eqref{ck.k2}.
@@ -5002,9 +5025,7 @@ Luego, $I^2=\pi$, de donde $I=\sqrt{\pi}$.
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.7\textwidth]{transformada1.png}
-  \includegraphics[width=0.7\textwidth]{transformada2.png}
-  \includegraphics[width=0.7\textwidth]{transformada3.png}
+  \includegraphics[width=0.9\textwidth]{transformadas.png}
   \caption{Gráficos de las funciones y sus transformadas en los ejemplos \ref{ej:indicadora}, \ref{ej:exponencial} y \ref{ej:gaussiana}.}
   \label{fig:transformadas}
 \end{figure}
@@ -5364,11 +5385,26 @@ $$
 $$
 la \emph{frecuencia de Nyquist}. Una componente de la señal continua con frecuencia $\xi>f_s/2$ no desaparece: aparece en el espectro discreto en la frecuencia $|\xi - m f_s|$ más cercana a cero (para algún entero $m$), ``disfrazada'' de una frecuencia baja. Eso es el aliasing de la Figura~\ref{fig:aliasing}: allí la tasa de muestreo es $f_s=16$, y la frecuencia $13$ se pliega sobre $|13-16| = 3$.
 \end{itemize}
-La regla práctica es la del \emph{teorema de muestreo de Nyquist--Shannon}: para capturar sin distorsión una señal cuyas frecuencias no superan $\xi_{\max}$, hay que muestrear a más del doble, $f_s>2\xi_{\max}$. Si no se puede, hay que filtrar la señal (eliminar las frecuencias altas) \emph{antes} de muestrearla, porque después ya no se puede distinguir lo verdadero de lo plegado.
+La regla práctica es la del \emph{teorema de muestreo de Nyquist--Shannon}: para capturar sin distorsión una señal cuyas frecuencias no superan $\xi_{\max}$, hay que muestrear a más del doble, $f_s>2\xi_{\max}$. Si no se puede, hay que filtrar la señal (eliminar las frecuencias altas) \emph{antes} de muestrearla, porque después ya no se puede distinguir lo verdadero de lo plegado. La Figura \ref{fig:grilla-frecuencias} muestra la grilla en un ejemplo pequeño.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.7\textwidth]{grilla-frecuencias.png}
+  \caption{Grilla de frecuencias de la DFT con $N=16$, $T=1$ ($f_s=16$). $|\hat f[k]|$ para $\cos(2\pi\cdot3t)$, cuya frecuencia cae en la grilla (dos picos, $k=3$ y $N-k=13$), y para $\cos(2\pi\cdot3{,}5t)$, que cae entre dos puntos y reparte su energía en todos los índices (fuga espectral). Los índices $k>N/2$ son las frecuencias negativas $\xi_k-f_s$; la línea punteada es la frecuencia de Nyquist.}
+  \label{fig:grilla-frecuencias}
+\end{figure}
 
 \begin{volvemos}{la señal de temperatura}
 Un año de mediciones horarias tiene $N=8760$ muestras, $T=1$ año y $f_s = 8760$ ciclos por año ($24$ por día). La resolución es $1$ ciclo por año: el ciclo anual es el índice $k=1$ y el ciclo diario el índice $k=365$; sus armónicos (por ejemplo, el de $12$ horas, $k=730$) también son accesibles. La frecuencia de Nyquist es $12$ ciclos por día: cualquier variación más rápida que dos horas se pliega sobre frecuencias más bajas. Si en cambio tuviéramos una medición diaria a las 15 h, $f_s = 365$ ciclos por año, y el ciclo diario, de frecuencia $365$, quedaría plegado exactamente sobre la frecuencia $0$: se vería como un desplazamiento de la media (la temperatura a las 15 h es más alta que la media diaria) y no como una oscilación. Esto responde la tercera pregunta de la Sección \ref{sec:conductor-senal}: muestrear una vez por día no ``pierde'' el ciclo diario, lo \emph{confunde} con la media.
+La Figura \ref{fig:temperatura-muestreo} lo muestra con los datos: la media de la serie de las 15 h es $21{,}5$ °C contra $18{,}2$ °C de la media horaria; los $3{,}3$ °C de diferencia son el ciclo diario y sus armónicos plegados sobre la frecuencia $0$.
 \end{volvemos}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\textwidth]{temperatura-muestreo.png}
+  \caption{(a) Espectro de amplitudes de la temperatura horaria de 2023 en ciclos por día, hasta la frecuencia de Nyquist ($12$ ciclos/día); se marcan el ciclo anual ($1/365$), el diario ($1$) y su armónico de 12 h ($2$). (b) Espectro de la misma señal muestreada una vez por día a las 15 h: la frecuencia de Nyquist baja a $0{,}5$ ciclos/día, el ciclo anual sigue intacto y el diario se pliega sobre $k=0$: la media sube de $18{,}2$ a $21{,}5$ °C.}
+  \label{fig:temperatura-muestreo}
+\end{figure}
 
 \section{Transformada rápida de Fourier}
 
@@ -5615,8 +5651,23 @@ $$
 \hat f[j] = \hat f_p[j] + \omega^j \hat f_i[j]\quad \text{y}\quad \hat f[\tfrac{N}{2}+j] = \hat f_p[j] - \omega^j \hat f_i[j],
 $$
 para $j=0,\dots,\tfrac{N}{2}-1$.
+La Figura \ref{fig:fft-mariposa} esquematiza esta etapa para $N=8$.
 
-Luego, hemos reducido el problema del cálculo de una DFT en dimensión $N$ al clálculo de la misma en dimensión $N/2$. Si ahora $N/2$ es nuevamente par podemos volver a aplicar el mismo argumento y reducir el cálculo a transformadas en dimensión $N/4$ y así sucesivamente.
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.85\textwidth]{fft-mariposa.png}
+  \caption{Una etapa del algoritmo de Cooley--Tukey para $N=8$: se separan las coordenadas pares e impares, se calculan dos DFT de tamaño 4 y se combinan de a pares (``mariposas'') con los factores $\omega^j$, $\omega=e^{-2\pi i/8}$: $\hat f[j]=\hat f_p[j]+\omega^j\hat f_i[j]$, $\hat f[j+4]=\hat f_p[j]-\omega^j\hat f_i[j]$.}
+  \label{fig:fft-mariposa}
+\end{figure}
+
+Luego, hemos reducido el problema del cálculo de una DFT en dimensión $N$ al clálculo de la misma en dimensión $N/2$. Si ahora $N/2$ es nuevamente par podemos volver a aplicar el mismo argumento y reducir el cálculo a transformadas en dimensión $N/4$ y así sucesivamente. La Figura \ref{fig:fft-costo} compara los tiempos de cómputo de las dos formas de calcular la DFT.
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.6\textwidth]{fft-costo.png}
+  \caption{Tiempo de cómputo de la DFT por producto con la matriz $A(\omega)$ y con la FFT (\texttt{np.fft.fft}) en función de $N$, con las referencias $N^2$ y $N\log_2N$. Para $N=4096$ la FFT es unas 300 veces más rápida.}
+  \label{fig:fft-costo}
+\end{figure}
+
 
 
 \chapter{Aplicaciones del análisis de Fourier}\label{chap:aplicaciones}
@@ -5715,7 +5766,22 @@ Dos observaciones prácticas sobre el análisis espectral de señales reales.
 
 \begin{volvemos}{la señal de temperatura}
 Con la DFT y el espectro de potencia se responde la primera pregunta de la Sección \ref{sec:conductor-senal} de manera cuantitativa: los picos en $k=1$ y $k=365$ (y sus armónicos) dan las amplitudes de los ciclos anual y diario, y la fracción de la energía total (fuera de la media) contenida en esos picos dice cuánto de la variabilidad explican los ciclos; el resto es la parte irregular. La segunda pregunta se responde con un filtro: conservar sólo los coeficientes de los picos y antitransformar da la ``temperatura regular'', y la diferencia con la señal original es la parte irregular, cuyo espectro se puede analizar a su vez (¿es blanco, o tiene una estructura de escalas de días, que corresponde a los frentes meteorológicos?). La cuarta pregunta es la de la sección siguiente, aplicada a una señal en lugar de a una imagen: ¿con cuántos coeficientes se reconstruye la serie con un error del $5\%$?
+Las Figuras \ref{fig:temperatura-filtrado} y \ref{fig:temperatura-compresion} hacen las cuentas con los datos de 2023: los cinco picos (anual, semestral, diario y sus armónicos de 12 y 8 h) contienen el $71\%$ de la energía fuera de la media; el residuo tiene un desvío de $3{,}4$ °C y su espectro no es blanco: decae aproximadamente como $\xi^{-1{,}7}$ y concentra su energía en períodos de días a semanas, la escala de los frentes. Para reconstruir la serie con un error del $5\%$ hacen falta unos $460$ coeficientes de $8760$; la serie se comprime mucho menos que una imagen, porque el residuo tiene espectro ancho.
 \end{volvemos}
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=0.95\textwidth]{temperatura-filtrado.png}
+  \caption{La temperatura horaria de 2023 y sus ciclos. (a) Espectro de potencia $|\hat T[k]|^2/N$ con los picos anual ($k=1$), semestral ($k=2$), diario ($k=365$) y sus armónicos ($730$, $1095$): entre los cinco contienen el $71\%$ de la energía fuera de la media. (b) Un mes de la señal y la ``temperatura regular'' (media más los cinco picos) obtenida filtrando; debajo, el residuo irregular (desvío $3{,}4$ °C, $29\%$ de la energía). (c) Espectro del residuo en ciclos por día (periodograma y promedio de Welch): no es blanco, decae como $\xi^{-1{,}7}$ y tiene la mayor parte de su energía en períodos de días a semanas (frentes).}
+  \label{fig:temperatura-filtrado}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.7\textwidth]{temperatura-compresion.png}
+  \caption{Error relativo de la reconstrucción de la serie de temperatura de 2023 conservando los $M$ coeficientes de mayor módulo (calculado con Plancherel), respecto de $\|T\|$ y de $\|T-\bar T\|$. Para un $10\%$ alcanzan $103$ coeficientes, para un $5\%$ hacen falta $462$ y para un $1\%$, $3662$ de $8760$.}
+  \label{fig:temperatura-compresion}
+\end{figure}
 
 \section{Compresión de imágenes mediante análisis espectral}
 
@@ -5741,7 +5807,14 @@ En muchas imágenes naturales, los valores de intensidad presentan una fuerte co
 espacial, lo que se traduce en una concentración muy marcada de la energía espectral en
 un subconjunto reducido de coeficientes de Fourier. En consecuencia, la mayor parte del
 espectro tiene amplitud muy pequeña y contribuye de manera marginal a la percepción
-visual global de la imagen.
+visual global de la imagen. La Figura \ref{fig:imagen-espectro} lo muestra para la imagen con la que vamos a trabajar.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.95\textwidth]{imagen-espectro.png}
+  \caption{(a) La imagen (fotografía de la astronauta Eileen Collins, NASA, dominio público, distribuida con \texttt{scikit-image}). (b) $\log(1+|\hat I|)$ con el origen de frecuencias en el centro: la energía se concentra en las bajas frecuencias. (c) Fracción de la energía $\sum|\hat I|^2$ contenida en los coeficientes de mayor módulo: el $1\%$ tiene el $97{,}8\%$ y el $0{,}1\%$ el $92{,}7\%$.}
+  \label{fig:imagen-espectro}
+\end{figure}
 
 Este fenómeno se observa claramente al analizar el módulo de la transformada discreta
 de Fourier del vector asociado a la imagen, donde sólo unos pocos coeficientes dominan
@@ -5755,16 +5828,15 @@ cierto porcentaje de los coeficientes de mayor magnitud y anular el resto. A par
 este espectro truncado, se reconstruye una imagen aproximada mediante la transformada
 inversa.
 
-Los ejemplos presentados muestran que, para imágenes naturales, incluso conservando una
-fracción extremadamente pequeña de los coeficientes —del orden del $10^{-2}\%$ o menos—
+Los ejemplos presentados muestran que, para imágenes naturales, conservando una
+fracción pequeña de los coeficientes —del orden del $1\%$—
 la imagen reconstruida preserva la estructura visual global y resulta claramente
-reconocible. Sólo cuando el porcentaje de coeficientes retenidos desciende aún más,
-comienzan a aparecer distorsiones perceptibles. En la Figura \ref{fig:imagen-original} se puede ver la imagen original en escala de grises y en la Figura \ref{fig:compresion-imagen} se pueden ver las diferentes compresiones conservando el 3\%, 1\%, 0.1\% y 0.01\% de las frecuencias más relevantes en la descomposición de Fourier.
+reconocible; por debajo del $0{,}1\%$ aparecen distorsiones perceptibles y con el $0{,}01\%$ (unos $27$ coeficientes en una imagen de $512\times512$) la imagen deja de reconocerse, aunque esos pocos coeficientes todavía contienen el $82\%$ de la energía: la energía mide bien el error en norma $2$, no la calidad visual. Notemos también que la cantidad \emph{absoluta} de coeficientes necesaria depende poco del tamaño de la imagen, así que el porcentaje sí depende de la resolución. En la Figura \ref{fig:imagen-original} se puede ver la imagen original en escala de grises y en la Figura \ref{fig:compresion-imagen} se pueden ver las diferentes compresiones conservando el 3\%, 1\%, 0.1\% y 0.01\% de las frecuencias más relevantes en la descomposición de Fourier.
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.45\textwidth]{imagen-original.png}
-\caption{Imagen original en escala de grises.}
+\caption{Imagen original en escala de grises ($512\times512$): fotografía de la astronauta Eileen Collins (NASA, dominio público; \texttt{skimage.data.astronaut}).}
 \label{fig:imagen-original}
 \end{figure}
 
@@ -5785,7 +5857,7 @@ imágenes, resultan tan eficaces.
 (c) 0.1\% de coeficientes &
 (d) 0.01\% de coeficientes
 \end{tabular}
-\caption{Reconstrucción de la imagen mediante truncamiento espectral, conservando distintos porcentajes de los coeficientes de Fourier de mayor magnitud.}
+\caption{Reconstrucción de la imagen mediante truncamiento espectral, conservando distintos porcentajes de los coeficientes de Fourier de mayor magnitud. Error relativo en norma $2$: $0{,}11$ (3\%), $0{,}15$ (1\%), $0{,}27$ (0,1\%), $0{,}42$ (0,01\%).}
 \label{fig:compresion-imagen}
 \end{figure}
 
