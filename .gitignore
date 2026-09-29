@@ -17,3 +17,6 @@ dist/
 .ipynb_checkpoints/
 # sistema
 .DS_Store
+
+# empaquetado
+*.tar.gz
