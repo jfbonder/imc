@@ -1,6 +1,6 @@
 # Figuras de la Parte I generadas por los notebooks (2026-09-29)
 
-**Estado (2026-09-29, noche):** ya aplicado al tex todo lo de las secciones 1 y 2 "reemplazan un `\figpendiente`" (anchos ajustados, cuatro figuras pendientes reemplazadas con referencias en el texto). Queda pendiente decidir sobre las figuras *opcionales* de la sección 2 y las observaciones de la sección 3.
+**Estado (2026-09-29, noche):** ya aplicado al tex todo lo de las secciones 1 y 2 "reemplazan un `\figpendiente`" (anchos ajustados, cuatro figuras pendientes reemplazadas con referencias en el texto). Después se agregaron al tex las opcionales `energia-vdp`, `flujo-conjugacion`, `linealizacion-LV2`, `competencia-retratos`, `hopf-generica-vs-vdp` y `sir-demografia` (las tres del cap. 3 quedan solo en el notebook), se aplicaron las cuatro correcciones de redacción de la sección 3, y la figura pendiente de la epidemia real se resolvió con los datos del internado inglés de 1978 (`datos/gripe_internado_1978.csv`, figura `casos-internado-1978`, script `tools/fig_internado.py`). **La Parte I no tiene figuras pendientes.**
 
 Todas las figuras matplotlib de los capítulos 2–8 salen ahora de `notebooks/01`–`05` (`GUARDAR = True` en la celda de configuración las reescribe en `figuras/`). Este archivo lista qué hay que tocar en `Notas-IMC.tex` para aprovecharlas. `Resorte.png` y `Pendulo.png` (esquemas) quedan como están.
 

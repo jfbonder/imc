@@ -449,7 +449,14 @@ R_0 = \frac{\beta}{\gamma}
 $$
 es el número de contagios que produce un infectado, durante su período de infección, en una población enteramente susceptible. Se lo llama \emph{número reproductivo básico}. Veremos que la pregunta 1 se responde comparando $R_0$ con $1$, y que las preguntas 2 y 3 tienen respuestas explícitas en términos de $R_0$.
 
-\figpendiente{Curva de casos de una epidemia real}{Serie temporal de casos diarios (por ejemplo, de una epidemia de gripe o de COVID-19) que sirva de dato para el ajuste del modelo en el laboratorio.}
+La pregunta 5 requiere datos. Usaremos a lo largo de la parte una epidemia pequeña y muy bien documentada: en enero de 1978 la gripe recorrió un internado inglés de 763 alumnos en dos semanas, y la enfermería registró cada día cuántos estaban en cama \cite{BMJ1978} (Figura \ref{fig:casos-internado}). El sistema es cerrado, la población es conocida y nadie tuvo que estimar cuántos casos quedaron sin registrar: por eso es el ejemplo clásico para poner a prueba el modelo más simple. Los datos están en el repositorio de la materia (\texttt{datos/gripe\_internado\_1978.csv}).
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.6\textwidth]{casos-internado-1978.png}
+  \caption{Alumnos en cama por día durante la epidemia de gripe en un internado inglés de 763 alumnos, del 22 de enero al 4 de febrero de 1978 \cite{BMJ1978}. Es el dato que se ajusta en el laboratorio de la Parte I.}
+  \label{fig:casos-internado}
+\end{figure}
 
 \section{Segundo problema conductor: un circuito que oscila solo}\label{sec:conductor-vdP}
 
@@ -952,7 +959,7 @@ F = -k x.
 
 Aplicando la segunda ley de Newton, el desplazamiento $x(t)$ de la partícula respecto de la posición de equilibrio satisface la ecuación
 \[
-\ddot x(t) + k x(t) = 0.
+m\,\ddot x(t) + k x(t) = 0.
 \]
 Esta es una EDO lineal de segundo orden con coeficientes constantes, cuyas soluciones describen un movimiento oscilatorio periódico. El oscilador armónico aparece en una enorme variedad de contextos físicos y matemáticos, y constituye un modelo de referencia para sistemas más complejos.
 
@@ -967,7 +974,7 @@ Si incorporamos esta fuerza al modelo del resorte, la ecuación de movimiento pa
 \[
 m \ddot x(t) + \gamma \dot x(t) + k x(t) = 0.
 \]
-Esta ecuación describe un oscilador armónico amortiguado. Dependiendo de los valores de los parámetros $m$, $\gamma$ y $k$, el sistema puede presentar distintos regímenes dinámicos, como oscilaciones amortiguadas o relajación monótona hacia el equilibrio.
+Esta ecuación describe un oscilador armónico amortiguado. Dependiendo de los valores de los parámetros $m$, $\gamma$ y $k$, el sistema puede presentar distintos regímenes dinámicos: si la fricción es pequeña ($\gamma<2\sqrt{km}$) la partícula oscila con amplitud decreciente, y si es grande ($\gamma>2\sqrt{km}$) vuelve al equilibrio sin oscilar. El valor $\gamma=2\sqrt{km}$ separa los dos regímenes; en los ejercicios se pide justificarlo.
 
 \section{El péndulo simple}\label{sec:pendulo}
 
@@ -1103,8 +1110,15 @@ Apliquemos la misma idea a la ecuación de van der Pol \eqref{eq:vdP-sistema}. L
 \[
 \frac{d}{dt}E = x\dot x + y\dot y = xy - xy - \lambda(x^2-1)y^2 = -\lambda(x^2-1)y^2 .
 \]
-Supongamos $\lambda>0$. Si la corriente es pequeña ($|x|<1$), entonces $\dot E>0$ siempre que $y\neq 0$: la energía crece y el circuito se \emph{enciende}, es decir, el reposo no atrae a las soluciones vecinas. Esto responde la primera pregunta de la Sección \ref{sec:conductor-vdP}. Si la corriente es grande ($|x|>1$), la energía decrece: las oscilaciones grandes se amortiguan. El sistema no puede ni quedarse en reposo ni crecer sin límite, y es razonable conjeturar que termina oscilando con una amplitud intermedia. Las simulaciones (Figura \ref{fig:vanderPol}, más adelante) confirman esa conjetura: todas las trayectorias convergen a una misma órbita cerrada, un ciclo límite como el de la Sección \ref{sec:ciclo_limite}. Para $\lambda<0$ los signos se invierten y el argumento muestra que el reposo atrae a las soluciones con $|x|<1$: el circuito se comporta como uno con una resistencia común. Demostrar la existencia del ciclo límite requiere más teoría que la que tenemos ahora.
+Supongamos $\lambda>0$. Si la corriente es pequeña ($|x|<1$), entonces $\dot E>0$ siempre que $y\neq 0$: la energía crece y el circuito se \emph{enciende} (Figura \ref{fig:energia-vdp}), es decir, el reposo no atrae a las soluciones vecinas. Esto responde la primera pregunta de la Sección \ref{sec:conductor-vdP}. Si la corriente es grande ($|x|>1$), la energía decrece: las oscilaciones grandes se amortiguan. El sistema no puede ni quedarse en reposo ni crecer sin límite, y es razonable conjeturar que termina oscilando con una amplitud intermedia. Las simulaciones (Figura \ref{fig:vanderPol}, más adelante) confirman esa conjetura: todas las trayectorias convergen a una misma órbita cerrada, un ciclo límite como el de la Sección \ref{sec:ciclo_limite}. Para $\lambda<0$ los signos se invierten y el argumento muestra que el reposo atrae a las soluciones con $|x|<1$: el circuito se comporta como uno con una resistencia común. Demostrar la existencia del ciclo límite requiere más teoría que la que tenemos ahora.
 \end{volvemos}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\textwidth]{energia-vdp.png}
+  \caption{La ``energía'' $E=\frac12(x^2+y^2)$ a lo largo de una solución de van der Pol ($\lambda=1$, $x(0)=0.1$, $y(0)=0$): $\dot E=-\lambda(x^2-1)y^2$ es positiva mientras $|x|<1$ y negativa cuando $|x|>1$, así que $E$ no es monótona. La solución termina oscilando con $E$ entre $1.17$ y $4$; la amplitud de esa oscilación no depende de la condición inicial.}
+  \label{fig:energia-vdp}
+\end{figure}
 
 Los ejemplos presentados ilustran cómo, a partir de principios físicos básicos, se obtienen ecuaciones diferenciales ordinarias que sirven como modelos matemáticos para describir la evolución temporal de sistemas mecánicos. Estos modelos acompañarán el desarrollo de la teoría general de EDOs y del análisis de sistemas dinámicos en los capítulos siguientes.
 
@@ -1513,8 +1527,15 @@ preservando el sentido del tiempo. Es decir, los dos flujos son topológicamente
 \end{teo}
 
 \begin{obs}\label{obs:HG-topologico}
-El teorema es \emph{local} (vale en un entorno de $\xx^*$, no en todo $\R^n$) y la conjugación es sólo \emph{topológica}. Esto último no es una limitación de la demostración sino del resultado: el sistema lineal $\dot x = x$, $\dot y = 2y$ y el sistema $\dot x = x$, $\dot y = 2y + x^2$ tienen la misma linealización en el origen, pero no existe ningún cambio de coordenadas de clase $C^2$ (ni, en particular, analítico) que conjugue sus flujos: la relación $\lambda_2 = 2\lambda_1$ entre los autovalores, llamada \emph{resonancia}, lo impide. Sí existe un homeomorfismo, como asegura el teorema (y en este ejemplo hasta un cambio de coordenadas $C^1$, $(x,y)\mapsto(x,\,y-x^2\ln|x|)$, pero no más regular). En la práctica, lo que usamos del teorema es lo siguiente: \emph{cerca de un equilibrio hiperbólico, el diagrama de fases del sistema no lineal se ve como el del sistema lineal}: un sumidero, una fuente o una silla, según los autovalores de $DF(\xx^*)$.
+El teorema es \emph{local} (vale en un entorno de $\xx^*$, no en todo $\R^n$) y la conjugación es sólo \emph{topológica}. Esto último no es una limitación de la demostración sino del resultado: el sistema lineal $\dot x = x$, $\dot y = 2y$ y el sistema $\dot x = x$, $\dot y = 2y + x^2$ tienen la misma linealización en el origen, pero no existe ningún cambio de coordenadas de clase $C^2$ (ni, en particular, analítico) que conjugue sus flujos: la relación $\lambda_2 = 2\lambda_1$ entre los autovalores, llamada \emph{resonancia}, lo impide. Sí existe un homeomorfismo, como asegura el teorema (y en este ejemplo hasta un cambio de coordenadas $C^1$, $(x,y)\mapsto(x,\,y-x^2\ln|x|)$, pero no más regular). En la práctica, lo que usamos del teorema es lo siguiente: \emph{cerca de un equilibrio hiperbólico, el diagrama de fases del sistema no lineal se ve como el del sistema lineal}: un sumidero, una fuente o una silla, según los autovalores de $DF(\xx^*)$. Los dos retratos de fase están en la Figura \ref{fig:flujo-conjugacion}.
 \end{obs}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\textwidth]{flujo-conjugacion.png}
+  \caption{Los sistemas $\dot x=x$, $\dot y=2y+x^2$ (izquierda) y su linealización $\dot x=x$, $\dot y=2y$ (derecha), con las mismas condiciones iniciales. Cerca del origen ambos son nodos inestables y el homeomorfismo $\hh(x,y)=(x,\,y-x^2\ln|x|)$ lleva las trayectorias de uno en las del otro, pero ningún cambio de coordenadas de clase $C^2$ puede hacerlo.}
+  \label{fig:flujo-conjugacion}
+\end{figure}
 
 \begin{proof}
 La demostración de este teorema es bastante técnica y elaborada y el interesado puede encontrarla en \cite{Coddington}. Para tener alguna intuición sobre el porqué de la validez de este teorema vamos a desarrollar un argumento puramente formal.
@@ -1665,7 +1686,14 @@ $$
 $$
 reales si $\rho^2\ge 4k(k-1)$ (nodo estable, Figura \ref{fig:LVk>1-1}) y complejos con parte real $-\rho/(2k)$ si $\rho^2<4k(k-1)$ (foco estable, Figura \ref{fig:LVk>1-2}).
 \end{itemize}
-La curva $\rho^2 = 4k(k-1)$ en el plano $(k,\rho)$ es la que separa el acercamiento monótono del oscilatorio, que era la pregunta que había quedado abierta. Notemos que, para $k$ grande (capacidad de carga grande, es decir, cerca del modelo clásico), casi siempre estamos en el caso oscilatorio, y la parte real $-\rho/(2k)$ tiende a cero: las oscilaciones se amortiguan cada vez más lentamente, y en el límite $k\to\infty$ recuperamos las órbitas cerradas de \eqref{LV1}.
+La curva $\rho^2 = 4k(k-1)$ en el plano $(k,\rho)$ es la que separa el acercamiento monótono del oscilatorio, que era la pregunta que había quedado abierta. Notemos que, para $k$ grande (capacidad de carga grande, es decir, cerca del modelo clásico), casi siempre estamos en el caso oscilatorio, y la parte real $-\rho/(2k)$ tiende a cero: las oscilaciones se amortiguan cada vez más lentamente, y en el límite $k\to\infty$ recuperamos las órbitas cerradas de \eqref{LV1}. La Figura \ref{fig:linealizacion-LV2} muestra, lado a lado, el sistema \eqref{LV2} cerca del equilibrio de coexistencia y su linealización: es el Teorema de Hartman--Grobman en acción.
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.85\textwidth]{linealizacion-LV2.png}
+  \caption{Hartman--Grobman en el modelo \eqref{LV2}: a la izquierda el sistema en una ventana alrededor del equilibrio de coexistencia $(1,1-1/k)$, a la derecha el sistema linealizado $\dot\yy = DF(\xx^*)\yy$ en las mismas coordenadas y con las mismas condiciones iniciales. Arriba $\rho^2\ge 4k(k-1)$ (nodo estable), abajo $\rho^2<4k(k-1)$ (foco estable).}
+  \label{fig:linealizacion-LV2}
+\end{figure}
+
 
 \subsection*{El modelo de bacterias y el umbral $k_c$}
 
@@ -1952,7 +1980,7 @@ verifica $\dot V = -\frac{\rho}{k}(h-1)^2\le 0$. Por el principio de LaSalle, el
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.9\textwidth]{vanderPol.png}
-  \caption{Diagrama de fases para el oscilador de van der Pol \eqref{eq:vdP-sistema}. A la izquierda, $\lambda=0.5$: el origen es inestable y las trayectorias convergen a un ciclo límite. A la derecha, $\lambda=-0.5$: el origen es asintóticamente estable; existe también un ciclo límite inestable (el mismo ciclo recorrido con el tiempo invertido) que separa las trayectorias que convergen al origen de las que escapan.}
+  \caption{Diagrama de fases para el oscilador de van der Pol \eqref{eq:vdP-sistema}. A la izquierda, $\lambda=0.5$: el origen es inestable y las trayectorias convergen a un ciclo límite. A la derecha, $\lambda=-0.5$: el origen es asintóticamente estable; existe también un ciclo límite inestable (la imagen del ciclo de $\lambda=0.5$ por la reflexión $(x,y)\mapsto(x,-y)$, que es lo que produce invertir el tiempo) que separa las trayectorias que convergen al origen de las que escapan.}
   \label{fig:vanderPol}
 \end{figure}
 
@@ -2143,7 +2171,7 @@ Las nulclinas están dadas por
 \mathcal N_1=\{\rho(1-n_1)-\alpha_1 n_2=0\}, \qquad
 \mathcal N_2=\left\{\frac{1}{\rho}(1-n_2)-\alpha_2 n_1=0\right\}.
 \]
-La coexistencia de ambas especies es posible si y sólo si $\mathcal N_1\cap\mathcal N_2\neq\emptyset$.
+Hay un equilibrio de coexistencia de ambas especies si y sólo si $\mathcal N_1\cap\mathcal N_2\neq\emptyset$ (que la coexistencia se observe depende, además, de que ese equilibrio sea estable).
 
 Esta intersección puede caracterizarse en términos de las cantidades
 \[
@@ -2165,7 +2193,14 @@ Ver Figura~\ref{fig:nulclinas}.
 
 El análisis del campo vectorial muestra que el equilibrio de coexistencia es asintóticamente estable cuando $a_1,a_2>1$, mientras que resulta ser un punto silla cuando $a_1,a_2<1$.
 
-En los casos $a_1<1<a_2$ y $a_2<1<a_1$ las nulclinas no se intersectan, por lo que la coexistencia no es posible. Queda como ejercicio para el lector realizar el diagrama de fases en estas situaciones.
+En los casos $a_1<1<a_2$ y $a_2<1<a_1$ las nulclinas no se intersectan, por lo que la coexistencia no es posible: una de las dos especies excluye a la otra. La Figura \ref{fig:competencia-retratos} muestra los retratos de fase de los cuatro casos; queda como ejercicio para el lector justificar el de los dos últimos con el análisis del campo.
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\textwidth]{competencia-retratos.png}
+  \caption{Retratos de fase del modelo de competencia ($\rho=1$) en los cuatro casos: $a_1,a_2>1$ (coexistencia asintóticamente estable), $a_1,a_2<1$ (el equilibrio de coexistencia es una silla: biestabilidad, gana la especie que parte con ventaja), $a_1<1<a_2$ (gana la especie 2) y $a_2<1<a_1$ (gana la especie 1). Puntos llenos: equilibrios estables; vacíos: inestables o sillas.}
+  \label{fig:competencia-retratos}
+\end{figure}
+
 
 
 \chapter{Bifurcaciones}\label{cap:bifurcaciones}
@@ -2612,8 +2647,15 @@ DF(0,\lambda) = \begin{bmatrix}
 -1 & \lambda
 \end{bmatrix}.
 $$
-Los autovalores de la matriz son $\frac12(\lambda\pm i\sqrt{4-\lambda^2})$ para $|\lambda|<2$, así que $\alpha(\lambda) = \lambda/2$, $\omega(0) = 1$ y $\alpha'(0) = 1/2>0$: se cumplen las hipótesis del Teorema \ref{teo.hopf} con $\mu=\lambda$, y en $\lambda=0$ el reposo pierde estabilidad. Sin embargo, la ecuación de van der Pol es, justamente, el \emph{caso degenerado} del teorema: en $\lambda=0$ el sistema es exactamente lineal (un centro), el coeficiente $\ell_1$ es nulo, y el ciclo no nace con amplitud $\sqrt\lambda$ sino que aparece ``de golpe'' con amplitud finita: la ecuación promediada del Ejercicio \ref{ejer:vdP-guiado} da radio $\approx 2$ para todo $\lambda>0$ pequeño, y sabemos por el Teorema de Liénard que ese ciclo es único y estable. Para ver la bifurcación de Hopf genérica alcanza con desacoplar los dos papeles de $\lambda$: en la familia $\ddot x + (x^2-\mu)\dot x + x = 0$ el mismo promedio da $\dot{\bar r} = \frac{\mu}{2}\bar r - \frac18\bar r^3$, y el ciclo nace en $\mu=0$ con amplitud $2\sqrt\mu$, como predice el caso supercrítico (ejercicio). En cualquiera de las dos formas, la respuesta a la tercera pregunta de la Sección \ref{sec:conductor-vdP} es la misma: el valor en el que el elemento resistivo pasa de disipar a entregar energía es el punto de bifurcación, y el período cerca de él es $2\pi$, la oscilación natural del circuito $LC$.
+Los autovalores de la matriz son $\frac12(\lambda\pm i\sqrt{4-\lambda^2})$ para $|\lambda|<2$, así que $\alpha(\lambda) = \lambda/2$, $\omega(0) = 1$ y $\alpha'(0) = 1/2>0$: se cumplen las hipótesis del Teorema \ref{teo.hopf} con $\mu=\lambda$, y en $\lambda=0$ el reposo pierde estabilidad. Sin embargo, la ecuación de van der Pol es, justamente, el \emph{caso degenerado} del teorema: en $\lambda=0$ el sistema es exactamente lineal (un centro), el coeficiente $\ell_1$ es nulo, y el ciclo no nace con amplitud $\sqrt\lambda$ sino que aparece ``de golpe'' con amplitud finita: la ecuación promediada del Ejercicio \ref{ejer:vdP-guiado} da radio $\approx 2$ para todo $\lambda>0$ pequeño, y sabemos por el Teorema de Liénard que ese ciclo es único y estable. Para ver la bifurcación de Hopf genérica alcanza con desacoplar los dos papeles de $\lambda$: en la familia $\ddot x + (x^2-\mu)\dot x + x = 0$ el mismo promedio da $\dot{\bar r} = \frac{\mu}{2}\bar r - \frac18\bar r^3$, y el ciclo nace en $\mu=0$ con amplitud $2\sqrt\mu$, como predice el caso supercrítico (ejercicio). En cualquiera de las dos formas, la respuesta a la tercera pregunta de la Sección \ref{sec:conductor-vdP} es la misma: el valor en el que el elemento resistivo pasa de disipar a entregar energía es el punto de bifurcación, y el período cerca de él es $2\pi$, la oscilación natural del circuito $LC$. La Figura \ref{fig:hopf-generica-vs-vdp} compara las dos situaciones.
 \end{volvemos}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\textwidth]{hopf-generica-vs-vdp.png}
+  \caption{Hopf genérica frente al caso degenerado, con la amplitud del ciclo medida numéricamente. Izquierda: la familia $\ddot x+(x^2-\mu)\dot x+x=0$, cuyo ciclo nace en $\mu=0$ con amplitud $2\sqrt{\mu}$. Derecha: van der Pol, donde el ciclo aparece con amplitud $\approx 2$ para todo $\lambda>0$.}
+  \label{fig:hopf-generica-vs-vdp}
+\end{figure}
 
 \begin{ejem}[El modelo de bacterias, Sección \ref{sec:ciclo_limite}]
 El sistema a estudiar es \eqref{bacteria2}. En la Sección \ref{sec:HG-modelos} calculamos la matriz diferencial en el equilibrio $(1,1)$:
@@ -2649,7 +2691,14 @@ La matriz diferencial es
 $$
 DF(s,i) = \begin{bmatrix} -\mu-\beta i & -\beta s\\ \beta i & \beta s-(\gamma+\mu)\end{bmatrix}.
 $$
-En $(1,0)$ los autovalores son $-\mu$ y $(\gamma+\mu)(R_0-1)$: el equilibrio libre de enfermedad es un nodo estable si $R_0<1$ y una silla si $R_0>1$. En el equilibrio endémico, $\tr DF = -\mu R_0<0$ y $\det DF = \mu(\gamma+\mu)(R_0-1)>0$ si $R_0>1$: es asintóticamente estable (foco o nodo según los parámetros; ejercicio). Cuando $R_0$ cruza el valor $1$, el equilibrio endémico entra en la región biológica ($i^*>0$) y \emph{intercambia su estabilidad} con el equilibrio libre de enfermedad: es una bifurcación transcrítica, exactamente como la de la ecuación $\dot x = \mu x - x^2$, con $R_0-1$ en el papel de $\mu$ e $i$ en el papel de $x$. La lectura epidemiológica es la que uno espera: si $R_0<1$ la enfermedad desaparece; si $R_0>1$ se vuelve endémica, con una fracción de infectados $i^*$ que crece linealmente con $R_0-1$ cerca del umbral. Los ejercicios guiados completan el análisis y exploran el acercamiento oscilatorio al equilibrio endémico, que explica las ondas epidémicas recurrentes de las enfermedades infantiles.
+En $(1,0)$ los autovalores son $-\mu$ y $(\gamma+\mu)(R_0-1)$: el equilibrio libre de enfermedad es un nodo estable si $R_0<1$ y una silla si $R_0>1$. En el equilibrio endémico, $\tr DF = -\mu R_0<0$ y $\det DF = \mu(\gamma+\mu)(R_0-1)>0$ si $R_0>1$: es asintóticamente estable (foco o nodo según los parámetros; ejercicio). Cuando $R_0$ cruza el valor $1$, el equilibrio endémico entra en la región biológica ($i^*>0$) y \emph{intercambia su estabilidad} con el equilibrio libre de enfermedad: es una bifurcación transcrítica, exactamente como la de la ecuación $\dot x = \mu x - x^2$, con $R_0-1$ en el papel de $\mu$ e $i$ en el papel de $x$. La lectura epidemiológica es la que uno espera: si $R_0<1$ la enfermedad desaparece; si $R_0>1$ se vuelve endémica, con una fracción de infectados $i^*$ que crece linealmente con $R_0-1$ cerca del umbral. Los ejercicios guiados completan el análisis y exploran el acercamiento oscilatorio al equilibrio endémico, que explica las ondas epidémicas recurrentes de las enfermedades infantiles. La Figura \ref{fig:sir-demografia} muestra el diagrama de bifurcación y una simulación con $R_0>1$.
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\textwidth]{sir-demografia.png}
+  \caption{SIR con nacimientos \eqref{eq:SIR-mu}, $\gamma=1$, $\mu=0.02$. (a) Diagrama de bifurcación: la rama endémica $i^*=\frac{\mu}{\beta}(R_0-1)$ intercambia estabilidad con la libre de enfermedad en $R_0=1$; el punto lleno es el equilibrio del panel (b). (b) Con $\beta=3$ ($R_0\approx 2.94$) el equilibrio endémico es un foco estable: $i(t)$ se acerca a $i^*$ con ondas de período $\approx 32$ (escala logarítmica).}
+  \label{fig:sir-demografia}
+\end{figure}
+
 
 \section{Conclusiones}
 
