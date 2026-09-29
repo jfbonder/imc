@@ -9,7 +9,7 @@ Notas de clase, guías y notebooks de la materia *Introducción al Modelado Cont
 | `notas/` | `Notas-IMC.tex` (fuente LaTeX de las notas), `Notas-IMC.pdf` (última compilación), `biblio.bib`, `CAMBIOS.md` (registro de la revisión), `FIGURAS-parte-I.md`, `FIGURAS-parte-II.md`, `FIGURAS-parte-III.md` (figuras generadas por los notebooks y dónde van) |
 | `figuras/` | Figuras de las notas. Las genera cada notebook con `estilo.guardar(fig, "nombre")` |
 | `imc/` | Módulo Python común a los notebooks (estilo, retratos de fase, espectros, esquemas numéricos, datos) |
-| `notebooks/` | Notebooks del texto (uno por capítulo) y de laboratorio (uno por problema conductor) |
+| `notebooks/` | Notebooks del texto (uno por capítulo) y de laboratorio (uno por problema conductor, con su guía del docente en `notebooks/docente/`) |
 | `datos/` | Datos usados en los laboratorios, con fuente y licencia en `datos/README.md` |
 
 Para compilar las notas: `cd notas && pdflatex Notas-IMC && bibtex Notas-IMC && pdflatex Notas-IMC && pdflatex Notas-IMC` (las figuras se buscan en `../figuras`, ver el `\graphicspath` del preámbulo).
@@ -36,16 +36,18 @@ Cada notebook se abre directamente en Google Colab con el botón; la primera cel
 
 ### De laboratorio (uno por problema conductor)
 
-| Notebook | Problema | Colab |
-| --- | --- | --- |
-| `lab-EDO-numerico` | Euler, Runge–Kutta, orden de convergencia | (pendiente) |
-| `lab-SIR` | Epidemia: simulación, SEIR, ajuste a datos | (pendiente) |
-| `lab-vanderPol` | Circuito: forma de onda, período, espectro, problema inverso | (pendiente) |
-| `lab-senal-temperatura` | Serie horaria de temperatura: espectro, filtrado, compresión | (pendiente) |
-| `lab-EDP-numerico` | Diferencias finitas, esquema explícito e implícito, $r\le 1/2$ | (pendiente) |
-| `lab-suelo` | Temperatura del suelo: ajuste de la difusividad | (pendiente) |
-| `lab-cuerda` | Cuerda vibrante: espectro real, inarmonicidad, leapfrog | (pendiente) |
-| `lab-laplace-datos` | Cinco puntos vs. Monte Carlo, inpainting | (pendiente) |
+Cada laboratorio viene en dos versiones generadas por el mismo script (`tools/make_lab_*.py`, con `tools/labkit.py`): la de estudiantes, con la explicación de los métodos, las consignas, esqueletos con `# TODO` y celdas de verificación, y la guía del docente en `notebooks/docente/`, con las soluciones completas ejecutadas, respuestas modelo de la interpretación y notas para la clase.
+
+| Notebook | Problema | Estudiantes | Guía del docente |
+| --- | --- | --- | --- |
+| `lab-EDO-numerico` | Euler, Runge–Kutta, orden de convergencia | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/lab-EDO-numerico.ipynb) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/docente/lab-EDO-numerico.ipynb) |
+| `lab-SIR` | Epidemia: simulación, SEIR, ajuste a datos | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/lab-SIR.ipynb) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/docente/lab-SIR.ipynb) |
+| `lab-vanderPol` | Circuito: forma de onda, período, espectro, problema inverso | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/lab-vanderPol.ipynb) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/docente/lab-vanderPol.ipynb) |
+| `lab-senal-temperatura` | Serie horaria de temperatura: espectro, filtrado, compresión | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/lab-senal-temperatura.ipynb) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/docente/lab-senal-temperatura.ipynb) |
+| `lab-EDP-numerico` | Diferencias finitas, esquema explícito e implícito, $r\le 1/2$ | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/lab-EDP-numerico.ipynb) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/docente/lab-EDP-numerico.ipynb) |
+| `lab-suelo` | Temperatura del suelo: ajuste de la difusividad | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/lab-suelo.ipynb) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/docente/lab-suelo.ipynb) |
+| `lab-cuerda` | Cuerda vibrante: espectro real, inarmonicidad, leapfrog | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/lab-cuerda.ipynb) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/docente/lab-cuerda.ipynb) |
+| `lab-laplace-datos` | Cinco puntos vs. Monte Carlo, inpainting | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/lab-laplace-datos.ipynb) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/docente/lab-laplace-datos.ipynb) |
 
 ## Convenciones
 

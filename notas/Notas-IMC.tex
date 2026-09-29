@@ -3537,11 +3537,11 @@ donde asumiremos $\sigma=10$, $b=\frac{8}{3}$.
 \subsection*{Laboratorio: los problemas conductores}
 
 \begin{ejer}[Ajuste del modelo SIR a datos]\label{lab:SIR-ajuste}
-Se dispone de una serie temporal de casos diarios de una epidemia (el archivo se provee con el notebook correspondiente; también puede usarse cualquier serie pública de casos de gripe o de COVID-19 de una ciudad durante una única ola).
+Se dispone de la serie de la epidemia de gripe del internado de 1978 (Figura \ref{fig:casos-internado}; archivo \texttt{datos/gripe\_internado\_1978.csv}): la cantidad de alumnos en cama cada día, es decir la \emph{prevalencia} $I(t) = N\,i(t)$, no los casos nuevos. (También puede usarse cualquier serie pública de casos de una ciudad durante una única ola; en ese caso el dato suele ser la incidencia diaria $\beta s i N$, y hay que ajustar esa curva.)
 \begin{enumerate}
-\item Implementar el modelo SIR y una función que, dados $(\beta,\gamma,i_0)$, devuelva la curva de nuevos casos diarios $\beta s i N$ evaluada en los días de los datos.
-\item Ajustar $(\beta,\gamma,i_0)$ por mínimos cuadrados (\lstinline{scipy.optimize.least_squares} o \lstinline{curve_fit}) usando sólo la primera mitad de la serie. Graficar el ajuste junto con los datos y los residuos.
-\item Con los parámetros ajustados, predecir la segunda mitad de la serie y compararla con los datos reales. ¿Predice bien el pico? ¿Y la cola?
+\item Implementar el modelo SIR y una función que, dados $(\beta,\gamma,i_0)$, devuelva $I(t)=N\,i(t)$ evaluada en los días de los datos.
+\item Ajustar $(\beta,\gamma,i_0)$ por mínimos cuadrados (\lstinline{scipy.optimize.least_squares} o \lstinline{curve_fit}) con toda la serie. Graficar el ajuste junto con los datos y los residuos; calcular $R_0$ y el tamaño final predicho, y compararlo con el observado.
+\item Repetir el ajuste usando sólo la primera mitad de la serie y, con esos parámetros, predecir la segunda mitad. ¿Predice bien el pico? ¿Y la cola?
 \item Repetir el ajuste desde varios puntos iniciales del optimizador. ¿Se obtienen siempre los mismos parámetros? ¿Y el mismo $R_0=\beta/\gamma$? Interpretar: ¿qué combinaciones de parámetros determinan los datos y cuáles no?
 \item Repetir con el modelo SEIR (Ejercicio \ref{modelo-SEIR}). ¿Mejora el ajuste? ¿Cambia la predicción?
 \item Escribir un párrafo con la conclusión: qué puede decir el modelo sobre esta epidemia y qué no.
@@ -6305,7 +6305,7 @@ Con la serie del ejercicio anterior:
 Cuando el contenido de frecuencias de una señal cambia con el tiempo (una nota musical que sube, la amplitud del ciclo diario que cambia con la estación), un único espectro no lo muestra. El \emph{espectrograma} consiste en calcular el espectro de potencia de ventanas sucesivas de la señal y graficarlo como una imagen (tiempo en el eje horizontal, frecuencia en el vertical, potencia en color).
 \begin{enumerate}
 \item Implementar el espectrograma con ventanas de $30$ días para la serie de temperatura y observar la variación estacional de la amplitud del ciclo diario.
-\item Aplicarlo a un archivo de audio corto (una escala tocada en un instrumento, grabada con el teléfono). Identificar las notas.
+\item Aplicarlo a la grabación de la cuerda de guitarra de la Parte III (\texttt{datos/cuerda\_guitarra.wav}) con ventanas de unos $50$ ms: identificar la nota y ver cómo decaen los armónicos. (Si se dispone de una grabación propia de una escala, identificar las notas.)
 \item Discutir el compromiso entre resolución temporal y resolución en frecuencia: ¿qué pasa con ventanas muy cortas? ¿Y muy largas?
 \end{enumerate}
 \end{ejer}
@@ -7704,7 +7704,7 @@ La función $u_{per}$ es \emph{una} solución de \eqref{eq:suelo}, pero el suelo
 
 Vale la pena detenerse en la moraleja. La ``convergencia al equilibrio'' del título de la sección anterior es, en realidad, convergencia al \emph{atractor} del problema: cuando los datos no dependen del tiempo, el atractor es un estado estacionario; cuando los datos son periódicos, es un estado periódico. En ambos casos el argumento es el mismo (restar el atractor y ver que el resto decae) y la tasa está dada por $D\lambda_1$. Es el mismo esquema que en la Parte I: un equilibrio estable o un ciclo límite estable, ahora en dimensión infinita.
 
-En el laboratorio se ajusta $D$ a partir de registros reales de temperatura a varias profundidades (usando la atenuación y el retraso del ciclo diario) y se compara la predicción \eqref{eq:suelo-periodica} con los datos, lo que responde la pregunta 4; la Figura \ref{fig:suelo-ajuste} adelanta el resultado con los datos de la Figura \ref{fig:suelo-datos}: la atenuación y el retraso del ciclo diario entre las dos capas superficiales dan $D\simeq 3$--$5\cdot10^{-7}$ m$^2$/s, el valor típico; el ciclo anual da un retraso consistente, pero una atenuación menor que la prevista, en parte porque las capas son promedios sobre espesores grandes y no mediciones puntuales. La pregunta 5 (la profundidad a la que enterrar una cañería) se responde con \eqref{eq:suelo-periodica} pidiendo que $\bar T - A e^{-x/\delta} > 0$ para el ciclo anual (Figura \ref{fig:suelo-caneria}).
+En el laboratorio se ajusta $D$ a partir de registros reales de temperatura a varias profundidades (usando la atenuación y el retraso del ciclo diario) y se compara la predicción \eqref{eq:suelo-periodica} con los datos, lo que responde la pregunta 4; la Figura \ref{fig:suelo-ajuste} adelanta el resultado con los datos de la Figura \ref{fig:suelo-datos}: la atenuación y el retraso del ciclo diario entre las dos capas superficiales dan $D\simeq 3$--$5\cdot10^{-7}$ m$^2$/s, el valor típico; el ciclo anual da un retraso consistente, pero una atenuación menor que la prevista; el promedio por capa no lo explica (para $\delta_{\text{anual}}\simeq 2$ m el efecto es despreciable), así que la discrepancia indica que el suelo no es homogéneo, como supone el modelo. La pregunta 5 (la profundidad a la que enterrar una cañería) se responde con \eqref{eq:suelo-periodica} pidiendo que $\bar T - A e^{-x/\delta} > 0$ para el ciclo anual (Figura \ref{fig:suelo-caneria}).
 
 \begin{figure}[ht]
   \centering
@@ -9834,10 +9834,10 @@ Obtener matrices para el problema discreto y resolver discretizando la condici\'
 \begin{enumerate}[label=(\alph*)]
  \item $U_1 - U_0 = 0$ (diferencias forward)
  \item $U_1 - U_{-1} = 0$ (diferencias centradas y nodo ficticio)
- \item $\frac{3}{2}U_0 - 2U_1 + \frac{1}{2}U_2$ (diferencias forward de orden 2)
+ \item $\frac{3}{2}U_0 - 2U_1 + \frac{1}{2}U_2 = 0$ (diferencias forward de orden 2)
  \end{enumerate}
  \textbf{Sug.} Para el caso del nodo ficticio, añadir la ecuaci\'on $1/h^2\left(U_{-1} -2U_0 + U_{1}\right) = f(x_0)$.
- Comparar contra la soluci\'on exacta en el caso $f=\sin(2\pi x)$ y tomando $e_m = \| U - u \|_\infty$,
+ Comparar contra la soluci\'on exacta en los casos $f=\sin(2\pi x)$ y $f=\cos(2\pi x)$ (en el primero $f(0)=0$ y las discretizaciones (a) y (b) coinciden; en el segundo no) y, tomando $e_m = \| U - u \|_\infty$,
  estudiar num\'ericamente cu\'al es el orden de aproximaci\'on que se observa para la soluci\'on del problema en cada caso.
 \end{ejer}
 
@@ -9851,7 +9851,7 @@ temporal y diferencias centradas para la segunda derivada espacial:
 
 \begin{enumerate}[label=(\alph*)]
 \item Suponiendo que la solución  continua $U$ tiene derivadas continuas y acotadas de tanto orden como sea necesario, mostrar que para cualquier valor de $r>0$ fijo se tiene que: 
-\[T_j^n:=\frac{U(x_j,t_{n+1}-U(x_j,t_n)}{k}-\alpha\frac{U(x_{j+1},t_n)-2U(x_j,t_n)+U(x_{j-1},t_n)}{h^2}\sim O(h^2)\]
+\[T_j^n:=\frac{U(x_j,t_{n+1})-U(x_j,t_n)}{k}-\alpha\frac{U(x_{j+1},t_n)-2U(x_j,t_n)+U(x_{j-1},t_n)}{h^2}\sim O(h^2)\]
 Más aún: si se elige $r=\frac{1}{6}$ $T_j^n\sim O(h^4)$.
 \item Mostrar que el error $e_j^{n}=U(x_j,t_n)-u_j^n$ satisface:
 \[e_j^{n+1}=re_{j-1}^n+(1-2r)e_j^n+re_{j+1}^n +kT_j^n\]
@@ -9890,9 +9890,9 @@ inicial $u(x,0) = u_0(x)$ arbitrario y con condiciones de borde de tipo Dirichle
 \item $u(x,0)= \sin (\pi x). $
 \end{itemize}
 
-Observar que ambos casos resultan estables en los primeros 50
-pasos. ¿Qu\'e ocurre con (i) para 100 pasos? \textquestiondown Y con (ii)? \textquestiondown
-Por qu\'e resulta mucho m\'as estable este último caso?
+Observar que ambos casos parecen estables en los primeros 50
+pasos. ¿Qu\'e ocurre con (i) para 900 pasos? \textquestiondown Y con (ii)? \textquestiondown
+Por qu\'e tarda mucho m\'as en inestabilizarse este último caso? (Pensar en qué modos de Fourier contiene cada dato inicial.)
 
 \item Elegir uno de los casos anteriores y resolver anal\'iticamente.
 Estudiar el error del m\'etodo contra la solucion exacta hasta el
@@ -9931,7 +9931,7 @@ $$
 \subsection*{Laboratorio: los problemas conductores}
 
 \begin{ejer}[La temperatura del suelo: ajuste de la difusividad]\label{lab:suelo}
-Se proveen (con el notebook correspondiente) registros de temperatura del suelo a varias profundidades, tomados cada hora durante un año, junto con la temperatura del aire (o del suelo en superficie).
+Se provee (\texttt{datos/suelo\_horaria.csv}) un año de temperatura horaria del aire y del suelo en cuatro capas ($0$--$7$, $7$--$28$, $28$--$100$ y $100$--$255$ cm), tomadas del reanálisis ERA5-Land: son \emph{promedios por capa}, no mediciones puntuales, y no hay medición en la superficie misma (la capa $0$--$7$ cm es lo más cercano). Tener esto en cuenta al elegir la profundidad representativa de cada capa y la condición de borde.
 \begin{enumerate}
 \item Graficar una semana de datos a todas las profundidades. Observar la atenuación y el retraso del ciclo diario.
 \item Para cada profundidad $x$, calcular con la DFT la amplitud $A(x)$ y la fase $\phi(x)$ del ciclo diario y del ciclo anual (Parte II).
@@ -9946,7 +9946,7 @@ Se proveen (con el notebook correspondiente) registros de temperatura del suelo 
 \item Grabar con un teléfono (o descargar) el sonido de una cuerda de guitarra pulsada, unos $3$ segundos, y cargar el archivo de audio en Python (\lstinline{scipy.io.wavfile}).
 \item Calcular el espectro de potencia del primer medio segundo. Identificar la frecuencia fundamental $f_1$ y los picos siguientes. ¿Están en $kf_1$? Medir el corrimiento relativo $(f_k - kf_1)/(kf_1)$ y compararlo con la predicción de inarmonicidad del ejercicio de amortiguamiento: ¿crece como $k^2$?
 \item Calcular el espectrograma (Parte II) y medir la tasa de decaimiento de cada armónico. ¿Decaen todos igual? Proponer un término de fricción en el modelo que reproduzca lo observado.
-\item Repetir pulsando la cuerda en el medio y cerca del puente. Comparar el reparto de energía entre armónicos con la predicción del Ejercicio \ref{ejer:cuerda-guiado}.
+\item Comparar el reparto de energía entre armónicos de la grabación con la predicción del Ejercicio \ref{ejer:cuerda-guiado} para la cuerda pulsada en $x_0 = L/2$, $L/5$ y $L/20$: ¿en qué punto parece haberse pulsado? (Quien tenga una guitarra a mano puede grabar la misma nota pulsada en el medio y cerca del puente y repetir el análisis.)
 \item Simular la cuerda con el esquema del Ejercicio \ref{lab:leapfrog} (agregando el término de fricción propuesto), ``escuchar'' la simulación (escribir el archivo de audio) y comparar su espectro con el real. Escribir un párrafo con la conclusión: qué predice bien el modelo de la cuerda ideal, qué le falta y qué le agregaría.
 \end{enumerate}
 \end{ejer}
@@ -9954,7 +9954,7 @@ Se proveen (con el notebook correspondiente) registros de temperatura del suelo 
 \begin{ejer}[Laplace en 2D: cinco puntos contra Monte Carlo]
 Consideramos el problema de Dirichlet $\Delta u = 0$ en el cuadrado unitario con un dato de borde $g$ a elección (por ejemplo $g=1$ en el lado superior y $0$ en los otros tres).
 \begin{enumerate}
-\item Resolver el sistema lineal del esquema de cinco puntos con $n = 20, 40, 80$ (usar matrices ralas, \lstinline{scipy.sparse}). Graficar la solución como mapa de color.
+\item Resolver el sistema lineal del esquema de cinco puntos con $n = 20, 40, 80$ (usar matrices ralas, \lstinline{scipy.sparse}). Graficar la solución como mapa de color y estimar el orden de convergencia comparando con la solución en serie; como el dato $g$ es discontinuo en las esquinas, medir el error lejos del borde (por ejemplo en $[\tfrac14,\tfrac34]^2$) y explicar por qué el error máximo global no decrece.
 \item Resolver el mismo problema ``jugando'': desde cada nodo interior, simular $M$ paseos al azar hasta llegar al borde y promediar el pago $g$. Comparar con el ítem anterior para $M=10, 100, 1000$. ¿Cómo decrece el error con $M$? ¿Cuál método es más caro?
 \item Agregar una fuente: $-\Delta u = f$. ¿Cómo se modifica el juego? Verificar numéricamente.
 \item \emph{Inpainting.} Tomar una imagen en escala de grises, borrar una región y rellenarla resolviendo la ecuación de Laplace con el borde de la región como dato. Mostrar el resultado para una región chica sobre un fondo liso y para una región grande sobre una textura. Explicar lo que se observa con el principio del máximo.
