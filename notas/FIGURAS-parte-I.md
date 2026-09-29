@@ -1,5 +1,7 @@
 # Figuras de la Parte I generadas por los notebooks (2026-09-29)
 
+**Estado (2026-09-29, noche):** ya aplicado al tex todo lo de las secciones 1 y 2 "reemplazan un `\figpendiente`" (anchos ajustados, cuatro figuras pendientes reemplazadas con referencias en el texto). Queda pendiente decidir sobre las figuras *opcionales* de la sección 2 y las observaciones de la sección 3.
+
 Todas las figuras matplotlib de los capítulos 2–8 salen ahora de `notebooks/01`–`05` (`GUARDAR = True` en la celda de configuración las reescribe en `figuras/`). Este archivo lista qué hay que tocar en `Notas-IMC.tex` para aprovecharlas. `Resorte.png` y `Pendulo.png` (esquemas) quedan como están.
 
 ## 1. Figuras regeneradas con el mismo nombre (el tex no cambia, salvo el ancho indicado)

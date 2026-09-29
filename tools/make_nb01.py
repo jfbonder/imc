@@ -33,7 +33,22 @@ from imc import estilo, fases
 from imc.estilo import COLORES
 
 estilo.activar()
-GUARDAR = False   # True para regenerar las figuras de las notas en figuras/""")
+plt.close(plt.figure())   # inicializa el backend inline fuera de los rc_context de abajo (si no, las figuras no se muestran)
+GUARDAR = False   # True para regenerar las figuras de las notas en figuras/
+
+def fuente(F):
+    # contexto con fuente F: las figuras se incluyen chicas en las notas y la letra tiene que seguir legible
+    return plt.rc_context({{"font.size": F, "axes.labelsize": F, "axes.titlesize": F, "xtick.labelsize": F - 1,
+                           "ytick.labelsize": F - 1, "legend.fontsize": F - 2, "lines.linewidth": 2.0}})
+
+def agrandar(ax, flecha=20, marcador=10):
+    # flechas de sentido y marcadores de equilibrio más grandes, por el mismo motivo
+    for t in ax.texts:
+        if getattr(t, "arrow_patch", None) is not None:
+            t.arrow_patch.set_mutation_scale(flecha)
+    for l in ax.lines:
+        if l.get_marker() == "o":
+            l.set_markersize(marcador)""")
 
 md("""## 2.1 Primeros modelos: Malthus y logística
 
@@ -42,22 +57,24 @@ Tasa de crecimiento logística $\\alpha(P) = a(1-P/K)$ y comparación de las dos
 code("""a, K = 1.0, 1.0
 P = np.linspace(0, 1.4 * K, 200)
 
-fig, ax = plt.subplots(figsize=(4.5, 3.2))
-ax.plot(P, a * (1 - P / K), color=COLORES["traj"], label=r"$\\alpha = a(1-P/K)$")
-ax.axhline(0, color="black", lw=1); ax.axvline(0, color="black", lw=1)
-ax.plot(K, 0, "ko"); ax.text(K, -0.12, "$K$", ha="center", va="top")
-ax.set_xlabel("$P$"); ax.set_ylabel(r"$\\alpha$"); ax.set_xticks([]); ax.set_yticks([])
-ax.legend(loc="upper right")
-if GUARDAR: estilo.guardar(fig, "tasa-logistica")""")
+with fuente(13):
+    fig, ax = plt.subplots(figsize=(4.5, 3.2))
+    ax.plot(P, a * (1 - P / K), color=COLORES["traj"], label=r"$\\alpha = a(1-P/K)$")
+    ax.axhline(0, color="black", lw=1); ax.axvline(0, color="black", lw=1)
+    ax.plot(K, 0, "ko", ms=7); ax.text(K, -0.12, "$K$", ha="center", va="top")
+    ax.set_xlabel("$P$"); ax.set_ylabel(r"$\\alpha$"); ax.set_xticks([]); ax.set_yticks([])
+    ax.legend(loc="upper right")
+    if GUARDAR: estilo.guardar(fig, "tasa-logistica")""")
 
 code("""t = np.linspace(0, 4, 200)
 P0, alpha = 0.2, 1.0
-fig, ax = plt.subplots(figsize=(4.5, 3.2))
-ax.plot(t, P0 * np.exp(alpha * t), "--", label=r"$P' = \\alpha P$")
-ax.plot(t, K / (1 + (K - P0) / P0 * np.exp(-alpha * t)), label=r"$P' = \\alpha P(1-P/K)$")
-ax.axhline(K, color="black", ls=":", lw=1)
-ax.set_xlabel("$t$"); ax.set_ylabel("$P(t)$"); ax.set_xticks([]); ax.set_yticks([]); ax.legend()
-if GUARDAR: estilo.guardar(fig, "maltus-vs-logistico")""")
+with fuente(13):
+    fig, ax = plt.subplots(figsize=(4.5, 3.2))
+    ax.plot(t, P0 * np.exp(alpha * t), "--", label=r"$P' = \\alpha P$")
+    ax.plot(t, K / (1 + (K - P0) / P0 * np.exp(-alpha * t)), label=r"$P' = \\alpha P(1-P/K)$")
+    ax.axhline(K, color="black", ls=":", lw=1)
+    ax.set_xlabel("$t$"); ax.set_ylabel("$P(t)$"); ax.set_xticks([]); ax.set_yticks([]); ax.legend()
+    if GUARDAR: estilo.guardar(fig, "maltus-vs-logistico")""")
 
 md("""### La recta de fase
 
@@ -66,19 +83,23 @@ Para una ecuación escalar $\\dot p = f(p)$ alcanza con el signo de $f$: los cer
 *(Figura pendiente del texto: recta de fase de la logística.)*""")
 
 code("""f = lambda p: (1 - p) * p      # logística adimensional, a = 1
-fig, ax = plt.subplots(figsize=(6, 3))
-eq = fases.recta_de_fase(f, -0.3, 1.5, ax=ax, nombre="p")
-ax.set_ylim(-0.6, 0.4)
-print("equilibrios:", eq)
-if GUARDAR: estilo.guardar(fig, "recta-fase-logistica")""")
+with fuente(14):
+    fig, ax = plt.subplots(figsize=(6, 3))
+    eq = fases.recta_de_fase(f, -0.3, 1.5, ax=ax, nombre="p")
+    ax.set_ylim(-0.6, 0.4); agrandar(ax, flecha=22, marcador=11)
+    for e in eq:
+        ax.text(e, -0.1, rf"$p = {round(e, 6):g}$", ha="center", va="top", fontsize=12)
+    print("equilibrios:", eq)
+    if GUARDAR: estilo.guardar(fig, "recta-fase-logistica")""")
 
 code("""# Soluciones para varias condiciones iniciales (Figura 'logistica')
-fig, ax = plt.subplots()
-t = np.linspace(0, 20, 400)
-for p0 in [0.01, 0.1, 0.5, 1.0, 2.0]:
-    ax.plot(t, 1 / (1 + (1 - p0) / p0 * np.exp(-0.5 * t)), label=f"$p_0 = {p0}$")
-ax.set_xlabel("Tiempo"); ax.set_ylabel("$p(t)$"); ax.legend()
-if GUARDAR: estilo.guardar(fig, "logistica")""")
+with fuente(14):
+    fig, ax = plt.subplots()
+    t = np.linspace(0, 20, 400)
+    for p0 in [0.01, 0.1, 0.5, 1.0, 2.0]:
+        ax.plot(t, 1 / (1 + (1 - p0) / p0 * np.exp(-0.5 * t)), label=f"$p_0 = {p0}$")
+    ax.set_xlabel("Tiempo"); ax.set_ylabel("$p(t)$"); ax.legend()
+    if GUARDAR: estilo.guardar(fig, "logistica")""")
 
 md("""## 2.2 Lotka–Volterra clásico
 
@@ -93,13 +114,15 @@ code("""def LV1(t, X, rho):
 rho = 1.0
 H = lambda h, p: (h - np.log(h)) + rho**2 * (p - np.log(p))
 
-fig, ax = plt.subplots(figsize=(5.5, 5))
-inicios = [(0.2, 0.2), (0.4, 0.4), (0.6, 0.6), (0.8, 0.8), (1.2, 1.2), (0.05, 1.0)]
-fases.retrato(LV1, (0, 2), (0, 2), inicios, T=12, ax=ax, args=(rho,),
-              nulclinas=[(lambda X, Y: 1 - Y, COLORES["nul_h"]), (lambda X, Y: 1 - X, COLORES["nul_p"])],
-              equilibrios=[(1, 1, "centro"), (0, 0, "silla")], xlabel="$h$", ylabel="$p$")
-estilo.parametros(ax, rf"$\\rho = {rho}$")
-if GUARDAR: estilo.guardar(fig, "LV1")""")
+with fuente(14):
+    fig, ax = plt.subplots(figsize=(5.5, 5))
+    inicios = [(0.2, 0.2), (0.4, 0.4), (0.6, 0.6), (0.8, 0.8), (1.2, 1.2), (0.05, 1.0)]
+    fases.retrato(LV1, (0, 2), (0, 2), inicios, T=12, ax=ax, args=(rho,),
+                  nulclinas=[(lambda X, Y: 1 - Y, COLORES["nul_h"]), (lambda X, Y: 1 - X, COLORES["nul_p"])],
+                  equilibrios=[(1, 1, "centro"), (0, 0, "silla")], xlabel="$h$", ylabel="$p$")
+    agrandar(ax)
+    estilo.parametros(ax, rf"$\\rho = {rho}$", fontsize=12)
+    if GUARDAR: estilo.guardar(fig, "LV1")""")
 
 code("""# Verificación numérica de la conservación de H a lo largo de una trayectoria
 sol = solve_ivp(LV1, (0, 30), [0.3, 0.3], args=(rho,), rtol=1e-10, atol=1e-12, dense_output=True)
@@ -120,16 +143,18 @@ code("""def LV2(t, X, rho, k):
     return [rho * h * (1 - h / k - p), -p * (1 - h) / rho]
 
 def figura_LV2(rho, k, nombre, T=25):
-    fig, ax = plt.subplots(figsize=(5.5, 5))
-    inicios = [(0.05, 2.0), (0.2, 2.0), (0.5, 2.0), (1.0, 2.0), (1.6, 2.0), (2.0, 1.5), (2.0, 0.6), (2.0, 0.1), (0.3, 0.05)]
-    eqs = [(0, 0, "silla"), (k, 0, "estable" if k <= 1 else "silla")]
-    if k > 1:
-        eqs.append((1, 1 - 1 / k, "estable"))
-    fases.retrato(LV2, (0, 2), (0, 2), inicios, T=T, ax=ax, args=(rho, k),
-                  nulclinas=[(lambda X, Y: 1 - X / k - Y, COLORES["nul_h"]), (lambda X, Y: 1 - X, COLORES["nul_p"])],
-                  equilibrios=eqs, xlabel="$h$", ylabel="$p$")
-    estilo.parametros(ax, rf"$\\rho = {rho}$, $k = {k}$")
-    if GUARDAR: estilo.guardar(fig, nombre)
+    with fuente(14):
+        fig, ax = plt.subplots(figsize=(5.5, 5))
+        inicios = [(0.05, 2.0), (0.2, 2.0), (0.5, 2.0), (1.0, 2.0), (1.6, 2.0), (2.0, 1.5), (2.0, 0.6), (2.0, 0.1), (0.3, 0.05)]
+        eqs = [(0, 0, "silla"), (k, 0, "estable" if k <= 1 else "silla")]
+        if k > 1:
+            eqs.append((1, 1 - 1 / k, "estable"))
+        fases.retrato(LV2, (0, 2), (0, 2), inicios, T=T, ax=ax, args=(rho, k),
+                      nulclinas=[(lambda X, Y: 1 - X / k - Y, COLORES["nul_h"]), (lambda X, Y: 1 - X, COLORES["nul_p"])],
+                      equilibrios=eqs, xlabel="$h$", ylabel="$p$")
+        agrandar(ax)
+        estilo.parametros(ax, rf"$\\rho = {rho}$, $k = {k}$", fontsize=12)
+        if GUARDAR: estilo.guardar(fig, nombre)
     return fig
 
 figura_LV2(1.0, 0.5, "LVk<1");""")
@@ -172,13 +197,15 @@ code("""def bacterias(t, X, k, beta, gamma):
 
 def figura_bacterias(k, beta, gamma, nombre, T=80):
     ah = (1 - 1 / k) * (beta + 1)
-    fig, ax = plt.subplots(figsize=(5.5, 5))
-    inicios = [(1.05, 1.0), (0.3, 1.8), (1.9, 0.2), (0.1, 0.1), (1.9, 1.9)]
-    fases.retrato(bacterias, (0, 2), (0, 2), inicios, T=T, ax=ax, args=(k, beta, gamma),
-                  nulclinas=[(lambda X, Y: (beta + X) * (1 - X / k) / ah - Y, COLORES["nul_h"]), (lambda X, Y: 1 - X, COLORES["nul_p"])],
-                  equilibrios=[(1, 1, "estable" if k < 2 + beta else "inestable")], xlabel="$h$", ylabel="$p$")
-    estilo.parametros(ax, rf"$k = {k}$, $\\beta = {beta}$, $\\gamma = {gamma}$" + "\\n" + rf"$k_c = 2+\\beta = {2 + beta}$")
-    if GUARDAR: estilo.guardar(fig, nombre)
+    with fuente(14):
+        fig, ax = plt.subplots(figsize=(5.5, 5))
+        inicios = [(1.05, 1.0), (0.3, 1.8), (1.9, 0.2), (0.1, 0.1), (1.9, 1.9)]
+        fases.retrato(bacterias, (0, 2), (0, 2), inicios, T=T, ax=ax, args=(k, beta, gamma),
+                      nulclinas=[(lambda X, Y: (beta + X) * (1 - X / k) / ah - Y, COLORES["nul_h"]), (lambda X, Y: 1 - X, COLORES["nul_p"])],
+                      equilibrios=[(1, 1, "estable" if k < 2 + beta else "inestable")], xlabel="$h$", ylabel="$p$")
+        agrandar(ax)
+        estilo.parametros(ax, rf"$k = {k}$, $\\beta = {beta}$, $\\gamma = {gamma}$" + "\\n" + rf"$k_c = 2+\\beta = {2 + beta}$", fontsize=12)
+        if GUARDAR: estilo.guardar(fig, nombre)
     return fig
 
 beta, gamma = 1.0, 0.5
@@ -213,11 +240,12 @@ beta, gamma = 0.6, 0.1
 s0, i0 = 0.7, 0.05
 sol = solve_ivp(SIR, (0, 160), [s0, i0], args=(beta, gamma), rtol=1e-8, dense_output=True)
 t = np.linspace(0, 160, 800); s, i = sol.sol(t); r = 1 - s - i
-fig, ax = plt.subplots()
-ax.plot(t, s, label="$s(t)$"); ax.plot(t, i, label="$i(t)$"); ax.plot(t, r, label="$r(t)$")
-ax.set_xlabel("Tiempo"); ax.set_ylabel("Proporción"); ax.legend()
-estilo.parametros(ax, rf"$\\beta={beta}$, $\\gamma={gamma}$, $R_0={beta/gamma:.0f}$", loc="upper right")
-if GUARDAR: estilo.guardar(fig, "SIR")
+with fuente(14):
+    fig, ax = plt.subplots()
+    ax.plot(t, s, label="$s(t)$"); ax.plot(t, i, label="$i(t)$"); ax.plot(t, r, label="$r(t)$")
+    ax.set_xlabel("Tiempo"); ax.set_ylabel("Proporción"); ax.set_ylim(0, 1.18); ax.legend(loc="center right")
+    estilo.parametros(ax, rf"$\\beta={beta}$, $\\gamma={gamma}$, $R_0={beta/gamma:.0f}$", loc="upper right", fontsize=12)
+    if GUARDAR: estilo.guardar(fig, "SIR")
 print(f"pico: i_max = {i.max():.3f} en t = {t[i.argmax()]:.1f};  s_inf = {s[-1]:.3f}")""")
 
 code("""# Plano de fases (s, i): curvas de nivel de i + s - ln(s)/R0 en el triángulo s + i <= 1
@@ -232,15 +260,19 @@ def plano_si(R0, ax, niveles=8):
     # una trayectoria con flecha desde (1, 0+)
     solp = solve_ivp(SIR, (0, 200), [0.999, 0.001], args=(R0, 1.0), rtol=1e-9, dense_output=True)
     tt = np.linspace(0, 200, 800); sp, ip = solp.sol(tt)
-    ax.plot(sp, ip, color=COLORES["modelo"], lw=2)
-    k = np.argmax(ip); ax.annotate("", xy=(sp[k + 1], ip[k + 1]), xytext=(sp[k], ip[k]), arrowprops=dict(arrowstyle="-|>", color=COLORES["modelo"], mutation_scale=16))
+    ax.plot(sp, ip, color=COLORES["modelo"], lw=2.5)
+    k = np.argmax(ip)
+    if k > 0:   # si R0 < 1 no hay pico: la trayectoria es un segmento minúsculo y la flecha no aporta
+        ax.annotate("", xy=(sp[k + 1], ip[k + 1]), xytext=(sp[k], ip[k]), arrowprops=dict(arrowstyle="-|>", color=COLORES["modelo"], mutation_scale=22))
     ax.set_xlim(0, 1); ax.set_ylim(0, 1); ax.set_xlabel("$s$"); ax.set_ylabel("$i$")
-    ax.set_title(rf"$R_0 = {R0}$"); ax.legend(loc="upper right")
+    ax.set_title(rf"$R_0 = {R0:g}$"); ax.legend(loc="upper right", fontsize=13)
 
-fig, axs = plt.subplots(1, 3, figsize=(12, 4))
-for ax, R0 in zip(axs, [0.8, 2.0, 4.0]):
-    plano_si(R0, ax)
-if GUARDAR: estilo.guardar(fig, "SIR-plano-si")""")
+with fuente(16):
+    fig, axs = plt.subplots(1, 3, figsize=(10, 3.8))
+    for ax, R0 in zip(axs, [0.8, 2.0, 4.0]):
+        plano_si(R0, ax)
+    fig.tight_layout()
+    if GUARDAR: estilo.guardar(fig, "SIR-plano-si")""")
 
 code("""# Pico y tamaño final en función de R0 (con s0 -> 1, i0 -> 0)
 R0s = np.linspace(1.01, 6, 100)

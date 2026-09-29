@@ -480,9 +480,14 @@ Las preguntas que queremos responder son:
 \item ¿Qué pasa cuando $\lambda$ cruza el valor $0$? ¿Y cuando $\lambda$ es grande?
 \item Si medimos la corriente en un circuito real, ¿podemos determinar $\lambda$ y comprobar que el modelo predice bien la forma de onda?
 \end{enumerate}
-Este problema es, en cierto sentido, el opuesto de la epidemia: allí todo tiende a un estado de reposo; acá el sistema se aleja del reposo y termina oscilando por su cuenta. Entre los dos aparecen casi todos los conceptos de esta parte: equilibrios y su estabilidad, umbrales, ciclos límite y bifurcaciones.
+Este problema es, en cierto sentido, el opuesto de la epidemia: allí todo tiende a un estado de reposo; acá el sistema se aleja del reposo y termina oscilando por su cuenta. Entre los dos aparecen casi todos los conceptos de esta parte: equilibrios y su estabilidad, umbrales, ciclos límite y bifurcaciones. La Figura~\ref{fig:circuito-vdp-corriente} muestra, en una simulación, la forma de onda que se pretende explicar.
 
-\figpendiente{Corriente medida en un circuito de van der Pol}{Registro (real o simulado con ruido) de la corriente en función del tiempo, para dos valores de $\lambda$, que sirva de dato para el laboratorio.}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\textwidth]{circuito-vdp-corriente.png}
+  \caption{Corriente en el circuito de van der Pol (simulación) a partir de una perturbación pequeña del reposo. Arriba, $\lambda=0.1$: la corriente crece lentamente y se estabiliza en una oscilación casi sinusoidal de amplitud $\approx 2$ y período $\approx 2\pi$. Abajo, $\lambda=5$: el circuito se enciende de inmediato y oscila con forma de relajación, con período mucho mayor que el natural. En el laboratorio se trabaja con un registro de este tipo, con ruido.}
+  \label{fig:circuito-vdp-corriente}
+\end{figure}
 
 \section{Organización de esta parte}
 
@@ -530,7 +535,7 @@ $$
 la cual se muestra esquemáticamente en la Figura~\ref{fig:tasa-logistica}.
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.4\textwidth]{tasa-logistica.png}
+  \includegraphics[width=0.45\textwidth]{tasa-logistica.png}
   \caption{Tasa logística $\alpha(P) = a\left(1 - \frac{P}{K}\right)$ como función de la población $P$.}
   \label{fig:tasa-logistica}
 \end{figure}
@@ -541,7 +546,7 @@ $$
 cuyo comportamiento contrasta fuertemente con el del modelo malthusiano, como se ilustra en la Figura~\ref{fig:maltus-logistico}.
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.4\textwidth]{maltus-vs-logistico.png}
+  \includegraphics[width=0.45\textwidth]{maltus-vs-logistico.png}
   \caption{Comparación entre el modelo malthusiano y el modelo logístico.}
   \label{fig:maltus-logistico}
 \end{figure}
@@ -565,9 +570,14 @@ en la cual ha desaparecido explícitamente el parámetro $K$. Si además medimos
 
 La ecuación logística se puede resolver explícitamente (ver los ejercicios de laboratorio), pero lo que nos interesa ahora es un método que funcione aunque no sepamos resolver. Para una ecuación escalar $\dot p = f(p)$ alcanza con mirar el signo de $f$. Los ceros de $f$ son los \emph{equilibrios}: si $p(0)=p^*$ con $f(p^*)=0$, la solución es constante. Entre dos ceros consecutivos $f$ tiene signo constante, de modo que la solución es monótona: crece si $f>0$ y decrece si $f<0$. Como las soluciones no pueden cruzarse (por la unicidad de soluciones, que se repasa en el Capítulo \ref{cap:flujo}), una solución que empieza entre dos equilibrios queda atrapada entre ellos para siempre y converge, monótonamente, al equilibrio hacia el que apunta el signo de $f$.
 
-Toda esta información se resume en la \emph{recta de fase}: se dibuja la recta real, se marcan los equilibrios y, en cada intervalo, una flecha en la dirección en que se mueve $p$. Para la logística, $f(p) = a(1-p)p$ se anula en $p=0$ y $p=1$; es negativa para $p<0$ (sin sentido biológico), positiva en $(0,1)$ y negativa para $p>1$. Luego, toda solución con $0<p(0)<1$ crece hacia $1$, y toda solución con $p(0)>1$ decrece hacia $1$: el equilibrio $p=1$ (la capacidad de carga) atrae a todas las soluciones con dato inicial positivo, y el equilibrio $p=0$ las repele. Esto es exactamente lo que se observa en la Figura~\ref{fig:logistico-condiciones-iniciales}.
+Toda esta información se resume en la \emph{recta de fase}: se dibuja la recta real, se marcan los equilibrios y, en cada intervalo, una flecha en la dirección en que se mueve $p$. Para la logística, $f(p) = a(1-p)p$ se anula en $p=0$ y $p=1$; es negativa para $p<0$ (sin sentido biológico), positiva en $(0,1)$ y negativa para $p>1$. Luego, toda solución con $0<p(0)<1$ crece hacia $1$, y toda solución con $p(0)>1$ decrece hacia $1$: el equilibrio $p=1$ (la capacidad de carga) atrae a todas las soluciones con dato inicial positivo, y el equilibrio $p=0$ las repele. Esto es exactamente lo que se observa en la Figura~\ref{fig:logistico-condiciones-iniciales}; la recta de fase correspondiente está en la Figura~\ref{fig:recta-fase-logistica}.
 
-\figpendiente{Recta de fase de la ecuación logística}{Recta real con los equilibrios $p=0$ y $p=1$ marcados y flechas indicando el sentido del movimiento en cada intervalo; debajo, el gráfico de $f(p)=a(1-p)p$.}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.6\textwidth]{recta-fase-logistica.png}
+  \caption{Recta de fase de la logística $\dot p=(1-p)p$: el equilibrio $p=0$ es inestable (vacío) y $p=1$ es estable (lleno); las flechas indican el sentido del movimiento en cada intervalo. Debajo, el gráfico de $f(p)$.}
+  \label{fig:recta-fase-logistica}
+\end{figure}
 
 \begin{figure}[ht]
   \centering
@@ -859,13 +869,18 @@ que se integra directamente: la cantidad
 \begin{equation}\label{eq:SIR-conservada}
 i + s - \frac{1}{R_0}\ln s
 \end{equation}
-es constante a lo largo de cada trayectoria. Las trayectorias son entonces las curvas de nivel de \eqref{eq:SIR-conservada} en el triángulo $s,i\ge 0$, $s+i\le 1$, recorridas con $s$ decreciente. Sobre cada una, $i$ alcanza su máximo cuando $s=1/R_0$ (Figura pendiente). Si la epidemia empieza con $s_0\simeq 1$ e $i_0\simeq 0$, la constante vale $1$, y el pico es
+es constante a lo largo de cada trayectoria. Las trayectorias son entonces las curvas de nivel de \eqref{eq:SIR-conservada} en el triángulo $s,i\ge 0$, $s+i\le 1$, recorridas con $s$ decreciente. Sobre cada una, $i$ alcanza su máximo cuando $s=1/R_0$ (Figura~\ref{fig:SIR-plano-si}). Si la epidemia empieza con $s_0\simeq 1$ e $i_0\simeq 0$, la constante vale $1$, y el pico es
 $$
 i_{\max} = 1 - \frac{1}{R_0}\bigl(1+\ln R_0\bigr).
 $$
 Para $R_0=2$ el pico es del $15\%$ de la población; para $R_0=6$, del $53\%$.
 
-\figpendiente{Plano de fases $(s,i)$ del modelo SIR}{Curvas de nivel de $i+s-\frac{1}{R_0}\ln s$ en el triángulo $s+i\le 1$, con la recta $s=1/R_0$ marcada y flechas indicando el sentido ($s$ decreciente). Dos o tres valores de $R_0$.}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.95\textwidth]{SIR-plano-si.png}
+  \caption{Plano de fases $(s,i)$ del modelo SIR para $R_0=0.8$, $2$ y $4$: curvas de nivel de $i+s-\frac{1}{R_0}\ln s$ en el triángulo $s+i\le 1$ (se recorren con $s$ decreciente) y la recta $s=1/R_0$, sobre la que $i$ alcanza su máximo. Para $R_0<1$ no hay pico.}
+  \label{fig:SIR-plano-si}
+\end{figure}
 
 \subsection*{¿Cuánta gente no se contagia?}
 
@@ -1474,7 +1489,7 @@ Una vez realizadas estas observaciones, el resto sigue del análisis hecho en \c
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.4\textwidth]{clasificacion.png}
+  \includegraphics[width=0.6\textwidth]{clasificacion.png}
   \caption{Regiones descriptas en el Teorema \ref{teo.lineal}.}
   \label{fig:clasificacion}
 \end{figure}
@@ -1598,7 +1613,7 @@ La ecuación para $\theta$ dice que las trayectorias rotan monótonamente en el 
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.6\textwidth]{sinHG.png}
+  \includegraphics[width=0.9\textwidth]{sinHG.png}
   \caption{Diagrama de fases para \eqref{eq:sinHG}. A la izquierda para $\lambda>0$ y a la derecha para $\lambda<0$.}
   \label{fig:sinHG}
 \end{figure}
@@ -1936,7 +1951,7 @@ verifica $\dot V = -\frac{\rho}{k}(h-1)^2\le 0$. Por el principio de LaSalle, el
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.6\textwidth]{vanderPol.png}
+  \includegraphics[width=0.9\textwidth]{vanderPol.png}
   \caption{Diagrama de fases para el oscilador de van der Pol \eqref{eq:vdP-sistema}. A la izquierda, $\lambda=0.5$: el origen es inestable y las trayectorias convergen a un ciclo límite. A la derecha, $\lambda=-0.5$: el origen es asintóticamente estable; existe también un ciclo límite inestable (el mismo ciclo recorrido con el tiempo invertido) que separa las trayectorias que convergen al origen de las que escapan.}
   \label{fig:vanderPol}
 \end{figure}
@@ -2143,7 +2158,7 @@ Ver Figura~\ref{fig:nulclinas}.
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.6\textwidth]{nulclinas.png}
+  \includegraphics[width=0.9\textwidth]{nulclinas.png}
   \caption{Gráfico de las nulclinas en los casos $a_i>1$ (izquierda) y $a_i<1$ (derecha), $i=1,2$.}
   \label{fig:nulclinas}
 \end{figure}
@@ -2496,7 +2511,7 @@ Observemos que el $(0,0)$ siempre es un equilibrio del sistema así que buscamos
 \end{ejem}
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.8\textwidth]{nulclinas-bif.png}
+  \includegraphics[width=0.9\textwidth]{nulclinas-bif.png}
   \caption{Gráfico de las nulclinas para el sistema \eqref{eq:bif1}.}
   \label{fig:nulclinas-bif}
 \end{figure}
@@ -2540,7 +2555,7 @@ $$
 Luego $(x_1^*, y_1^*)$ es una silla y como $\Delta_2<ab$, tenemos que $\tau^2-4\Delta_2>(a-b)^2>0$ con lo que $(x_2^*, y_2^*)$ es un nodo estable. El diagrama de fases para este caso está en la Figura \ref{fig:ej-bif1-fases}
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.6\textwidth]{ej-bif1-fases.png}
+  \includegraphics[width=0.7\textwidth]{ej-bif1-fases.png}
   \caption{Diagrama de fases en el caso $a<a_c$.}
   \label{fig:ej-bif1-fases}
 \end{figure}
@@ -2579,9 +2594,14 @@ Entonces, salvo en un caso degenerado que se describe abajo, ocurre una de las d
 En ambos casos el período de la órbita tiende a $2\pi/\omega(0)$ cuando $\mu\to 0$. Cuál de los dos casos ocurre está determinado por el signo de un coeficiente $\ell_1$ (el \emph{primer coeficiente de Lyapunov}) que depende de las derivadas de $F$ hasta orden tres en el origen: $\ell_1<0$ da el caso supercrítico y $\ell_1>0$ el subcrítico. El caso degenerado es $\ell_1=0$.
 \end{teo}
 
-La demostración original de este resultado se debe a E. Hopf \cite{Hopf}; una demostración moderna, junto con la fórmula para $\ell_1$, puede verse en \cite{Kuznetsov}. En los ejemplos que siguen no calculamos $\ell_1$: decidimos si la bifurcación es super o subcrítica por otros medios (o numéricamente).
+La demostración original de este resultado se debe a E. Hopf \cite{Hopf}; una demostración moderna, junto con la fórmula para $\ell_1$, puede verse en \cite{Kuznetsov}. En los ejemplos que siguen no calculamos $\ell_1$: decidimos si la bifurcación es super o subcrítica por otros medios (o numéricamente). La Figura~\ref{fig:hopf-diagrama} resume los dos casos.
 
-\figpendiente{Diagrama de la bifurcación de Hopf}{Amplitud de la órbita periódica en función de $\mu$ para los casos supercrítico y subcrítico (ramas parabólicas), junto con tres diagramas de fase ($\mu<0$, $\mu=0$, $\mu>0$) para el caso supercrítico.}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\textwidth]{hopf-diagrama.png}
+  \caption{Bifurcación de Hopf. Arriba: amplitud de la órbita periódica en función de $\mu$ en los casos supercrítico ($\ell_1<0$, ciclo estable para $\mu>0$) y subcrítico ($\ell_1>0$, ciclo inestable para $\mu<0$); trazo lleno = estable, a trazos = inestable. Abajo: retratos de fase de la forma normal $\dot r=\mu r-r^3$, $\dot\theta=1$ para $\mu<0$, $\mu=0$ y $\mu>0$.}
+  \label{fig:hopf-diagrama}
+\end{figure}
 
 \begin{volvemos}{el circuito}
 En el caso del oscilador de van der Pol (Sección \ref{sec:conductor-vdP}), el campo $F(\xx,\lambda)$ viene dado por 
