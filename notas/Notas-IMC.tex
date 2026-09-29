@@ -6346,7 +6346,7 @@ En esta parte los problemas conductores se desarrollan principalmente en el labo
 
 \subsection*{La temperatura del suelo}\label{sec:conductor-suelo}
 
-En la Parte II estudiamos la temperatura del aire, que oscila con un ciclo diario y uno anual. Esa temperatura es la que ``ve'' la superficie del suelo, y el calor se difunde desde allí hacia abajo. Las estaciones meteorológicas miden la temperatura del suelo a varias profundidades (típicamente $5$, $10$, $20$, $50$ y $100$ cm), y los registros muestran algo notable: a medida que se baja, la oscilación diaria se atenúa muy rápido (a medio metro ya casi no se nota), la oscilación anual se atenúa mucho más lentamente, y ambas llegan \emph{retrasadas}: el máximo diario a $20$ cm ocurre varias horas después que en la superficie, y el máximo anual a un metro de profundidad ocurre semanas después que en la superficie. A suficiente profundidad la temperatura es constante todo el año (es el principio de las bodegas y de los sótanos).
+En la Parte II estudiamos la temperatura del aire, que oscila con un ciclo diario y uno anual. Esa temperatura es la que ``ve'' la superficie del suelo, y el calor se difunde desde allí hacia abajo. Las estaciones meteorológicas miden la temperatura del suelo a varias profundidades (típicamente $5$, $10$, $20$, $50$ y $100$ cm), y los registros muestran algo notable (Figura \ref{fig:suelo-datos}): a medida que se baja, la oscilación diaria se atenúa muy rápido (a medio metro ya casi no se nota), la oscilación anual se atenúa mucho más lentamente, y ambas llegan \emph{retrasadas}: el máximo diario a $20$ cm ocurre varias horas después que en la superficie, y el máximo anual a un metro de profundidad ocurre semanas después que en la superficie. A suficiente profundidad la temperatura es constante todo el año (es el principio de las bodegas y de los sótanos).
 
 Las preguntas son:
 \begin{enumerate}
@@ -6358,7 +6358,13 @@ Las preguntas son:
 \end{enumerate}
 El modelo es la ecuación del calor en el semieje $x>0$ con una condición de borde \emph{periódica en el tiempo} en $x=0$. Veremos que el estado al que converge la solución no es un equilibrio sino una oscilación, y que la teoría de convergencia al equilibrio del Capítulo \ref{ch:intro-heat} se aplica igual.
 
-\figpendiente{Temperatura del suelo a varias profundidades}{Registro real (o simulado) de temperatura a $0$, $10$, $20$, $50$ y $100$ cm durante una semana y durante un año, mostrando la atenuación y el retraso de los ciclos.}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.95\textwidth]{suelo-datos.png}
+  \caption{Temperatura del aire y del suelo en cuatro capas (0--7, 7--28, 28--100 y 100--255 cm; reanálisis ERA5-Land para Aeroparque, 2023): (a) una semana de enero, hora por hora: el ciclo diario se atenúa y se retrasa con la profundidad, y a 28--100 cm ya desaparece; (b) el año en medias móviles de 7 días: el ciclo anual se atenúa mucho menos y llega a la capa más profunda con casi dos meses de retraso. Los datos están en el repositorio de la materia (\texttt{datos/suelo\_horaria.csv}).}
+  \label{fig:suelo-datos}
+\end{figure}
+
 
 \subsection*{La cuerda vibrante}\label{sec:conductor-cuerda}
 
@@ -6549,11 +6555,18 @@ El movimiento browniano se refiere al movimiento irregular y errático de partí
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.5\textwidth]{Browniano.png}
-\caption{Realización de una partícula en un movimiento Browniano.}
+\caption{Realización de una partícula en un movimiento browniano ($D=0.5$).}
 \label{fig:Browniano}
 \end{figure}
 
-En 1905, Albert Einstein proporcionó una descripción cuantitativa del movimiento browniano basada en la hipótesis de que las partículas visibles sufren una enorme cantidad de colisiones microscópicas con las moléculas del fluido. Estas colisiones, impredecibles a escala individual, producen un movimiento neto aleatorio que puede describirse estadísticamente.
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\textwidth]{paseo-azar.png}
+  \caption{Paseo al azar simétrico con $\Delta x=\Delta t=1$ ($D=1/2$): (a) trayectorias, con la envolvente $\pm\sqrt{2Dt}$; (b) distribución de la posición tras $n=100$ pasos comparada con la probabilidad exacta $p_j^n$ y con la gaussiana de varianza $n\Delta x^2=2Dt_n$, la solución fundamental de la ecuación del calor.}
+  \label{fig:paseo-azar}
+\end{figure}
+
+En 1905, Albert Einstein proporcionó una descripción cuantitativa del movimiento browniano basada en la hipótesis de que las partículas visibles sufren una enorme cantidad de colisiones microscópicas con las moléculas del fluido. Estas colisiones, impredecibles a escala individual, producen un movimiento neto aleatorio que puede describirse estadísticamente. La Figura \ref{fig:paseo-azar} muestra el paseo al azar discreto y cómo su distribución se acerca a la gaussiana.
 
 En su artículo \cite{Einstein}, Einstein mostró que la evolución temporal de la densidad de probabilidad de encontrar una partícula browniana satisface la ecuación de difusión. Este resultado constituyó una de las primeras confirmaciones cuantitativas de la teoría molecular de la materia.
 
@@ -7588,48 +7601,26 @@ Para ilustrar el resultado, consideremos el problema definido en
 condiciones de borde homogéneas (\(u=0\) en \(\partial \Omega\)), dato
 inicial \(g=0\) y coeficiente de difusión \(D=0.4\).
 
-La solución estacionaria del problema se muestra en la Figura~\ref{fig:estacionaria-heat}.
+La solución estacionaria del problema y la evolución hacia ella se muestran en la Figura~\ref{fig:heat2d}.
+
+
 
 \begin{figure}[ht]
-\centering
-\includegraphics[width=0.5\textwidth]{estacionaria-heat.png}
-\caption{Estado estacionario \(u^*\) de la ecuación \(-D\Delta u^* = f\)
-con condiciones de borde homogéneas.}
-\label{fig:estacionaria-heat}
+  \centering
+  \includegraphics[width=0.95\textwidth]{heat2d.png}
+  \caption{Solución de $u_t - D\Delta u = 1$ en $[0,1]^2$ con $u=0$ en el borde, $u(\cdot,0)=0$ y $D=0.4$, en varios instantes, y el estado estacionario $u^*$ (misma escala de color). A $t=0.5$ la diferencia con $u^*$ es $2\cdot10^{-3}$ en norma $L^2$.}
+  \label{fig:heat2d}
 \end{figure}
 
-La evolución temporal de la solución de la ecuación del calor \(u_t - D\Delta u = f\) se observa en la Figura~\ref{fig:heat2d} para diferentes instantes de tiempo.
 
+
+En la Figura~\ref{fig:errores-heat-log} se muestra, en escala
+logarítmica, la norma $\|u(\cdot,t)-u^*\|_2$ en función del tiempo: exhibe un decaimiento
+exponencial, y el ajuste lineal da la tasa.
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.4\textwidth]{heat2d-1.png}
-\includegraphics[width=0.4\textwidth]{heat2d-2.png}
-\includegraphics[width=0.4\textwidth]{heat2d-3.png}
-\includegraphics[width=0.4\textwidth]{heat2d-4.png}
-\caption{Snapshots de la solución \(u(x,y,t)\) en diferentes tiempos,
-mostrando la convergencia hacia el estado estacionario.}
-\label{fig:heat2d}
-\end{figure}
-
-La Figura~\ref{fig:errores-heat} muestra la evolución de la
-norma \(\|u(\cdot,t) - u^*\|_2\) en función del tiempo, ilustrando la
-convergencia de la solución temporal hacia el estado estacionario.
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=0.5\textwidth]{errores-heat.png}
-\caption{Evolución temporal de la norma \(\|u(\cdot,t) - u^*\|_2\),
-indicando la convergencia hacia el estado estacionario.}
-\label{fig:errores-heat}
-\end{figure}
-
-En la Figura~\ref{fig:errores-heat-log} se muestra el gráfico en escala
-logarítmica de la norma $\|u(\cdot,t)-u^*\|_2$, que exhibe un decaimiento
-exponencial. El ajuste lineal confirma una tasa de decaimiento constante.
-\begin{figure}[ht]
-\centering
-\includegraphics[width=0.5\textwidth]{errores-heat-log.png}
-\caption{Gráfico semilogarítmico del error $\|u(\cdot,t)-u^*\|_{L^2(\Omega)}$. La pendiente de la recta ajustada numéricamente representa la tasa de decaimiento exponencial.}
+\includegraphics[width=0.6\textwidth]{errores-heat-log.png}
+\caption{Gráfico semilogarítmico del error $\|u(\cdot,t)-u^*\|_{L^2(\Omega)}$ para el ejemplo de la Figura \ref{fig:heat2d}, con la recta ajustada (pendiente $-7.90$) y la tasa teórica $2\pi^2D$. En gris, lo que da el esquema implícito con paso $\Delta t=0.01$: pendiente $-7.60$.}
 \label{fig:errores-heat-log}
 \end{figure}
 
@@ -7647,13 +7638,13 @@ En el dominio considerado, $\Omega = [0,1]\times[0,1]\subset\R^2$, el diámetro 
 \[
 \lambda_1 D \ge 0.2\,\pi^2 \approx 1.97 .
 \]
-Por otra parte, el ajuste numérico del decaimiento del error (Figura \ref{fig:errores-heat-log}) arroja una tasa bastante mayor, del orden de $7.6$. Esto no contradice la teoría: la cota basada en el diámetro garantiza un decaimiento exponencial, pero no captura la forma del dominio, y por lo tanto no es óptima.
+Por otra parte, el ajuste numérico del decaimiento del error (Figura \ref{fig:errores-heat-log}) arroja una tasa bastante mayor, del orden de $7.9$. Esto no contradice la teoría: la cota basada en el diámetro garantiza un decaimiento exponencial, pero no captura la forma del dominio, y por lo tanto no es óptima.
 
 De hecho, para el cuadrado sabemos (Observación \ref{obs:poincare-optima}) que la constante óptima es $\lambda_1 = 2\pi^2$, que da la tasa
 \[
 \lambda_1 D = 0.8\,\pi^2 \approx 7.90,
 \]
-en excelente acuerdo con la pendiente $7.6$ observada numéricamente (la pequeña diferencia se debe al error de discretización y a que el ajuste incluye el transitorio inicial, donde contribuyen los modos superiores). En general, la tasa de convergencia al equilibrio de un proceso difusivo en un dominio $\Omega$ está dada por $D\lambda_1(\Omega)$: \emph{el primer autovalor del Laplaciano es la constante de tiempo del dominio}.
+en acuerdo con la pendiente $7.90$ observada numéricamente. Vale la pena notar que la tasa medida depende del esquema numérico: el método de Euler implícito con paso $\Delta t$ decae como $(1+D\lambda_1\Delta t)^{-t/\Delta t}$, es decir con tasa $\ln(1+D\lambda_1\Delta t)/\Delta t$, que para $\Delta t=0.01$ vale $7.60$ (la curva gris de la figura); no es un error del método, es la tasa \emph{del esquema}, que tiende a la del problema continuo cuando $\Delta t\to0$. En general, la tasa de convergencia al equilibrio de un proceso difusivo en un dominio $\Omega$ está dada por $D\lambda_1(\Omega)$: \emph{el primer autovalor del Laplaciano es la constante de tiempo del dominio}.
 
 \section{Volvemos al problema: la temperatura del suelo}\label{sec:volvemos-suelo}
 
@@ -7677,13 +7668,19 @@ y tomando parte real obtenemos la \emph{solución periódica}
 \begin{equation}\label{eq:suelo-periodica}
 u_{per}(x,t) = \bar T + A\, e^{-x/\delta}\cos\Bigl(\omega t - \frac{x}{\delta}\Bigr) .
 \end{equation}
-La lectura es inmediata y responde las preguntas 2 y 3 de la Sección \ref{sec:conductores-III}:
+La lectura es inmediata (Figura \ref{fig:suelo-periodica}) y responde las preguntas 2 y 3 de la Sección \ref{sec:conductores-III}:
 \begin{itemize}
 \item la oscilación se atenúa exponencialmente con la profundidad, con una \emph{profundidad de penetración} $\delta = \sqrt{2D/\omega}$: a profundidad $\delta$ la amplitud es $e^{-1}\simeq 37\%$ de la superficial, y a $3\delta$ es el $5\%$;
 \item como $\delta\propto\omega^{-1/2}$, el ciclo anual ($\omega$ unas $365$ veces menor que el diario) penetra $\sqrt{365}\simeq 19$ veces más que el diario. Para un suelo típico, $D\simeq 5\times10^{-7}\,\mathrm{m^2/s}$, lo que da $\delta_{\text{diario}}\simeq 12$ cm y $\delta_{\text{anual}}\simeq 2.2$ m;
 \item la oscilación llega con un \emph{retraso de fase} $x/\delta$, es decir un retraso temporal $x/(\delta\omega)$: a profundidad $\delta$ el retraso es $1/\omega$, es decir $1/(2\pi)$ del período (unas $4$ horas para el ciclo diario, unos $2$ meses para el anual). A profundidad $\pi\delta$ la oscilación está en contrafase con la superficie: cuando arriba es verano, ahí abajo es invierno.
 \end{itemize}
-\figpendiente{Solución periódica de la ecuación del calor en el suelo}{Perfiles $u_{per}(x,t)$ para varios instantes del ciclo (envolvente $e^{-x/\delta}$ marcada) y, en otro panel, la oscilación en función del tiempo a varias profundidades mostrando atenuación y retraso.}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.95\textwidth]{suelo-periodica.png}
+  \caption{La solución periódica \eqref{eq:suelo-periodica} para el ciclo diario con $A=5$ °C y $D=5\cdot10^{-7}$ m$^2$/s ($\delta=11.7$ cm): (a) perfiles en profundidad a lo largo del ciclo, con la envolvente $\pm Ae^{-x/\delta}$; (b) la oscilación a varias profundidades: atenuación $e^{-x/\delta}$ y retraso $x/(\delta\omega)$; a $\pi\delta$ está en contrafase, con amplitud $e^{-\pi}A$.}
+  \label{fig:suelo-periodica}
+\end{figure}
+
 
 \subsection*{Convergencia al estado periódico}
 
@@ -7691,7 +7688,21 @@ La función $u_{per}$ es \emph{una} solución de \eqref{eq:suelo}, pero el suelo
 
 Vale la pena detenerse en la moraleja. La ``convergencia al equilibrio'' del título de la sección anterior es, en realidad, convergencia al \emph{atractor} del problema: cuando los datos no dependen del tiempo, el atractor es un estado estacionario; cuando los datos son periódicos, es un estado periódico. En ambos casos el argumento es el mismo (restar el atractor y ver que el resto decae) y la tasa está dada por $D\lambda_1$. Es el mismo esquema que en la Parte I: un equilibrio estable o un ciclo límite estable, ahora en dimensión infinita.
 
-En el laboratorio se ajusta $D$ a partir de registros reales de temperatura a varias profundidades (usando la atenuación y el retraso del ciclo diario) y se compara la predicción \eqref{eq:suelo-periodica} con los datos, lo que responde la pregunta 4. La pregunta 5 (la profundidad a la que enterrar una cañería) se responde con \eqref{eq:suelo-periodica} pidiendo que $\bar T - A e^{-x/\delta} > 0$ para el ciclo anual.
+En el laboratorio se ajusta $D$ a partir de registros reales de temperatura a varias profundidades (usando la atenuación y el retraso del ciclo diario) y se compara la predicción \eqref{eq:suelo-periodica} con los datos, lo que responde la pregunta 4; la Figura \ref{fig:suelo-ajuste} adelanta el resultado con los datos de la Figura \ref{fig:suelo-datos}: la atenuación y el retraso del ciclo diario entre las dos capas superficiales dan $D\simeq 3$--$5\cdot10^{-7}$ m$^2$/s, el valor típico; el ciclo anual da un retraso consistente, pero una atenuación menor que la prevista, en parte porque las capas son promedios sobre espesores grandes y no mediciones puntuales. La pregunta 5 (la profundidad a la que enterrar una cañería) se responde con \eqref{eq:suelo-periodica} pidiendo que $\bar T - A e^{-x/\delta} > 0$ para el ciclo anual (Figura \ref{fig:suelo-caneria}).
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\textwidth]{suelo-ajuste.png}
+  \caption{Estimación de la difusividad con los datos de la Figura \ref{fig:suelo-datos}: amplitud (escala logarítmica) y retraso de fase de los ciclos anual (arriba) y diario (abajo) en función de la profundidad media de cada capa, con las rectas $-x/\delta$ ajustadas y el $D=\delta^2\omega/2$ resultante. Para el ciclo diario sólo se usan las dos capas superficiales; en la tercera el ciclo ya casi no se ve.}
+  \label{fig:suelo-ajuste}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.6\textwidth]{suelo-caneria.png}
+  \caption{Temperatura mínima anual $\bar T - Ae^{-x/\delta_a}$ en función de la profundidad, con $D=5\cdot10^{-7}$ m$^2$/s ($\delta_a=2.24$ m). Con los valores ajustados para Buenos Aires ($\bar T=19$ °C, $A=8$ °C) el suelo no se congela ni en la superficie; en un clima frío hipotético ($\bar T=5$ °C, $A=15$ °C) hay que enterrar la cañería por debajo de $x=\delta_a\ln(A/\bar T)\simeq 2.5$ m.}
+  \label{fig:suelo-caneria}
+\end{figure}
 
 \chapter{La ecuación de Laplace/Poisson}
 
@@ -7733,9 +7744,9 @@ El problema consiste entonces en encontrar una función $u$ que minimice el func
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.4\textwidth]{sup-min1.png}
-\includegraphics[width=0.4\textwidth]{sup-min2.png}
-\caption{Dos superficies con igual condición de contorno. A la izquierda, una superficie arbitraria; a la derecha, una superficie mínima. (Figura a rehacer: en esta versión ambas superficies se ven iguales.)}
+\includegraphics[width=0.45\textwidth]{sup-min1.png}
+\includegraphics[width=0.45\textwidth]{sup-min2.png}
+\caption{Dos superficies con el mismo borde (el alambre $z=0.3\cos 2\theta$ sobre el disco unitario). A la izquierda, una superficie con ondulaciones interiores, de área $4.20$; a la derecha, la gráfica de la función armónica con ese dato de borde, $u=0.3(x^2-y^2)$, de área $3.41$.}
 \label{fig:sup-min}
 \end{figure}
 
@@ -7887,13 +7898,20 @@ u(x,y)
 =\frac{u(x+h,y)+u(x-h,y)+u(x,y+h)+u(x,y-h)}{4}.
 \]
 
-Esta es una ecuación de equilibrio discreta: el valor del juego en un punto interior es el promedio de los valores en su vecindad inmediata (ver Figura \ref{fig:juego}).
+Esta es una ecuación de equilibrio discreta: el valor del juego en un punto interior es el promedio de los valores en su vecindad inmediata (ver Figura \ref{fig:juego}). La Figura \ref{fig:juego-montecarlo} compara, en un ejemplo, el valor esperado estimado jugando muchas partidas con la solución de la ecuación de promedios.
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.4\textwidth]{juego.png}
+\includegraphics[width=0.45\textwidth]{juego.png}
 \caption{Interpretación probabilística de la ecuación de Laplace.
 El valor del juego en un punto interior es el promedio de los valores en los puntos vecinos, lo que en el límite continuo conduce a la ecuación $\Delta u = 0$.}
 \label{fig:juego}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.95\textwidth]{juego-montecarlo.png}
+  \caption{El juego con $n=20$ y pago $g = \sin2\pi x + \frac12\cos3\pi y$ en el borde: (a) una partida desde el centro; (b) el valor esperado estimado promediando $400$ partidas desde cada nodo; (c) la solución exacta de la ecuación de promedios. La diferencia entre (b) y (c) (error cuadrático medio $0.03$, máximo $0.11$) es el ruido estadístico, del orden de $\sigma/\sqrt{M}$.}
+  \label{fig:juego-montecarlo}
 \end{figure}
 
 Para interpretar esta ecuación en el límite continuo, suponemos que $u$ es una función suficientemente regular y desarrollamos en serie de Taylor alrededor del punto $(x,y)$:
@@ -8028,7 +8046,14 @@ Esta condición tiene una interpretación física clara. Si $u$ representa la te
 
 \subsection{Principio del máximo}
 
-Una de las propiedades más importantes de las funciones armónicas es el \emph{principio del máximo}. Este principio establece, en términos generales, que una función armónica en un dominio acotado alcanza su máximo y su mínimo en la frontera del dominio, y no en el interior (salvo que sea constante). 
+Una de las propiedades más importantes de las funciones armónicas es el \emph{principio del máximo}. Este principio establece, en términos generales, que una función armónica en un dominio acotado alcanza su máximo y su mínimo en la frontera del dominio, y no en el interior (salvo que sea constante).  La Figura \ref{fig:principio-maximo} lo ilustra.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.6\textwidth]{principio-maximo.png}
+  \caption{Solución de $\Delta u=0$ en el cuadrado con $u=g=\sin2\pi x+\frac12\cos3\pi y$ en el borde: el máximo y el mínimo se alcanzan en $\partial Q$; en el interior $|u|<1.43$.}
+  \label{fig:principio-maximo}
+\end{figure}
 
 \medskip
 
@@ -8211,7 +8236,7 @@ Sea $u\in C^2(\Omega)$ armónica en $\Omega\subset\R^n$. Entonces, para toda bol
 $$
 u(\xx_0) = \frac{1}{|\partial B_r|}\int_{\partial B_r(\xx_0)} u\, dS = \frac{1}{|B_r|}\int_{B_r(\xx_0)} u\, d\xx :
 $$
-el valor en el centro es el promedio de los valores sobre cualquier esfera centrada en él, y también el promedio sobre la bola.
+el valor en el centro es el promedio de los valores sobre cualquier esfera centrada en él, y también el promedio sobre la bola (Figura \ref{fig:valor-medio}).
 \end{teo}
 
 \begin{proof}
@@ -8222,6 +8247,13 @@ Sea $\phi(r)$ el promedio de $u$ sobre la esfera de radio $r$. Con el cambio de 
 \end{align*}
 Por el Teorema de la divergencia (Teorema \ref{Gauss}), la última integral es $\int_{B_r(\xx_0)}\Delta u\, d\xx = 0$. Luego $\phi$ es constante, y como $\phi(r)\to u(\xx_0)$ cuando $r\to 0$ (por continuidad de $u$), $\phi(r) = u(\xx_0)$ para todo $r$. La igualdad con el promedio sobre la bola se obtiene integrando en $r$ (coordenadas polares).
 \end{proof}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.85\textwidth]{valor-medio.png}
+  \caption{Propiedad del valor medio: para $u=x^3-3xy^2$ (armónica) el promedio sobre cualquier círculo o disco centrado en $\xx_0$ es $u(\xx_0)$; para $v = x^2+y^2$, con $\Delta v = 4>0$, el promedio sobre el círculo de radio $r$ es $v(\xx_0)+r^2$ y sobre el disco $v(\xx_0)+r^2/2$.}
+  \label{fig:valor-medio}
+\end{figure}
 
 La propiedad del valor medio tiene consecuencias inmediatas. Da una segunda demostración del principio del máximo: si $u$ alcanzara su máximo $M$ en un punto interior $\xx_0$, el promedio de $u$ sobre una bola alrededor de $\xx_0$ sería $M$, lo que obliga a $u\equiv M$ en esa bola, y por conexión en todo $\Omega$ (\emph{principio del máximo fuerte}: una función armónica no constante no alcanza su máximo en el interior). Y explica la regularidad de las funciones armónicas: $u$ es en cada punto un promedio de sí misma, y promediar suaviza; de hecho toda función armónica es $C^\infty$ (y aun analítica). La misma idea en versión discreta es la que hace funcionar los métodos numéricos de la Sección \ref{sec:juego} (ejercicios de laboratorio) y los algoritmos de propagación de etiquetas en grafos.
 
@@ -8266,8 +8298,8 @@ Sin entrar en derivaciones técnicas, las solución fundamental viene dada por
 donde $\omega_n$ es el volumen de la esfera de radio 1 en dimensión $n$ (por ejemplo, $\omega_3 = \frac43\pi$). Estas funciones son suaves fuera del origen y presentan una singularidad donde se concentra la fuente. Ver \cite{Bonder} para una deducción de las mismas. 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.4\textwidth]{sol-fundamental-lap.png}
-\includegraphics[width=0.4\textwidth]{superposicion.png}
+\includegraphics[width=0.45\textwidth]{sol-fundamental-lap.png}
+\includegraphics[width=0.45\textwidth]{superposicion.png}
 \caption{A la izquierda, solución fundamental del Laplaciano en dimensión $2$ y a la derecha solución de la ecuación de Poisson asociada a tres cargas puntuales, obtenida por superposición de las soluciones fundamentales correspondientes.}
 \label{fig:sol-fundamental2}
 \end{figure}
@@ -8288,7 +8320,7 @@ Desde esta perspectiva, el operador \emph{inverso} de $-\Delta$, es decir la con
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.8\textwidth]{convolucion.png}
+\includegraphics[width=0.95\textwidth]{convolucion.png}
 \caption{Fuente $f$ ruidosa (izquierda) y solución de la ecuación de Poisson asociada (derecha) $u=\Phi*f$, ilustrando el efecto suavizante del operador Laplaciano.}
 \label{fig:convolucion}
 \end{figure}
@@ -8387,8 +8419,8 @@ En la Figura~\ref{fig:poisson-fourier} se muestra una aproximación de la soluci
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.4\textwidth]{poisson-fourier.png}
-\caption{Aproximación de la solución de la ecuación de Poisson $\Delta u = f$ con condiciones de Dirichlet homogéneas mediante 20 nodos de la expansión en serie de Fourier. La fuente es $f(x,y)=-x\, e^{x+y}$.}
+\includegraphics[width=0.6\textwidth]{poisson-fourier.png}
+\caption{Aproximación de la solución de la ecuación de Poisson $-\Delta u = f$ con condiciones de Dirichlet homogéneas mediante los primeros 20 modos de la expansión en serie de Fourier. La fuente es $f(x,y)=-x\, e^{x+y}$; el mínimo, $-0.130$, se alcanza en $(0.67,0.59)$.}
 \label{fig:poisson-fourier}
 \end{figure}
 
@@ -8407,7 +8439,13 @@ En este capítulo primero discutiremos distintos tipos de ondas y sus propiedade
 
 En la vida cotidiana nos encontramos con distintos tipos de ondas: ondas sonoras, ondas electromagnéticas (como ondas de radio o de luz), ondas en el agua (profundas o superficiales) y ondas elásticas en sólidos. Fenómenos oscilatorios aparecen también en contextos menos evidentes, como ondas de rarefacción o de choque en dinámica de tráfico, ondas electroquímicas en el sistema nervioso o en la regulación del latido cardíaco, e incluso, a escala cuántica, todo puede describirse mediante funciones de onda. Ver la figura pendiente al final de este párrafo.
 
-\figpendiente{Distintos tipos de ondas}{Tres fotos o esquemas propios (cuerda, agua, onda electromagnética) en reemplazo de las imágenes de origen externo de la versión anterior.}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.95\textwidth]{ondas-esquemas.png}
+  \caption{Tres tipos de ondas: (a) un pulso transversal en una cuerda tensa (la perturbación viaja con velocidad $c$; cada punto de la cuerda sólo se mueve transversalmente); (b) una onda en la superficie del agua; (c) una onda electromagnética, con los campos $\mathbf E$ y $\mathbf B$ perpendiculares entre sí y a la dirección de propagación.}
+  \label{fig:ondas-esquemas}
+\end{figure}
+
 
 
 Aunque estos fenómenos comparten ciertas características, también presentan diferencias importantes. Por ejemplo, las ondas progresivas en el agua propagan una perturbación, mientras que las ondas estacionarias no. Las ondas sonoras requieren un medio material, mientras que las ondas electromagnéticas no. Las ondas electroquímicas suelen interactuar con el medio, modificándolo, mientras que las ondas en el agua no.
@@ -8419,39 +8457,21 @@ Son perturbaciones que se describen mediante una función de la forma
 \[
 u(x,t) = g(x - ct),
 \]
-donde $c$ es la velocidad de propagación. Para $t=0$, la función $u(x,0)=g(x)$ representa el perfil inicial de la perturbación, que se propaga sin deformarse con velocidad $|c|$ en la dirección positiva ($c>0$) o negativa ($c<0$) de $x$. Ver Figura \ref{fig:viajera}.
-\begin{figure}[ht]
-\centering
-\includegraphics[width=0.5\textwidth]{viajera.png}
-\caption{Una onda viajera en una dimensión. El perfil inicial se desplaza rigidamente en el espacio con velocidad constante, sin cambiar de forma.}
-\label{fig:viajera}
-\end{figure}
+donde $c$ es la velocidad de propagación. Para $t=0$, la función $u(x,0)=g(x)$ representa el perfil inicial de la perturbación, que se propaga sin deformarse con velocidad $|c|$ en la dirección positiva ($c>0$) o negativa ($c<0$) de $x$. Ver Figura \ref{fig:catalogo-ondas}(a).
 
 \subsection*{Ondas armónicas}
 Son un caso particular de ondas progresivas:
 \[
 u(x,t) = A \cos(kx - \omega t),
 \]
-donde $A$ es la amplitud, $k$ el número de onda, $\omega$ la frecuencia angular y $\lambda = 2\pi/k$ la longitud de onda. La velocidad de fase es $c_p = \omega/k$. La notación compleja $u(x,t) = A e^{i(kx - \omega t)}$ puede simplificar los cálculos. Ver Figura \ref{fig:armonica}.
-\begin{figure}[ht]
-\centering
-\includegraphics[width=0.5\textwidth]{armonica.png}
-\caption{Dos instantáneas de una onda armónica en distintos instantes de tiempo. Se trata de un caso particular de onda viajera, caracterizado por una dependencia sinusoidal en el espacio.}
-\label{fig:armonica}
-\end{figure}
+donde $A$ es la amplitud, $k$ el número de onda, $\omega$ la frecuencia angular y $\lambda = 2\pi/k$ la longitud de onda. La velocidad de fase es $c_p = \omega/k$. La notación compleja $u(x,t) = A e^{i(kx - \omega t)}$ puede simplificar los cálculos. Ver Figura \ref{fig:catalogo-ondas}(b).
 
 \subsection*{Ondas estacionarias}
 Se pueden generar, por ejemplo, superponiendo dos ondas armónicas de igual amplitud que se propagan en direcciones opuestas:
 \[
 u(x,t) = A \cos(kx - \omega t) + A \cos(kx + \omega t) = 2 A \cos(kx) \cos(\omega t).
 \]
-Aquí, la onda básica $\cos(kx)$ se modula en el tiempo mediante $B \cos(\omega t)$. Ver Figura \ref{fig:estacionaria}.
-\begin{figure}[ht]
-\centering
-\includegraphics[width=0.5\textwidth]{estacionaria.png}
-\caption{Instantáneas de una onda estacionaria en distintos instantes. La forma espacial permanece fija y la oscilación ocurre únicamente en el tiempo, sin transporte neto de la perturbación.}
-\label{fig:estacionaria}
-\end{figure}
+Aquí, la onda básica $\cos(kx)$ se modula en el tiempo mediante $B \cos(\omega t)$. Ver Figura \ref{fig:catalogo-ondas}(c).
 
 \subsection*{Ondas en más de una dimensión}
 \paragraph{\bf Ondas planas}
@@ -8463,25 +8483,20 @@ donde $\mathbf{k}$ es el vector de onda y $\mathbf{k}/|\mathbf{k}|$ indica la di
 \[
 u(\mathbf{x},t) = A e^{i(\mathbf{k}\cdot \mathbf{x} - \omega t)}.
 \]
-Ver Figura \ref{fig:plana}.
-\begin{figure}[ht]
-\centering
-\includegraphics[width=0.5\textwidth]{plana.png}
-\caption{Instantánea de una onda plana en dos dimensiones. Los frentes de onda son líneas paralelas, lo que indica una propagación en una dirección fija.}
-\label{fig:plana}
-\end{figure}
+Ver Figura \ref{fig:catalogo-ondas}(d).
 
 \paragraph{\bf Ondas esféricas}
 Dependen únicamente de la distancia $r = |\mathbf{x} - \mathbf{x}_0|$ a un punto fijo $\mathbf{x}_0 \in \mathbb{R}^n$:
 \[
 u(\mathbf{x},t) = v(r,t).
 \]
-Por ejemplo, una onda esférica estacionaria puede escribirse $u(\mathbf{x},t) = e^{i\omega t} v(r)$, mientras que una onda esférica progresiva toma la forma $u(\mathbf{x},t) = v(r - ct)$, cuyas superficies de onda son esferas $r - ct = \text{constante}$. Ver Figura \ref{fig:esferica}.
+Por ejemplo, una onda esférica estacionaria puede escribirse $u(\mathbf{x},t) = e^{i\omega t} v(r)$, mientras que una onda esférica progresiva toma la forma $u(\mathbf{x},t) = v(r - ct)$, cuyas superficies de onda son esferas $r - ct = \text{constante}$. Ver Figura \ref{fig:catalogo-ondas}(e).
+
 \begin{figure}[ht]
-\centering
-\includegraphics[width=0.5\textwidth]{esferica.png}
-\caption{Instantánea de una onda esférica en dos dimensiones. La perturbación se propaga radialmente desde una fuente puntual, dando lugar a frentes de onda concéntricos.}
-\label{fig:esferica}
+  \centering
+  \includegraphics[width=0.95\textwidth]{catalogo-ondas.png}
+  \caption{Catálogo de ondas: (a) onda viajera $g(x-ct)$: el perfil se traslada rígidamente; (b) onda armónica $A\cos(kx-\omega t)$; (c) onda estacionaria $2A\cos(kx)\cos(\omega t)$: los nodos no se mueven; (d) onda plana en el plano: frentes rectos perpendiculares a $\mathbf k$; (e) onda esférica: frentes circulares. Los dos mapas de color comparten la escala.}
+  \label{fig:catalogo-ondas}
 \end{figure}
 
 \section{Motivación}
@@ -8907,10 +8922,17 @@ La solución en serie responde las preguntas 2 y 3 de la Sección \ref{sec:condu
 $$
 f_k = \frac{\omega_k}{2\pi} = \frac{k}{2L}\sqrt{\frac{T}{\rho}},\qquad k=1,2,3,\dots
 $$
-Todas son \emph{múltiplos enteros} de la fundamental $f_1 = \frac{1}{2L}\sqrt{T/\rho}$: por eso el sonido de una cuerda tiene una altura definida, y por eso un músico afina subiendo la tensión o acorta la cuerda con los dedos para subir la nota (a la mitad de la cuerda, una octava). Las frecuencias $f_k$ con $k\ge 2$ son los \emph{armónicos}. El timbre es el reparto de energía \eqref{eq:energia-modos} entre los armónicos, que depende de cómo se excita la cuerda: los coeficientes $A_k,B_k$ están determinados por la forma inicial $g$ y la velocidad inicial $h$. Una cuerda pulsada en un punto $x_0$ (forma inicial triangular, velocidad nula) tiene $A_k\propto \sin(k\pi x_0/L)/k^2$: pulsarla en el medio anula todos los armónicos pares, y pulsarla cerca del puente (como se hace para un sonido ``brillante'') reparte más energía en los armónicos altos. Una cuerda golpeada (piano: forma inicial nula, velocidad concentrada en un punto) tiene $B_k\propto\sin(k\pi x_0/L)/k$, con armónicos que decaen más lento: por eso suena distinto. Los detalles quedan como ejercicio.
+Todas son \emph{múltiplos enteros} de la fundamental $f_1 = \frac{1}{2L}\sqrt{T/\rho}$: por eso el sonido de una cuerda tiene una altura definida, y por eso un músico afina subiendo la tensión o acorta la cuerda con los dedos para subir la nota (a la mitad de la cuerda, una octava). Las frecuencias $f_k$ con $k\ge 2$ son los \emph{armónicos} (Figura \ref{fig:modos-cuerda}). El timbre es el reparto de energía \eqref{eq:energia-modos} entre los armónicos, que depende de cómo se excita la cuerda: los coeficientes $A_k,B_k$ están determinados por la forma inicial $g$ y la velocidad inicial $h$. Una cuerda pulsada en un punto $x_0$ (forma inicial triangular, velocidad nula) tiene $A_k\propto \sin(k\pi x_0/L)/k^2$: pulsarla en el medio anula todos los armónicos pares, y pulsarla cerca del puente (como se hace para un sonido ``brillante'') reparte más energía en los armónicos altos. Una cuerda golpeada (piano: forma inicial nula, velocidad concentrada en un punto) tiene $B_k\propto\sin(k\pi x_0/L)/k$, con armónicos que decaen más lento: por eso suena distinto. Los detalles quedan como ejercicio.
 
 La pregunta 4 se contesta en el laboratorio: en el espectro de una cuerda real los picos están casi, pero no exactamente, en $kf_1$ (las cuerdas reales tienen rigidez, y eso corre los armónicos altos hacia arriba: \emph{inarmonicidad}), y su amplitud decrece con el tiempo, más rápido para los armónicos altos, porque hay fricción con el aire y disipación interna. Ambos efectos se pueden incorporar al modelo con términos adicionales, y ese es un buen ejercicio de modelado: ver qué agrega cada término al espectro y compararlo con lo medido.
 \end{volvemos}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.95\textwidth]{modos-cuerda.png}
+  \caption{(a) Los primeros cuatro modos normales de la cuerda con extremos fijos y sus frecuencias $f_k=kf_1$. (b) Espectro ideal de la cuerda pulsada en $x_0=L/5$: las amplitudes $A_k$ decaen como $1/k^2$ y faltan los armónicos múltiplos de $5$, para los que $x_0$ es un nodo.}
+  \label{fig:modos-cuerda}
+\end{figure}
 
 En la Figura \ref{fig:sol-ondas-20nodos} se muestran distintos instantes de la
 solución de \eqref{eq:ondas}, obtenida mediante una truncación a $20$ modos de
@@ -8920,15 +8942,13 @@ se manifiesta la conservación de la energía demostrada en la sección anterior
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.6\textwidth]{sol-ondas-20nodos.png}
-\caption{Solución de la ecuación de ondas en distintos instantes de tiempo,
-obtenida mediante una truncación a $20$ modos normales.}
+\caption{Solución de la ecuación de ondas con $L=c=1$, dato inicial $g(x)=\sin\pi x+\frac12\sin3\pi x$ y $h=0$, en distintos instantes de tiempo (para este dato la serie tiene sólo dos términos).}
 \label{fig:sol-ondas-20nodos}
 \end{figure}
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.6\textwidth]{energia-ondas.png}
-\caption{Energía cinética, energía potencial y energía total de la solución de la
-ecuación de ondas.}
+\caption{Energía cinética, energía potencial y energía total de la solución de la Figura \ref{fig:sol-ondas-20nodos}; la total coincide con la suma por modos $E_1+E_3$ de \eqref{eq:energia-modos}.}
 \label{fig:energia-ondas}
 \end{figure}
 
@@ -9030,6 +9050,14 @@ u(x,t)
 \frac{1}{2c}
 \int_{x-ct}^{x+ct} h(s)\,ds.
 \end{equation}
+La Figura \ref{fig:dalembert-pulso} muestra el caso $h=0$: el dato se parte en dos mitades que viajan en sentidos opuestos.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9\textwidth]{dalembert-pulso.png}
+  \caption{La fórmula de d'Alembert con $h=0$: el dato $g$ se parte en dos mitades que viajan sin deformarse en sentidos opuestos con velocidad $c$.}
+  \label{fig:dalembert-pulso}
+\end{figure}
 
 \begin{obs}
 La deducción de la fórmula de d’Alembert no sólo proporciona una representación explícita de la solución, sino que también implica la unicidad del problema de Cauchy, ya que cualquier solución suficientemente regular debe coincidir con dicha expresión.
@@ -9122,16 +9150,8 @@ de la ecuación de ondas en $\R$, dicho dominio es el intervalo
 D(x,t)=\{(s,0)\in\R\times\{0\}:\ |s-x|\le ct\}.
 \]
 Geométricamente, este conjunto corresponde a la intersección del cono
-característico con el eje $t=0$. Ver Figura \ref{fig:dominio-dependencia}.
+característico con el eje $t=0$. Ver Figura \ref{fig:caracteristicas}(a).
 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=0.6\textwidth]{dominio-dependencia.png}
-\caption{Dominio de dependencia de un punto $(x_0,t_0)$ para la ecuación de ondas.
-La solución en $(x_0,t_0)$ sólo depende de los valores iniciales dentro del intervalo
-$[x_0-ct_0,x_0+ct_0]$.}
-\label{fig:dominio-dependencia}
-\end{figure}
 
 
 \medskip
@@ -9143,16 +9163,15 @@ depende del dato inicial en $(x_0,0)$. En este caso, dicho conjunto está dado p
 \[
 \{(x,t):\ |x-x_0|\le ct,\ t\ge 0\},
 \]
-que corresponde al cono característico con vértice en $(x_0,0)$. Ver Figura \ref{fig:rango-influencia}.
+que corresponde al cono característico con vértice en $(x_0,0)$. Ver Figura \ref{fig:caracteristicas}(b).
 
 \begin{figure}[ht]
-\centering
-\includegraphics[width=0.6\textwidth]{rango-influencia.png}
-\caption{Rango de influencia de un punto $(x_0,0)$ para la ecuación de ondas.
-Una perturbación inicial localizada en $x_0$ sólo puede afectar a la solución
-dentro del cono característico.}
-\label{fig:rango-influencia}
+  \centering
+  \includegraphics[width=0.9\textwidth]{caracteristicas.png}
+  \caption{(a) Dominio de dependencia de $(x_0,t_0)$: $u(x_0,t_0)$ sólo depende de los datos iniciales en $[x_0-ct_0, x_0+ct_0]$. (b) Rango de influencia de $(x_0,0)$: el dato en $x_0$ sólo afecta a la solución en el cono $|x-x_0|\le ct$.}
+  \label{fig:caracteristicas}
 \end{figure}
+
 
 \medskip
 
@@ -9174,9 +9193,15 @@ Tenemos dos fórmulas para la solución de la ecuación de ondas: la serie de Fo
 
 Consideremos el problema en $(0,L)$ con condiciones de Dirichlet homogéneas y datos $g,h$, y extendamos $g$ y $h$ a toda la recta como funciones \emph{impares} y $2L$-periódicas (la extensión impar es la que se anula en $x=0$ y $x=L$). Sea $u$ la solución de d'Alembert \eqref{eq:dalembert} con esos datos extendidos. Entonces $u(\cdot,t)$ es impar y $2L$-periódica para todo $t$ (la fórmula preserva ambas simetrías; ejercicio), y por lo tanto $u(0,t)=u(L,t)=0$: la restricción de $u$ a $(0,L)$ es la solución del problema en el intervalo. Como por unicidad hay una sola, la serie de Fourier de la Sección anterior y esta $u$ coinciden.
 
-La lectura física es transparente. Un pulso que viaja hacia la derecha sobre la cuerda llega al extremo fijo $x=L$, donde se encuentra con su ``imagen'' invertida que viene del intervalo $(L,2L)$ de la extensión impar: el resultado es que el pulso se \emph{refleja} en el extremo fijo con el signo cambiado. Una onda estacionaria (un modo normal) no es otra cosa que la superposición de dos ondas viajeras que se reflejan indefinidamente en los dos extremos. Recíprocamente, la fórmula $\sin(k\pi x/L)\cos(\omega_k t) = \frac12[\sin(k\pi(x-ct)/L) + \sin(k\pi(x+ct)/L)]$ muestra cada modo como suma de dos ondas viajeras.
+La lectura física es transparente. Un pulso que viaja hacia la derecha sobre la cuerda llega al extremo fijo $x=L$, donde se encuentra con su ``imagen'' invertida que viene del intervalo $(L,2L)$ de la extensión impar: el resultado es que el pulso se \emph{refleja} en el extremo fijo con el signo cambiado (Figura \ref{fig:reflexion-pulso}). Una onda estacionaria (un modo normal) no es otra cosa que la superposición de dos ondas viajeras que se reflejan indefinidamente en los dos extremos. Recíprocamente, la fórmula $\sin(k\pi x/L)\cos(\omega_k t) = \frac12[\sin(k\pi(x-ct)/L) + \sin(k\pi(x+ct)/L)]$ muestra cada modo como suma de dos ondas viajeras.
 
-\figpendiente{Reflexión de un pulso en un extremo fijo}{Instantes sucesivos de un pulso que viaja hacia el extremo fijo $x=L$ y se refleja invertido, junto con la extensión impar del dato inicial en $(L,2L)$ que ``explica'' la reflexión.}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.95\textwidth]{reflexion-pulso.png}
+  \caption{Reflexión de un pulso en el extremo fijo $x=L$ ($L=c=1$). En $[0,L]$, la solución; en $(L,2L)$, sombreada, la extensión impar del dato: la ``imagen'' invertida viaja hacia la izquierda y entra en $[0,L]$ cuando el pulso sale, de modo que el pulso vuelve invertido. En el instante en que el pulso y su imagen se superponen la cuerda está momentáneamente plana y toda la energía es cinética. Sobre la solución exacta, el esquema numérico leapfrog con $r=c\Delta t/\Delta x=0.5$.}
+  \label{fig:reflexion-pulso}
+\end{figure}
+
 
 Cada descripción es útil para algo distinto. La serie de Fourier hace evidentes las frecuencias, la energía por modo y el timbre; la fórmula de d'Alembert hace evidentes la velocidad finita de propagación, los dominios de dependencia y el hecho de que las singularidades del dato inicial \emph{viajan} sin suavizarse: si $g$ tiene un pico (una cuerda pulsada), $u(\cdot,t)$ tiene dos picos, en $x_0\pm ct$, para todo $t$. En la ecuación del calor, en cambio, todo pico desaparece instantáneamente. Esta es la diferencia cualitativa más profunda entre las ecuaciones parabólicas y las hiperbólicas, y conviene tenerla presente al elegir un modelo: si el fenómeno que se observa transporta perfiles sin deformarlos, el modelo es de ondas; si los borra, es de difusión.
 
