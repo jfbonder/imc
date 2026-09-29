@@ -5660,7 +5660,7 @@ La Figura \ref{fig:fft-mariposa} esquematiza esta etapa para $N=8$.
   \label{fig:fft-mariposa}
 \end{figure}
 
-Luego, hemos reducido el problema del cálculo de una DFT en dimensión $N$ al clálculo de la misma en dimensión $N/2$. Si ahora $N/2$ es nuevamente par podemos volver a aplicar el mismo argumento y reducir el cálculo a transformadas en dimensión $N/4$ y así sucesivamente. La Figura \ref{fig:fft-costo} compara los tiempos de cómputo de las dos formas de calcular la DFT.
+Luego, hemos reducido el problema del cálculo de una DFT en dimensión $N$ al cálculo de dos DFT en dimensión $N/2$, más el costo de combinarlas: $N/2$ productos $\omega^j\hat f_i[j]$ (cada uno se usa en la suma y en la resta) y $N$ sumas o restas; para $N=8$ son $4$ productos y $8$ sumas. Si ahora $N/2$ es nuevamente par podemos volver a aplicar el mismo argumento y reducir el cálculo a transformadas en dimensión $N/4$ y así sucesivamente: cuando $N=2^m$ hay $m=\log_2 N$ etapas, cada una con $N/2$ productos, y el costo total es del orden de $\frac{N}{2}\log_2 N$ productos en lugar de los $N^2$ del producto por la matriz $A(\omega)$. La Figura \ref{fig:fft-costo} compara los tiempos de cómputo de las dos formas de calcular la DFT.
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.6\textwidth]{fft-costo.png}

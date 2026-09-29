@@ -43,8 +43,8 @@ Las figuras de los capítulos 11–15 salen de `notebooks/06-series`, `07-transf
 - Cap. 15, compresión: la afirmación "del orden del $10^{-2}\%$ o menos ... claramente reconocible" **no se cumple** con el criterio del texto (27 coeficientes en 512×512 no reconstruyen nada); se reescribió: reconocible con ~1 %, distorsiones por debajo del 0,1 %, y la observación de que la energía (82 % en el 0,01 %) no mide la calidad visual. Captions con errores relativos y atribución NASA.
 - Caption de `nucleo-dirichlet` sin la aclaración "(sin el factor 1/L)".
 
-## Observaciones que quedaron sin tocar (para decidir)
+## Observaciones revisadas con Julián
 
-- §14.5 (interpolación trigonométrica): el polinomio $\sum_{j=0}^{N-1}c_je^{2\pi ijx/T}$ interpola en los nodos pero entre los nodos hay que leer $j>N/2$ como $j-N$; podría agregarse una frase.
-- §14.8: una etapa de la FFT para $N=8$ cuesta 4 productos y 8 sumas (no 8 productos).
-- Para el signo, $\sup|f-S_N|=1$ para todo $N$ (la suma parcial es continua); el 9 % es el sobreimpulso, no el error uniforme.
+- §14.5 (interpolación entre nodos): se deja como está.
+- §14.8: se agregó el conteo explícito de la etapa ($N/2$ productos y $N$ sumas; para $N=8$, 4 y 8) y el total $\frac N2\log_2N$.
+- Gibbs vs. error uniforme para el signo: no vale la pena la distinción en el texto.
