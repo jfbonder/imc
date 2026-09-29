@@ -12,7 +12,7 @@ from __future__ import annotations
 import os
 import urllib.request
 
-REPO = "USUARIO/imc-notas"   # <- completar con el usuario de GitHub
+REPO = "jfbonder/imc"   
 RAMA = "main"
 
 _RAW = "https://raw.githubusercontent.com/{repo}/{rama}/datos/{archivo}"

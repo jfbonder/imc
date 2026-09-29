@@ -1,7 +1,7 @@
 """Genera notebooks/01-poblaciones.ipynb."""
 import nbformat as nbf
 
-REPO = "USUARIO/imc-notas"
+REPO = "jfbonder/imc"
 NB = "notebooks/01-poblaciones.ipynb"
 
 nb = nbf.v4.new_notebook()

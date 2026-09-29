@@ -22,7 +22,7 @@ Cada notebook se abre directamente en Google Colab con el botón; la primera cel
 
 | Notebook | Capítulo | Colab |
 | --- | --- | --- |
-| `01-poblaciones` | 2. Modelos poblacionales | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/USUARIO/imc-notas/blob/main/notebooks/01-poblaciones.ipynb) |
+| `01-poblaciones` | 2. Modelos poblacionales | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/01-poblaciones.ipynb) |
 | `02-mecanicos` | 3. Sistemas mecánicos y eléctricos | (pendiente) |
 | `03-lineales-HG` | 4–5. Flujo, sistemas lineales, Hartman–Grobman | (pendiente) |
 | `04-lyapunov-global` | 6–7. Lyapunov, Poincaré–Bendixson, competencia, Lorenz | (pendiente) |
