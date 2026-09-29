@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "imc"
+version = "0.1.0"
+description = "Utilidades para los notebooks de Introducción al Modelado Continuo (LCD, FCEN-UBA)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [{name = "Julián Fernández Bonder", email = "jfbonder@dm.uba.ar"}]
+dependencies = ["numpy", "scipy", "matplotlib"]
+
+[tool.setuptools]
+packages = ["imc"]

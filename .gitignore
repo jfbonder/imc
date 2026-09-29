@@ -1,0 +1,19 @@
+# LaTeX
+notas/*.aux
+notas/*.log
+notas/*.out
+notas/*.toc
+notas/*.bbl
+notas/*.blg
+notas/*.synctex.gz
+notas/*.fdb_latexmk
+notas/*.fls
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+.ipynb_checkpoints/
+# sistema
+.DS_Store
