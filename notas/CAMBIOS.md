@@ -55,3 +55,6 @@ Se definió también el entorno `volvemos` (`\begin{volvemos}{la epidemia} … \
 - Marcado núcleo/lectura por capítulo: diferido.
 - Separación física de las guías en documentos aparte (por ahora siguen como capítulos "Ejercicios").
 - Datos para los laboratorios (serie de temperatura, temperatura del suelo, casos de epidemia, audio de cuerda): a proveer con los notebooks.
+
+## 2026-09-29 — Poincaré en tres escalones
+- Teorema de Poincaré enunciado con la constante elemental $1/d^2$ y demostrado con Cauchy–Schwarz (Lema 1D con $(b-a)^2$); Wirtinger ($\pi^2/d^2$) pasa a una observación y su demostración por series de senos a un ejercicio guiado de la Parte III (`ejer:wirtinger`); la comparación numérica del cuadrado muestra las tres cotas: $0.2$, $1.97$ y la óptima $7.90$, que coincide con la medida.

@@ -7527,7 +7527,7 @@ Esa estimación nos la da el siguiente resultado.
 \begin{teo}[Desigualdad de Poincaré]\label{teo:Poincare}
 Sea $\Omega\subset\R^n$ un dominio acotado de diámetro $d$ y sea $w\colon \overline{\Omega}\to\R$ una función de clase $C^1$ tal que $w=0$ en toda la frontera $\partial\Omega$. Entonces
 $$
-\frac{\pi^2}{d^2} \int_\Omega w^2\, d\xx \le \int_\Omega |\nabla w|^2\, d\xx.
+\frac{1}{d^2} \int_\Omega w^2\, d\xx \le \int_\Omega |\nabla w|^2\, d\xx.
 $$
 \end{teo}
 
@@ -7547,38 +7547,45 @@ Es decir: si la función es cero en un extremo del intervalo, su valor en cualqu
 La desigualdad de Poincaré generaliza esta idea a dominios en varias dimensiones. Si $w=0$ en toda la frontera de $\Omega$, entonces el ``tamaño promedio'' de $w$ (medido por la integral de $w^2$, es decir, su norma $L^2$) está controlado por el ``tamaño promedio'' de su gradiente (la integral de $|\nabla w|^2$). La constante sólo depende de la geometría del dominio.
 \end{obs}
 
-La demostración se apoya en el caso unidimensional, que se resuelve con las series de Fourier de la Parte II.
+La demostración se apoya en el caso unidimensional, que es la versión ``en integral'' del argumento de la observación anterior.
 
-\begin{lema}[Desigualdad de Wirtinger]\label{lema:wirtinger}
-Sea $\varphi\colon[a,b]\to\R$ de clase $C^1$ con $\varphi(a)=\varphi(b)=0$. Entonces
+\begin{lema}\label{lema:poincare-1d}
+Sea $\varphi\colon[a,b]\to\R$ de clase $C^1$ con $\varphi(a)=0$. Entonces
 $$
-\int_a^b \varphi(x)^2\, dx \le \frac{(b-a)^2}{\pi^2}\int_a^b \varphi'(x)^2\, dx .
+\int_a^b \varphi(x)^2\, dx \le (b-a)^2\int_a^b \varphi'(x)^2\, dx .
 $$
 \end{lema}
 
 \begin{proof}
-Podemos suponer $[a,b]=[0,\ell]$. Extendemos $\varphi$ a $[-\ell,\ell]$ como función impar y luego a toda la recta como función $2\ell$-periódica; como $\varphi(0)=\varphi(\ell)=0$, la extensión es continua y $C^1$ a trozos, y su serie de Fourier es una serie de senos, $\varphi(x) = \sum_{k\ge 1} b_k\sin(k\pi x/\ell)$. Por la Proposición \ref{prop.coef}, ítem 3, la extensión de $\varphi'$ (que es par) tiene coeficientes $\frac{k\pi}{\ell}b_k$ en la base de cosenos. La identidad de Plancherel (Corolario \ref{plancherel}) aplicada a ambas da
+Como $\varphi(a)=0$, para cada $x\in[a,b]$ es $\varphi(x) = \int_a^x \varphi'(s)\, ds$, y por la desigualdad de Cauchy--Schwarz
 $$
-\int_0^\ell \varphi^2\, dx = \frac{\ell}{2}\sum_{k\ge1} b_k^2,\qquad
-\int_0^\ell (\varphi')^2\, dx = \frac{\ell}{2}\sum_{k\ge1} \Bigl(\frac{k\pi}{\ell}\Bigr)^2 b_k^2 \ge \frac{\pi^2}{\ell^2}\,\frac{\ell}{2}\sum_{k\ge1} b_k^2 ,
+\varphi(x)^2 = \Bigl(\int_a^x 1\cdot\varphi'(s)\, ds\Bigr)^2 \le (x-a)\int_a^x \varphi'(s)^2\, ds \le (b-a)\int_a^b \varphi'(s)^2\, ds .
 $$
-que es la desigualdad buscada. La igualdad vale exactamente para $\varphi(x) = \sin(\pi x/\ell)$: la constante es óptima.
+Integrando en $x$ entre $a$ y $b$ se obtiene el resultado.
 \end{proof}
 
 \begin{proof}[Demostración del Teorema \ref{teo:Poincare}]
-Sea $w\colon \overline{\Omega}\to\R$ de clase $C^1$ tal que $w=0$ en $\partial\Omega$; la extendemos por cero fuera de $\Omega$. Fijemos una dirección, digamos $x_1$, y escribamos $\xx = (x_1,\xx')$ con $\xx'\in\R^{n-1}$. Para cada $\xx'$ fijo, la recta $\{(x_1,\xx')\colon x_1\in\R\}$ corta a $\Omega$ en una unión de intervalos abiertos, cada uno de longitud a lo sumo $d$, y $w(\cdot,\xx')$ se anula en los extremos de cada uno de ellos. Aplicando el Lema \ref{lema:wirtinger} en cada intervalo y sumando,
+Sea $w\colon \overline{\Omega}\to\R$ de clase $C^1$ tal que $w=0$ en $\partial\Omega$; la extendemos por cero fuera de $\Omega$. Fijemos una dirección, digamos $x_1$, y escribamos $\xx = (x_1,\xx')$ con $\xx'\in\R^{n-1}$. Para cada $\xx'$ fijo, la recta $\{(x_1,\xx')\colon x_1\in\R\}$ corta a $\Omega$ en una unión de intervalos abiertos, cada uno de longitud a lo sumo $d$, y $w(\cdot,\xx')$ se anula en los extremos de cada uno de ellos. Aplicando el Lema \ref{lema:poincare-1d} en cada intervalo y sumando,
 $$
-\int_{\R} w(x_1,\xx')^2\, dx_1 \le \frac{d^2}{\pi^2}\int_\R (\partial_{x_1}w(x_1,\xx'))^2\, dx_1 \le \frac{d^2}{\pi^2}\int_\R |\nabla w(x_1,\xx')|^2\, dx_1 .
+\int_{\R} w(x_1,\xx')^2\, dx_1 \le d^2\int_\R (\partial_{x_1}w(x_1,\xx'))^2\, dx_1 \le d^2\int_\R |\nabla w(x_1,\xx')|^2\, dx_1 .
 $$
 Integrando en $\xx'$ se obtiene el resultado.
 \end{proof}
+
+\begin{obs}[La constante se puede mejorar]\label{obs:wirtinger}
+La constante $(b-a)^2$ del Lema \ref{lema:poincare-1d} no es la mejor posible. Si además $\varphi(b)=0$, la serie de senos de la Parte II da la \emph{desigualdad de Wirtinger}
+$$
+\int_a^b \varphi^2\, dx \le \frac{(b-a)^2}{\pi^2}\int_a^b (\varphi')^2\, dx,
+$$
+con igualdad para $\varphi(x)=\sin\bigl(\pi(x-a)/(b-a)\bigr)$, y con ella la constante del Teorema \ref{teo:Poincare} mejora a $\pi^2/d^2$. La demostración es un ejercicio guiado de esta parte (Ejercicio \ref{ejer:wirtinger}): se extiende $\varphi$ de manera impar, se escribe su serie de Fourier y se compara con la de $\varphi'$ usando la identidad de Parseval. Es un buen ejemplo de cómo la información espectral mejora una estimación elemental; la observación siguiente lleva esa idea hasta el final.
+\end{obs}
 
 \begin{obs}\label{obs:poincare-optima}
 La mejor constante posible en la desigualdad de Poincaré, es decir
 $$
 \lambda_1(\Omega) = \min\left\{\frac{\int_\Omega|\nabla w|^2}{\int_\Omega w^2}\colon w\neq 0,\ w=0 \text{ en }\partial\Omega\right\},
 $$
-es el \emph{primer autovalor} del operador $-\Delta$ con condiciones de Dirichlet en $\Omega$, y el mínimo se alcanza en la primera autofunción. El Teorema \ref{teo:Poincare} dice que $\lambda_1(\Omega)\ge \pi^2/d^2$. Para el intervalo $(0,\ell)$ es exactamente $\pi^2/\ell^2$ (el $k=1$ de la separación de variables de la Sección \ref{sec:heat.n=1}). Para el cuadrado $[0,1]^2$, la autofunción es $\sin(\pi x)\sin(\pi y)$ y $\lambda_1 = 2\pi^2$, mientras que la cota del teorema, con $d=\sqrt2$, da $\pi^2/2$: la cota general es correcta pero grosera, porque sólo usa el diámetro y no la forma del dominio.
+es el \emph{primer autovalor} del operador $-\Delta$ con condiciones de Dirichlet en $\Omega$, y el mínimo se alcanza en la primera autofunción. El Teorema \ref{teo:Poincare} dice que $\lambda_1(\Omega)\ge 1/d^2$, y la Observación \ref{obs:wirtinger}, que $\lambda_1(\Omega)\ge \pi^2/d^2$. Para el intervalo $(0,\ell)$ es exactamente $\pi^2/\ell^2$ (el $k=1$ de la separación de variables de la Sección \ref{sec:heat.n=1}): ahí Wirtinger es óptima. Para el cuadrado $[0,1]^2$, la autofunción es $\sin(\pi x)\sin(\pi y)$ y $\lambda_1 = 2\pi^2$, mientras que las cotas anteriores, con $d=\sqrt2$, dan $1/2$ y $\pi^2/2$: son correctas pero groseras, porque sólo usan el diámetro y no la forma del dominio.
 \end{obs}
 
 Si volvemos a la estimación \eqref{energia1} y usamos la desigualdad de Poincaré con la mejor constante $\lambda_1 = \lambda_1(\Omega)$, se obtiene la cota
@@ -7597,7 +7604,7 @@ Es decir
 \begin{equation}\label{eq:decaimiento-L2}
 \|v(\cdot,t)\|_{L^2(\Omega)} = \left(\int_\Omega v^2(\xx,t)\, d\xx\right)^{1/2}\le \|\bar g\|_{L^2(\Omega)}\; e^{-\lambda_1 D t},
 \end{equation}
-con lo que el régimen transitorio decae exponencialmente, en norma $L^2$, a una tasa $\lambda_1 D$ (y su cuadrado, la energía, a tasa $2\lambda_1 D$). Usando la cota del Teorema \ref{teo:Poincare}, la tasa es al menos $\pi^2 D/d^2$, donde $D$ es la difusividad y $d$ es el diámetro del dominio $\Omega$. Comparar con lo obtenido en el análisis en dimensión 1: allí $\lambda_1 = \pi^2/L^2$ y la tasa $\pi^2D/L^2$ es exactamente la del primer término de la serie.
+con lo que el régimen transitorio decae exponencialmente, en norma $L^2$, a una tasa $\lambda_1 D$ (y su cuadrado, la energía, a tasa $2\lambda_1 D$). Usando la cota del Teorema \ref{teo:Poincare}, la tasa es al menos $D/d^2$ (o $\pi^2D/d^2$ con la mejora de Wirtinger), donde $D$ es la difusividad y $d$ es el diámetro del dominio $\Omega$. Comparar con lo obtenido en el análisis en dimensión 1: allí $\lambda_1 = \pi^2/L^2$ y la tasa $\pi^2D/L^2$ es exactamente la del primer término de la serie.
 
 Observemos que la escala de tiempo de la relajación es, otra vez, del orden de $d^2/D$: a tiempo $t=3\,d^2/(\pi^2 D)$ el régimen transitorio ya se encuentra por debajo del 5\% de su tamaño original, medido en norma $L^2$.
 
@@ -7639,17 +7646,19 @@ Recordemos que, a partir de \eqref{eq:decaimiento-L2}, el régimen transitorio v
 \]
 donde $\lambda_1 = \lambda_1(\Omega)$ es la mejor constante de la desigualdad de Poincaré y $D$ es el coeficiente de difusión.
 
-En el dominio considerado, $\Omega = [0,1]\times[0,1]\subset\R^2$, el diámetro es $d=\sqrt{2}$ y en el experimento numérico tomamos $D=0.4$. Usando la cota general $\lambda_1 \ge \pi^2/d^2 = \pi^2/2$ del Teorema~\ref{teo:Poincare}, se obtiene una tasa de decaimiento de al menos
+En el dominio considerado, $\Omega = [0,1]\times[0,1]\subset\R^2$, el diámetro es $d=\sqrt{2}$ y en el experimento numérico tomamos $D=0.4$. Comparemos las tres constantes que tenemos. La cota elemental del Teorema~\ref{teo:Poincare}, $\lambda_1\ge 1/d^2 = 1/2$, garantiza una tasa de decaimiento de al menos
+\[
+\lambda_1 D \ge 0.2 ;
+\]
+con la mejora de Wirtinger (Observación \ref{obs:wirtinger}), $\lambda_1\ge\pi^2/d^2=\pi^2/2$, la tasa garantizada sube a
 \[
 \lambda_1 D \ge 0.2\,\pi^2 \approx 1.97 .
 \]
-Por otra parte, el ajuste numérico del decaimiento del error (Figura \ref{fig:errores-heat-log}) arroja una tasa bastante mayor, del orden de $7.9$. Esto no contradice la teoría: la cota basada en el diámetro garantiza un decaimiento exponencial, pero no captura la forma del dominio, y por lo tanto no es óptima.
-
-De hecho, para el cuadrado sabemos (Observación \ref{obs:poincare-optima}) que la constante óptima es $\lambda_1 = 2\pi^2$, que da la tasa
+Por otra parte, el ajuste numérico del decaimiento del error (Figura \ref{fig:errores-heat-log}) arroja una tasa bastante mayor, del orden de $7.9$. Esto no contradice la teoría: las dos cotas garantizan un decaimiento exponencial, pero sólo usan el diámetro del dominio, y ninguna captura su forma. Recién con la constante óptima del cuadrado (Observación \ref{obs:poincare-optima}), $\lambda_1 = 2\pi^2$, la tasa teórica
 \[
-\lambda_1 D = 0.8\,\pi^2 \approx 7.90,
+\lambda_1 D = 0.8\,\pi^2 \approx 7.90
 \]
-en acuerdo con la pendiente $7.90$ observada numéricamente. Vale la pena notar que la tasa medida depende del esquema numérico: el método de Euler implícito con paso $\Delta t$ decae como $(1+D\lambda_1\Delta t)^{-t/\Delta t}$, es decir con tasa $\ln(1+D\lambda_1\Delta t)/\Delta t$, que para $\Delta t=0.01$ vale $7.60$ (la curva gris de la figura); no es un error del método, es la tasa \emph{del esquema}, que tiende a la del problema continuo cuando $\Delta t\to0$. En general, la tasa de convergencia al equilibrio de un proceso difusivo en un dominio $\Omega$ está dada por $D\lambda_1(\Omega)$: \emph{el primer autovalor del Laplaciano es la constante de tiempo del dominio}.
+coincide con la pendiente $7.90$ observada numéricamente. Vale la pena notar que la tasa medida depende del esquema numérico: el método de Euler implícito con paso $\Delta t$ decae como $(1+D\lambda_1\Delta t)^{-t/\Delta t}$, es decir con tasa $\ln(1+D\lambda_1\Delta t)/\Delta t$, que para $\Delta t=0.01$ vale $7.60$ (la curva gris de la figura); no es un error del método, es la tasa \emph{del esquema}, que tiende a la del problema continuo cuando $\Delta t\to0$. En general, la tasa de convergencia al equilibrio de un proceso difusivo en un dominio $\Omega$ está dada por $D\lambda_1(\Omega)$: \emph{el primer autovalor del Laplaciano es la constante de tiempo del dominio}.
 
 \section{Volvemos al problema: la temperatura del suelo}\label{sec:volvemos-suelo}
 
@@ -9366,6 +9375,22 @@ dada por la convolución de $\varphi$ en la variable $x$ con la solución
 fundamental. Probar que si $\varphi\in L^1(\R)$, entonces $u(\cdot,t)\in
 L^1(\R)\ \forall t>0$ y
 $$\int_{\R} u(x,t) dx = \int_{\R} \varphi(x) dx,\quad \forall t>0.$$
+\end{ejer}
+
+\begin{ejer}[Desigualdad de Wirtinger, guiado]\label{ejer:wirtinger}
+Sea $\varphi\colon[0,\ell]\to\R$ de clase $C^1$ con $\varphi(0)=\varphi(\ell)=0$. El objetivo es probar la desigualdad de Wirtinger de la Observación \ref{obs:wirtinger},
+$$
+\int_0^\ell \varphi^2\, dx \le \frac{\ell^2}{\pi^2}\int_0^\ell (\varphi')^2\, dx ,
+$$
+que mejora la constante $\ell^2$ del Lema \ref{lema:poincare-1d} y es óptima.
+\begin{enumerate}
+\item Extender $\varphi$ a $[-\ell,\ell]$ como función impar y luego a toda la recta como función $2\ell$-periódica. Verificar que la extensión es continua y $C^1$ a trozos (¿qué papel juegan las hipótesis $\varphi(0)=\varphi(\ell)=0$?) y que su serie de Fourier es una serie de senos, $\varphi(x) = \sum_{k\ge1} b_k\sin(k\pi x/\ell)$.
+\item Mostrar, usando la Proposición \ref{prop.coef} (coeficientes de la derivada), que la serie de Fourier de $\varphi'$ es $\sum_{k\ge1} \frac{k\pi}{\ell}\, b_k\cos(k\pi x/\ell)$.
+\item Escribir $\int_0^\ell\varphi^2$ y $\int_0^\ell(\varphi')^2$ en términos de los $b_k$ usando la identidad de Parseval (atención al factor $\ell/2$ que viene de integrar sobre medio período).
+\item Concluir la desigualdad comparando término a término, y mostrar que vale la igualdad si y sólo si $\varphi(x) = b_1\sin(\pi x/\ell)$: la constante es óptima.
+\item Deducir la versión con constante $\pi^2/d^2$ de la desigualdad de Poincaré, repitiendo la demostración del Teorema \ref{teo:Poincare} con este lema en lugar del Lema \ref{lema:poincare-1d}.
+\item Para el cuadrado $[0,1]^2$, calcular $\int|\nabla w|^2/\int w^2$ para $w = \sin(\pi x)\sin(\pi y)$ y comparar con las tres cotas $1/d^2$, $\pi^2/d^2$ y $\lambda_1=2\pi^2$. ¿Por qué Wirtinger es óptima en el intervalo y no en el cuadrado?
+\end{enumerate}
 \end{ejer}
 
 
