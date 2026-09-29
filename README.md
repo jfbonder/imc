@@ -1,5 +1,7 @@
 # Introducción al Modelado Continuo
 
+Sitio de la materia: https://jfbonder.github.io/imc/
+
 Notas de clase, guías y notebooks de la materia *Introducción al Modelado Continuo* (Licenciatura en Ciencia de Datos, FCEN–UBA). Julián Fernández Bonder, Departamento de Matemática e Instituto de Cálculo, FCEN–UBA / CONICET.
 
 ## Contenido del repositorio

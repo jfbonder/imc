@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introducción al Modelado Continuo</title>
+<meta name="description" content="Introducción al Modelado Continuo (Licenciatura en Ciencia de Datos, FCEN-UBA): notas de clase, notebooks que reproducen las figuras y laboratorios en Colab.">
+<style>
+  :root { --tinta:#1d1d1f; --gris:#5b5b60; --linea:#e3e3e6; --acento:#1f4e9c; --fondo:#fbfbf9; --tarjeta:#fff; }
+  @media (prefers-color-scheme: dark) {
+    :root { --tinta:#ececec; --gris:#a5a5ab; --linea:#333338; --acento:#7aa6d8; --fondo:#141416; --tarjeta:#1d1d20; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font:17px/1.55 Georgia, "Times New Roman", serif; color:var(--tinta); background:var(--fondo); }
+  header, main, footer { max-width:880px; margin:0 auto; padding:0 16px; }
+  header { padding-top:56px; padding-bottom:24px; border-bottom:1px solid var(--linea); }
+  h1 { font-size:2.2rem; margin:0 0 6px; font-weight:normal; letter-spacing:.01em; }
+  .sub { color:var(--gris); margin:0 0 6px; }
+  .autor { font-family:system-ui, sans-serif; font-size:.9rem; }
+  nav { margin-top:22px; font-family:system-ui, sans-serif; font-size:.95rem; }
+  nav a { margin-right:18px; color:var(--acento); text-decoration:none; }
+  h2 { font-weight:normal; font-size:1.5rem; margin:44px 0 14px; }
+  h2 small { color:var(--gris); font-size:1rem; margin-left:10px; font-family:system-ui, sans-serif; }
+  p { margin:0 0 12px; }
+  a { color:var(--acento); }
+  .descarga { display:flex; flex-wrap:wrap; gap:10px; margin:14px 0 6px; font-family:system-ui, sans-serif; font-size:.95rem; }
+  .boton { display:inline-block; padding:8px 14px; border:1px solid var(--acento); border-radius:6px; text-decoration:none; color:var(--acento); }
+  .boton.lleno { background:var(--acento); color:#fff; }
+  .parte { margin-top:26px; font-family:system-ui, sans-serif; font-size:.85rem; text-transform:uppercase; letter-spacing:.06em; color:var(--gris); border-bottom:1px solid var(--linea); padding-bottom:6px; }
+  .cap { display:grid; grid-template-columns:110px 1fr; gap:14px; padding:16px 0; border-bottom:1px solid var(--linea); }
+  .cap .num { color:var(--gris); font-family:system-ui, sans-serif; font-size:.85rem; text-transform:uppercase; letter-spacing:.06em; padding-top:6px; }
+  .cap h3, .cuaderno h3 { margin:0 0 4px; font-size:1.1rem; font-weight:normal; }
+  .cap p, .cuaderno p { color:var(--gris); font-size:.97rem; margin:0 0 6px; }
+  .enlaces { font-family:system-ui, sans-serif; font-size:.9rem; }
+  .cuadernos { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:14px; }
+  .cuaderno { background:var(--tarjeta); border:1px solid var(--linea); border-radius:10px; padding:16px; }
+  .cuaderno .meta { font-family:system-ui, sans-serif; font-size:.8rem; text-transform:uppercase; letter-spacing:.06em; }
+  .cuaderno .boton { padding:6px 10px; font-size:.85rem; margin-right:8px; margin-bottom:6px; }
+  .conductores { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:14px; margin-top:14px; }
+  .conductor { border-left:3px solid var(--acento); padding:2px 0 2px 14px; }
+  .conductor h3 { margin:0 0 4px; font-size:1.05rem; font-weight:normal; }
+  .conductor p { color:var(--gris); font-size:.95rem; margin:0; }
+  table { border-collapse:collapse; width:100%; font-size:.95rem; margin:10px 0; }
+  th, td { text-align:left; padding:8px 6px; border-bottom:1px solid var(--linea); vertical-align:top; }
+  th { font-family:system-ui, sans-serif; font-size:.8rem; text-transform:uppercase; letter-spacing:.06em; color:var(--gris); font-weight:normal; }
+  .nw { white-space:nowrap; }
+  code { font-size:.9em; background:var(--linea); padding:1px 5px; border-radius:4px; }
+  footer { margin-top:56px; padding:24px 16px 48px; border-top:1px solid var(--linea); color:var(--gris); font-size:.9rem; }
+  @media (max-width:560px) { .cap { grid-template-columns:1fr; gap:4px; } header { padding-top:36px; } h1 { font-size:1.7rem; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Introducción al Modelado Continuo</h1>
+  <p class="sub">Materia de la Licenciatura en Ciencia de Datos.<br>Departamento de Matemática, Facultad de Ciencias Exactas y Naturales, Universidad de Buenos Aires.</p>
+  <p class="sub autor">Julián Fernández Bonder · Notas de clase, notebooks que reproducen las figuras y laboratorios en Colab</p>
+  <nav><a href="#notas">Notas</a><a href="#capitulos">Capítulos</a><a href="#cuadernos">Notebooks</a><a href="#laboratorios">Laboratorios</a><a href="#datos">Datos</a><a href="#uso">Cómo usar el material</a><a href="https://github.com/jfbonder/imc">Repositorio</a></nav>
+</header>
+<main>
+  <section id="notas">
+    <h2>Las notas</h2>
+    <p>Un curso de un cuatrimestre en tres partes: dinámica no lineal (ecuaciones diferenciales ordinarias como modelos: equilibrios, estabilidad, ciclos límite, bifurcaciones), análisis de Fourier (series, transformada, DFT y sus aplicaciones al análisis de señales) y ecuaciones en derivadas parciales (difusión, Laplace y ondas, con el énfasis puesto en la convergencia al equilibrio). El objetivo es que quien lo termine pueda tomar un problema concreto, decidir si conviene modelarlo con ecuaciones diferenciales, construir el modelo, analizarlo y volver al problema con respuestas. Cada parte se organiza alrededor de uno o dos <em>problemas conductores</em>, planteados al comienzo y retomados cada vez que la teoría permite decir algo nuevo; los laboratorios los llevan hasta los datos.</p>
+    <div class="descarga">
+      <a class="boton lleno" href="notas/Notas-IMC.pdf">Notas completas (PDF, 284 páginas)</a>
+      <a class="boton" href="https://github.com/jfbonder/imc/tree/main/notas">Fuentes LaTeX</a>
+      <a class="boton" href="https://github.com/jfbonder/imc/blob/main/notas/CAMBIOS.md">Registro de cambios</a>
+    </div>
+    <div class="conductores">
+      <article class="conductor">
+        <h3>Parte I · una epidemia y un circuito que oscila solo</h3>
+        <p>El modelo SIR, con la epidemia de gripe de un internado inglés (1978) como dato, y el oscilador de van der Pol: umbrales, equilibrios, ciclos límite y bifurcaciones.</p>
+      </article>
+      <article class="conductor">
+        <h3>Parte II · una señal de temperatura</h3>
+        <p>Tres años de temperatura horaria en Buenos Aires: qué frecuencias contiene, cómo separar los ciclos del ruido, qué se pierde al submuestrear y cuánto se puede comprimir.</p>
+      </article>
+      <article class="conductor">
+        <h3>Parte III · el suelo y la cuerda</h3>
+        <p>La temperatura del suelo a varias profundidades (difusión con forzado periódico) y la cuerda de una guitarra (modos normales, espectro real, inarmonicidad).</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="capitulos">
+    <h2>Capítulos</h2>
+    <p class="parte">Parte I · Dinámica no lineal</p>
+      <article class="cap">
+        <div class="num">Capítulo 1</div>
+        <div>
+          <h3>Introducción</h3>
+          <p>Del problema al modelo: ¿cuándo alcanza una EDO? Los dos problemas conductores: la epidemia (SIR) y el circuito de van der Pol.</p>
+          <p class="enlaces"><a href="notas/Notas-IMC.pdf#page=13">notas</a></p>
+        </div>
+      </article>
+      <article class="cap">
+        <div class="num">Capítulo 2</div>
+        <div>
+          <h3>Modelos poblacionales</h3>
+          <p>Malthus y logística, la recta de fase, Lotka–Volterra con y sin capacidad de carga, ciclos límite, el modelo SIR y el número reproductivo básico.</p>
+          <p class="enlaces"><a href="notas/Notas-IMC.pdf#page=19">notas</a> · <a href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/01-poblaciones.ipynb">notebook</a></p>
+        </div>
+      </article>
+      <article class="cap">
+        <div class="num">Capítulo 3</div>
+        <div>
+          <h3>Sistemas mecánicos</h3>
+          <p>Leyes de Newton, oscilador armónico, fricción, péndulo, circuitos eléctricos, reducción a sistemas de primer orden y la energía como herramienta.</p>
+          <p class="enlaces"><a href="notas/Notas-IMC.pdf#page=35">notas</a> · <a href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/02-mecanicos.ipynb">notebook</a></p>
+        </div>
+      </article>
+      <article class="cap">
+        <div class="num">Capítulo 4</div>
+        <div>
+          <h3>Flujo y diagramas de fase</h3>
+          <p>Existencia y unicidad, el flujo de una EDO, órbitas y retratos de fase.</p>
+          <p class="enlaces"><a href="notas/Notas-IMC.pdf#page=43">notas</a> · <a href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/03-lineales-HG.ipynb">notebook</a></p>
+        </div>
+      </article>
+      <article class="cap">
+        <div class="num">Capítulo 5</div>
+        <div>
+          <h3>El Teorema de Hartman–Grobman</h3>
+          <p>Conjugación, clasificación de los sistemas lineales en el plano (traza y determinante), linealización en equilibrios hiperbólicos; vuelta a los modelos poblacionales.</p>
+          <p class="enlaces"><a href="notas/Notas-IMC.pdf#page=49">notas</a> · <a href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/03-lineales-HG.ipynb">notebook</a></p>
+        </div>
+      </article>
+      <article class="cap">
+        <div class="num">Capítulo 6</div>
+        <div>
+          <h3>Sistemas conservativos y funciones de Lyapunov</h3>
+          <p>Cantidades conservadas y potenciales, funciones de Lyapunov, el principio de LaSalle; el circuito de van der Pol.</p>
+          <p class="enlaces"><a href="notas/Notas-IMC.pdf#page=61">notas</a> · <a href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/04-lyapunov-global.ipynb">notebook</a></p>
+        </div>
+      </article>
+      <article class="cap">
+        <div class="num">Capítulo 7</div>
+        <div>
+          <h3>Dinámica global en dimensión dos</h3>
+          <p>Conjuntos límite, el teorema de Poincaré–Bendixson, el estudio gráfico con nulclinas: competencia entre especies.</p>
+          <p class="enlaces"><a href="notas/Notas-IMC.pdf#page=69">notas</a> · <a href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/04-lyapunov-global.ipynb">notebook</a></p>
+        </div>
+      </article>
+      <article class="cap">
+        <div class="num">Capítulo 8</div>
+        <div>
+          <h3>Bifurcaciones</h3>
+          <p>Estabilidad estructural, bifurcaciones silla-nodo, transcrítica y de horquilla, bifurcaciones en el plano, la bifurcación de Hopf (y el caso degenerado de van der Pol); la epidemia con nacimientos.</p>
+          <p class="enlaces"><a href="notas/Notas-IMC.pdf#page=77">notas</a> · <a href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/05-bifurcaciones.ipynb">notebook</a></p>
+        </div>
+      </article>
+      <article class="cap">
+        <div class="num">Capítulo 9</div>
+        <div>
+          <h3>Ejercicios de la Parte I</h3>
+          <p>Ejercicios teóricos (con las series guiadas sobre los problemas conductores) y ejercicios de laboratorio.</p>
+          <p class="enlaces"><a href="notas/Notas-IMC.pdf#page=95">notas</a> · <a href="#laboratorios">laboratorios</a></p>
+        </div>
+      </article>
+    <p class="parte">Parte II · Análisis de Fourier</p>
+      <article class="cap">
+        <div class="num">Capítulo 10</div>
+        <div>
+          <h3>Introducción</h3>
+          <p>Motivación y el problema conductor: una serie temporal de temperatura.</p>
+          <p class="enlaces"><a href="notas/Notas-IMC.pdf#page=117">notas</a></p>
+        </div>
+      </article>
+      <article class="cap">
+        <div class="num">Capítulo 11</div>
+        <div>
+          <h3>Series de Fourier</h3>
+          <p>Ondas fundamentales, superposición, ortogonalidad, la serie de Fourier compleja y real.</p>
+          <p class="enlaces"><a href="notas/Notas-IMC.pdf#page=121">notas</a> · <a href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/06-series.ipynb">notebook</a></p>
+        </div>
+      </article>
+      <article class="cap">
+        <div class="num">Capítulo 12</div>
+        <div>
+          <h3>Convergencia de la serie de Fourier</h3>
+          <p>Propiedades de los coeficientes, convergencia puntual (Dini), uniforme y en media cuadrática, el fenómeno de Gibbs.</p>
+          <p class="enlaces"><a href="notas/Notas-IMC.pdf#page=131">notas</a> · <a href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/06-series.ipynb">notebook</a></p>
+        </div>
+      </article>
+      <article class="cap">
+        <div class="num">Capítulo 13</div>
+        <div>
+          <h3>Transformada de Fourier</h3>
+          <p>De las series a la transformada, propiedades, inversión, convolución y el teorema de Plancherel.</p>
+          <p class="enlaces"><a href="notas/Notas-IMC.pdf#page=149">notas</a> · <a href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/07-transformada-DFT.ipynb">notebook</a></p>
+        </div>
+      </article>
+      <article class="cap">
+        <div class="num">Capítulo 14</div>
+        <div>
+          <h3>La transformada de Fourier discreta</h3>
+          <p>La DFT y su representación matricial, muestreo, la grilla de frecuencias y el aliasing, la transformada rápida (FFT).</p>
+          <p class="enlaces"><a href="notas/Notas-IMC.pdf#page=161">notas</a> · <a href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/07-transformada-DFT.ipynb">notebook</a></p>
+        </div>
+      </article>
+      <article class="cap">
+        <div class="num">Capítulo 15</div>
+        <div>
+          <h3>Aplicaciones del análisis de Fourier</h3>
+          <p>Filtrado de ruido en señales, la señal de temperatura, compresión de imágenes.</p>
+          <p class="enlaces"><a href="notas/Notas-IMC.pdf#page=173">notas</a> · <a href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/08-aplicaciones.ipynb">notebook</a></p>
+        </div>
+      </article>
+      <article class="cap">
+        <div class="num">Capítulo 16</div>
+        <div>
+          <h3>Ejercicios de la Parte II</h3>
+          <p>Ejercicios teóricos y de laboratorio.</p>
+          <p class="enlaces"><a href="notas/Notas-IMC.pdf#page=183">notas</a> · <a href="#laboratorios">laboratorios</a></p>
+        </div>
+      </article>
+    <p class="parte">Parte III · Ecuaciones en derivadas parciales</p>
+      <article class="cap">
+        <div class="num">Capítulo 17</div>
+        <div>
+          <h3>Introducción</h3>
+          <p>Los dos problemas conductores: la temperatura del suelo y la cuerda vibrante.</p>
+          <p class="enlaces"><a href="notas/Notas-IMC.pdf#page=195">notas</a></p>
+        </div>
+      </article>
+      <article class="cap">
+        <div class="num">Capítulo 18</div>
+        <div>
+          <h3>La ecuación de difusión</h3>
+          <p>Conservación, movimiento browniano y paseo al azar, la ecuación del calor en un intervalo, en la recta y en dimensión mayor; convergencia al equilibrio y la desigualdad de Poincaré; la temperatura del suelo.</p>
+          <p class="enlaces"><a href="notas/Notas-IMC.pdf#page=201">notas</a> · <a href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/09-calor.ipynb">notebook</a></p>
+        </div>
+      </article>
+      <article class="cap">
+        <div class="num">Capítulo 19</div>
+        <div>
+          <h3>La ecuación de Laplace/Poisson</h3>
+          <p>Superficies mínimas, juegos aleatorios y valor esperado, principio del máximo y valor medio, solución fundamental y series de Fourier en un rectángulo.</p>
+          <p class="enlaces"><a href="notas/Notas-IMC.pdf#page=233">notas</a> · <a href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/10-laplace.ipynb">notebook</a></p>
+        </div>
+      </article>
+      <article class="cap">
+        <div class="num">Capítulo 20</div>
+        <div>
+          <h3>La ecuación de ondas</h3>
+          <p>Tipos de ondas, la cuerda vibrante, energía, series de Fourier y modos normales, la fórmula de d'Alembert y las dos descripciones de la misma solución.</p>
+          <p class="enlaces"><a href="notas/Notas-IMC.pdf#page=251">notas</a> · <a href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/11-ondas.ipynb">notebook</a></p>
+        </div>
+      </article>
+      <article class="cap">
+        <div class="num">Capítulo 21</div>
+        <div>
+          <h3>Ejercicios de la Parte III</h3>
+          <p>Ejercicios teóricos y de laboratorio.</p>
+          <p class="enlaces"><a href="notas/Notas-IMC.pdf#page=269">notas</a> · <a href="#laboratorios">laboratorios</a></p>
+        </div>
+      </article>
+  </section>
+
+  <section id="cuadernos">
+    <h2>Notebooks del texto</h2>
+    <p>Once notebooks de Python, uno por capítulo o par de capítulos, que reproducen todas las figuras de las notas y permiten cambiar los parámetros de cada modelo. No requieren instalar nada: el botón abre una copia en Google Colab (hace falta una cuenta de Google para ejecutarla) y la primera celda instala el módulo <code>imc</code> del repositorio. Cada uno termina con una sección <em>para experimentar</em>.</p>
+    <div class="cuadernos">
+      <article class="cuaderno"><h3>Modelos poblacionales</h3><p class="meta">Capítulo 2</p><p>Logística y recta de fase, Lotka–Volterra con nulclinas, el modelo de bacterias y su ciclo, el SIR en el plano (s, i).</p><p class="enlaces"><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/01-poblaciones.ipynb">Abrir en Colab</a> <a class="nw" href="https://raw.githubusercontent.com/jfbonder/imc/main/notebooks/01-poblaciones.ipynb">descargar&nbsp;.ipynb</a></p></article>
+      <article class="cuaderno"><h3>Sistemas mecánicos y eléctricos</h3><p class="meta">Capítulo 3</p><p>Oscilador armónico, fricción, péndulo, la corriente del circuito de van der Pol y su energía no monótona.</p><p class="enlaces"><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/02-mecanicos.ipynb">Abrir en Colab</a> <a class="nw" href="https://raw.githubusercontent.com/jfbonder/imc/main/notebooks/02-mecanicos.ipynb">descargar&nbsp;.ipynb</a></p></article>
+      <article class="cuaderno"><h3>Sistemas lineales y Hartman–Grobman</h3><p class="meta">Capítulos 4–5</p><p>Los retratos lineales (silla, nodo, foco, centro), el plano traza–determinante, linealización de los modelos poblacionales.</p><p class="enlaces"><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/03-lineales-HG.ipynb">Abrir en Colab</a> <a class="nw" href="https://raw.githubusercontent.com/jfbonder/imc/main/notebooks/03-lineales-HG.ipynb">descargar&nbsp;.ipynb</a></p></article>
+      <article class="cuaderno"><h3>Lyapunov y dinámica global</h3><p class="meta">Capítulos 6–7</p><p>Energía del péndulo, funciones de Lyapunov, van der Pol, Poincaré–Bendixson, competencia entre especies, Lorenz.</p><p class="enlaces"><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/04-lyapunov-global.ipynb">Abrir en Colab</a> <a class="nw" href="https://raw.githubusercontent.com/jfbonder/imc/main/notebooks/04-lyapunov-global.ipynb">descargar&nbsp;.ipynb</a></p></article>
+      <article class="cuaderno"><h3>Bifurcaciones</h3><p class="meta">Capítulo 8</p><p>Silla-nodo, transcrítica, horquilla, un ejemplo en el plano, Hopf genérica contra van der Pol, el SIR con nacimientos.</p><p class="enlaces"><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/05-bifurcaciones.ipynb">Abrir en Colab</a> <a class="nw" href="https://raw.githubusercontent.com/jfbonder/imc/main/notebooks/05-bifurcaciones.ipynb">descargar&nbsp;.ipynb</a></p></article>
+      <article class="cuaderno"><h3>Series de Fourier y convergencia</h3><p class="meta">Capítulos 11–12</p><p>Sumas parciales, núcleo de Dirichlet, decaimiento de los coeficientes, Gibbs, la serie de Fourier de la temperatura.</p><p class="enlaces"><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/06-series.ipynb">Abrir en Colab</a> <a class="nw" href="https://raw.githubusercontent.com/jfbonder/imc/main/notebooks/06-series.ipynb">descargar&nbsp;.ipynb</a></p></article>
+      <article class="cuaderno"><h3>Transformada, DFT y FFT</h3><p class="meta">Capítulos 13–14</p><p>Transformadas clásicas, la matriz de Fourier, aliasing, la grilla de frecuencias, Cooley–Tukey y su costo, la temperatura submuestreada.</p><p class="enlaces"><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/07-transformada-DFT.ipynb">Abrir en Colab</a> <a class="nw" href="https://raw.githubusercontent.com/jfbonder/imc/main/notebooks/07-transformada-DFT.ipynb">descargar&nbsp;.ipynb</a></p></article>
+      <article class="cuaderno"><h3>Filtrado y compresión</h3><p class="meta">Capítulo 15</p><p>Filtro por umbral, la temperatura regular y su residuo, compresión de la serie y de una imagen.</p><p class="enlaces"><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/08-aplicaciones.ipynb">Abrir en Colab</a> <a class="nw" href="https://raw.githubusercontent.com/jfbonder/imc/main/notebooks/08-aplicaciones.ipynb">descargar&nbsp;.ipynb</a></p></article>
+      <article class="cuaderno"><h3>La ecuación de difusión</h3><p class="meta">Capítulo 18</p><p>Paseo al azar, calor en un intervalo y en el cuadrado, tasa de decaimiento, la solución periódica del suelo y el ajuste de la difusividad.</p><p class="enlaces"><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/09-calor.ipynb">Abrir en Colab</a> <a class="nw" href="https://raw.githubusercontent.com/jfbonder/imc/main/notebooks/09-calor.ipynb">descargar&nbsp;.ipynb</a></p></article>
+      <article class="cuaderno"><h3>Laplace y Poisson</h3><p class="meta">Capítulo 19</p><p>Superficies mínimas, el juego aleatorio y Monte Carlo, valor medio, principio del máximo, solución fundamental, series en el rectángulo.</p><p class="enlaces"><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/10-laplace.ipynb">Abrir en Colab</a> <a class="nw" href="https://raw.githubusercontent.com/jfbonder/imc/main/notebooks/10-laplace.ipynb">descargar&nbsp;.ipynb</a></p></article>
+      <article class="cuaderno"><h3>La ecuación de ondas</h3><p class="meta">Capítulo 20</p><p>Catálogo de ondas, modos de la cuerda, energía, d'Alembert, dominios de dependencia, reflexión de un pulso.</p><p class="enlaces"><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/11-ondas.ipynb">Abrir en Colab</a> <a class="nw" href="https://raw.githubusercontent.com/jfbonder/imc/main/notebooks/11-ondas.ipynb">descargar&nbsp;.ipynb</a></p></article>
+    </div>
+  </section>
+
+  <section id="laboratorios">
+    <h2>Laboratorios</h2>
+    <p>Ocho laboratorios, uno por problema conductor y uno por cada bloque de métodos numéricos (que se explican acá y no en las notas). Cada uno viene en dos versiones generadas por el mismo script: la de <strong>estudiantes</strong>, con la explicación de los métodos, las consignas, esqueletos con <code># TODO</code> y celdas de verificación, y la <strong>guía del docente</strong>, con las soluciones completas ejecutadas y respuestas modelo. Todos terminan con preguntas de interpretación escrita, que es lo que se evalúa. Cada uno está pensado para una sesión de laboratorio de cuatro horas (los más largos, para dos).</p>
+    <div class="cuadernos">
+      <article class="cuaderno"><h3>Resolución numérica de EDOs</h3><p class="meta">Parte I · métodos</p><p>Euler desde cero, orden de convergencia, estabilidad y rigidez, Runge–Kutta, sistemas y energía, eventos con <code>solve_ivp</code>, SIR y SEIR.</p><p class="enlaces"><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/lab-EDO-numerico.ipynb">Estudiantes</a><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/docente/lab-EDO-numerico.ipynb">Guía del docente</a></p></article>
+      <article class="cuaderno"><h3>Ajuste del modelo SIR a datos</h3><p class="meta">Parte I · epidemia</p><p>La gripe del internado de 1978: mínimos cuadrados, identificabilidad, validación con media serie, SEIR, vacunación y aislamiento.</p><p class="enlaces"><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/lab-SIR.ipynb">Estudiantes</a><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/docente/lab-SIR.ipynb">Guía del docente</a></p></article>
+      <article class="cuaderno"><h3>La forma de onda del circuito</h3><p class="meta">Parte I · van der Pol</p><p>Régimen permanente, período y amplitud con eventos, espectro, y el problema inverso: estimar λ a partir de un registro con ruido.</p><p class="enlaces"><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/lab-vanderPol.ipynb">Estudiantes</a><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/docente/lab-vanderPol.ipynb">Guía del docente</a></p></article>
+      <article class="cuaderno"><h3>La señal de temperatura</h3><p class="meta">Parte II · señal</p><p>Espectro de datos reales, ventanas, amplitud y fase de los ciclos, aliasing, filtrado y promedios móviles, compresión, espectrograma.</p><p class="enlaces"><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/lab-senal-temperatura.ipynb">Estudiantes</a><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/docente/lab-senal-temperatura.ipynb">Guía del docente</a></p></article>
+      <article class="cuaderno"><h3>Diferencias finitas para EDPs</h3><p class="meta">Parte III · métodos</p><p>Matrices de diferenciación, Poisson 1D, capa límite, Neumann, calor explícito e implícito (r ≤ 1/2), leapfrog y CFL.</p><p class="enlaces"><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/lab-EDP-numerico.ipynb">Estudiantes</a><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/docente/lab-EDP-numerico.ipynb">Guía del docente</a></p></article>
+      <article class="cuaderno"><h3>La temperatura del suelo</h3><p class="meta">Parte III · difusión</p><p>Amplitud y fase por capa, cuatro estimaciones de la difusividad, simulación con la superficie como borde, residuos, la cañería.</p><p class="enlaces"><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/lab-suelo.ipynb">Estudiantes</a><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/docente/lab-suelo.ipynb">Guía del docente</a></p></article>
+      <article class="cuaderno"><h3>El espectro de una cuerda real</h3><p class="meta">Parte III · ondas</p><p>Fundamental y armónicos de una grabación, inarmonicidad por rigidez, decaimiento por armónico, timbre, simulación con leapfrog y fricción.</p><p class="enlaces"><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/lab-cuerda.ipynb">Estudiantes</a><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/docente/lab-cuerda.ipynb">Guía del docente</a></p></article>
+      <article class="cuaderno"><h3>Laplace en 2D e inpainting</h3><p class="meta">Parte III · Laplace</p><p>Cinco puntos contra Monte Carlo, costo y error, métodos iterativos, el juego con fuente, rellenar regiones de una imagen.</p><p class="enlaces"><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/lab-laplace-datos.ipynb">Estudiantes</a><a class="boton" href="https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/docente/lab-laplace-datos.ipynb">Guía del docente</a></p></article>
+    </div>
+  </section>
+
+  <section id="datos">
+    <h2>Datos</h2>
+    <p>Los notebooks descargan los datos solos desde el repositorio (<code>datos.obtener("archivo")</code>). Fuentes y licencias:</p>
+    <table>
+      <tr><th>Archivo</th><th>Contenido</th><th>Fuente y licencia</th></tr>
+      <tr><td class="nw"><code>gripe_internado_1978.csv</code></td><td>Alumnos en cama por día durante una epidemia de gripe en un internado inglés (763 alumnos, 14 días).</td><td>Anónimo, <em>Influenza in a boarding school</em>, BMJ, 1978; reproducido en Murray, <em>Mathematical Biology I</em>.</td></tr>
+      <tr><td class="nw"><code>temperatura_horaria.csv</code></td><td>Temperatura del aire cada hora, 2021–2023, en el punto de Aeroparque (Buenos Aires).</td><td>Reanálisis ERA5 vía <a href="https://open-meteo.com/">Open-Meteo</a>, CC BY 4.0 (Copernicus). Reanálisis, no medición directa.</td></tr>
+      <tr><td class="nw"><code>suelo_horaria.csv</code></td><td>Temperatura del aire y del suelo en cuatro capas (0–7, 7–28, 28–100, 100–255 cm), 2023, mismo punto.</td><td>Reanálisis ERA5-Land vía Open-Meteo, CC BY 4.0. Promedios por capa.</td></tr>
+      <tr><td class="nw"><code>cuerda_guitarra.wav</code></td><td>Cuerda de guitarra (Sol) pulsada, 6 segundos, mono 44,1 kHz.</td><td>Freesound, sonido 8403 de <em>speedy</em>, CC0.</td></tr>
+      <tr><td class="nw"><code>vanderpol_registro.csv</code></td><td>Corriente simulada con ruido de un circuito de van der Pol con λ desconocido.</td><td>Propia (generada por el laboratorio), CC BY 4.0.</td></tr>
+      <tr><td class="nw"><code>astronauta.png</code></td><td>Imagen en escala de grises para el ejemplo de compresión y el inpainting.</td><td>NASA, dominio público (distribuida con scikit-image).</td></tr>
+    </table>
+  </section>
+
+  <section id="uso">
+    <h2>Cómo usar el material</h2>
+    <p>Para estudiar por cuenta propia, el orden natural es el de los capítulos: leer el capítulo, correr el notebook del texto cambiando parámetros, hacer los ejercicios teóricos (están al final de cada parte, con la misma numeración que en las notas) y, cuando toque, el laboratorio correspondiente. Los notebooks del texto son cortos y sirven para <em>ver</em>: reproducen cada figura de las notas desde una celda marcada con su nombre. Los laboratorios son para <em>hacer</em>: traen la explicación de lo que hace falta, consignas con lo que se espera y celdas para completar; la guía del docente tiene las soluciones. Todo el código común vive en el módulo <code>imc</code> del repositorio (retratos de fase, espectros, esquemas numéricos, acceso a los datos), que se instala solo en Colab.</p>
+    <p>Correcciones y sugerencias: abrir un <em>issue</em> o un <em>pull request</em> en el <a href="https://github.com/jfbonder/imc">repositorio</a>, o escribir a <code>jfbonder@dm.uba.ar</code>.</p>
+  </section>
+</main>
+<footer>
+  <p>© 2026 Julián Fernández Bonder. El texto y las figuras se distribuyen bajo licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es">CC BY-NC-SA 4.0</a>: se pueden copiar, redistribuir y adaptar con atribución, sin fines comerciales y compartiendo bajo la misma licencia. El código (módulo <code>imc</code>, notebooks y scripts) tiene licencia MIT. Los datos tienen la licencia indicada en cada caso.</p>
+  <p>Instituto de Cálculo (IC–CONICET) y Departamento de Matemática (FCEN–UBA).</p>
+</footer>
+</body>
+</html>
