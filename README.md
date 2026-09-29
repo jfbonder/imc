@@ -6,7 +6,7 @@ Notas de clase, guías y notebooks de la materia *Introducción al Modelado Cont
 
 | Carpeta | Qué hay |
 | --- | --- |
-| `notas/` | `Notas-IMC.tex` (fuente LaTeX de las notas), `biblio.bib`, `CAMBIOS.md` (registro de la revisión) |
+| `notas/` | `Notas-IMC.tex` (fuente LaTeX de las notas), `Notas-IMC.pdf` (última compilación), `biblio.bib`, `CAMBIOS.md` (registro de la revisión), `FIGURAS-parte-I.md` (figuras generadas por los notebooks y dónde van) |
 | `figuras/` | Figuras de las notas. Las genera cada notebook con `estilo.guardar(fig, "nombre")` |
 | `imc/` | Módulo Python común a los notebooks (estilo, retratos de fase, espectros, esquemas numéricos, datos) |
 | `notebooks/` | Notebooks del texto (uno por capítulo) y de laboratorio (uno por problema conductor) |
