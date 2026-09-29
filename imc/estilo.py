@@ -85,11 +85,12 @@ def guardar(fig, nombre, carpeta=None, formatos=("png",)):
     return rutas
 
 
-def parametros(ax, texto, loc="upper right"):
-    """Escribe los valores de los parámetros en una esquina del gráfico."""
+def parametros(ax, texto, loc="upper right", fontsize=9):
+    """Escribe los valores de los parámetros en una esquina del gráfico.
+    ``fontsize`` conviene subirlo (10--11) en figuras que el texto incluye chicas."""
     xy = {"upper right": (0.98, 0.98), "upper left": (0.02, 0.98),
           "lower right": (0.98, 0.02), "lower left": (0.02, 0.02)}[loc]
     ha = "right" if "right" in loc else "left"
     va = "top" if "upper" in loc else "bottom"
-    ax.text(*xy, texto, transform=ax.transAxes, ha=ha, va=va, fontsize=9,
-            bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="0.8"))
+    ax.text(*xy, texto, transform=ax.transAxes, ha=ha, va=va, fontsize=fontsize,
+            bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="0.8"), zorder=10)

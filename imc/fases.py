@@ -87,10 +87,15 @@ def campo(F, xlim, ylim, ax=None, n=20, args=(), normalizar=True, color=None):
 
 
 def trayectoria(F, X0, T, ax=None, args=(), color=None, flecha=True, lw=None,
-                atras=False, **kw):
+                atras=False, pos_flecha=None, T_atras=None, **kw):
     """Integra ``X' = F(t, X)`` desde ``X0`` durante ``T`` y dibuja la curva.
 
-    Con ``atras=True`` integra también hacia el pasado (útil para sillas).
+    Con ``atras=True`` integra también hacia el pasado (útil para sillas) durante
+    ``T_atras`` (por defecto, el mismo ``T``).
+    ``pos_flecha``: si se da (entre 0 y 1), la flecha de sentido se ubica en esa
+    fracción de la longitud de la curva *dentro de los límites actuales del eje*
+    (útil cuando la trayectoria sale del recuadro o se acumula en un punto); si
+    es ``None`` se ubica a un tercio de los pasos de integración.
     Devuelve la solución de ``solve_ivp``.
     """
     if ax is None:
@@ -101,11 +106,20 @@ def trayectoria(F, X0, T, ax=None, args=(), color=None, flecha=True, lw=None,
     ax.plot(sol.y[0], sol.y[1], color=color, lw=lw, **kw)
     if flecha and sol.y.shape[1] > 10:
         k = sol.y.shape[1] // 3
+        if pos_flecha is not None:
+            x, y = sol.y
+            (xa, xb), (ya, yb) = sorted(ax.get_xlim()), sorted(ax.get_ylim())
+            dentro = np.where((x >= xa) & (x <= xb) & (y >= ya) & (y <= yb))[0]
+            if len(dentro) > 2:
+                s = np.concatenate([[0.0], np.cumsum(np.hypot(np.diff(x[dentro]), np.diff(y[dentro])))])
+                k = int(dentro[min(np.searchsorted(s, pos_flecha * s[-1]), len(dentro) - 1)])
+                k = min(k, sol.y.shape[1] - 2)
         ax.annotate("", xy=sol.y[:, k + 1], xytext=sol.y[:, k],
                     arrowprops=dict(arrowstyle="-|>", color=color, mutation_scale=14))
     if atras:
-        solb = solve_ivp(F, (0, -T), X0, args=args, rtol=1e-8, atol=1e-10,
-                         max_step=T / 400)
+        Tb = T_atras if T_atras is not None else T
+        solb = solve_ivp(F, (0, -Tb), X0, args=args, rtol=1e-8, atol=1e-10,
+                         max_step=Tb / 400)
         ax.plot(solb.y[0], solb.y[1], color=color, lw=lw, **kw)
     return sol
 
@@ -153,19 +167,20 @@ def marcar_equilibrios(ax, equilibrios):
             ax.plot(x, y, "o", ms=8, color="white", mec="black", mew=1.5, zorder=6)
 
 
-def clasificar(J):
+def clasificar(J, tol=1e-9):
     """Clasifica el equilibrio de un sistema lineal plano por traza y determinante.
 
     Devuelve una cadena: 'silla', 'nodo estable', 'nodo inestable', 'foco estable',
-    'foco inestable', 'centro' o 'degenerado'.
+    'foco inestable', 'centro' o 'degenerado'. ``tol`` es la tolerancia con la que
+    se consideran nulos la traza o el determinante (útil con jacobianos numéricos).
     """
     J = np.asarray(J, dtype=float)
     tr, det = np.trace(J), np.linalg.det(J)
-    if det < 0:
+    if det < -tol:
         return "silla"
-    if det == 0:
+    if abs(det) <= tol:
         return "degenerado"
-    if tr == 0:
+    if abs(tr) <= tol:
         return "centro"
     disc = tr ** 2 - 4 * det
     tipo = "nodo" if disc >= 0 else "foco"

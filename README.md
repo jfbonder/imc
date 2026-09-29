@@ -23,10 +23,10 @@ Cada notebook se abre directamente en Google Colab con el botón; la primera cel
 | Notebook | Capítulo | Colab |
 | --- | --- | --- |
 | `01-poblaciones` | 2. Modelos poblacionales | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/01-poblaciones.ipynb) |
-| `02-mecanicos` | 3. Sistemas mecánicos y eléctricos | (pendiente) |
-| `03-lineales-HG` | 4–5. Flujo, sistemas lineales, Hartman–Grobman | (pendiente) |
-| `04-lyapunov-global` | 6–7. Lyapunov, Poincaré–Bendixson, competencia, Lorenz | (pendiente) |
-| `05-bifurcaciones` | 8. Bifurcaciones | (pendiente) |
+| `02-mecanicos` | 3. Sistemas mecánicos y eléctricos | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/02-mecanicos.ipynb) |
+| `03-lineales-HG` | 4–5. Flujo, sistemas lineales, Hartman–Grobman | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/03-lineales-HG.ipynb) |
+| `04-lyapunov-global` | 6–7. Lyapunov, Poincaré–Bendixson, competencia, Lorenz | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/04-lyapunov-global.ipynb) |
+| `05-bifurcaciones` | 8. Bifurcaciones | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/05-bifurcaciones.ipynb) |
 | `06-series` | 11–12. Series de Fourier y convergencia | (pendiente) |
 | `07-transformada-DFT` | 13–14. Transformada de Fourier, DFT, FFT | (pendiente) |
 | `08-aplicaciones` | 15. Filtrado, ventanas, compresión | (pendiente) |

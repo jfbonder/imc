@@ -113,7 +113,7 @@ md("""## 2.3 Lotka–Volterra con capacidad de carga
 
 $$h' = \\rho\\,h\\Bigl(1-\\frac{h}{k}-p\\Bigr),\\qquad p' = -\\tfrac{1}{\\rho}\\,p(1-h).$$
 
-La nulclina de $h$ pasa a ser la recta $p = 1-h/k$. Tres casos según $k$; para $k>1$ el acercamiento al equilibrio de coexistencia $(1,1-1/k)$ es monótono o en espiral según el signo de $\\rho^2 - 4k(k-1)$ (esto se justifica en el Capítulo 5).""")
+La nulclina de $h$ pasa a ser la recta $p = 1-h/k$. Tres casos según $k$; para $k>1$ el acercamiento al equilibrio de coexistencia $(1,1-1/k)$ es monótono o en espiral según el signo de $\\rho^2 - 4k(k-1)$; por ahora lo vemos en la simulación, cuando desarrollemos más la teoría vamos a poder explicarlo.""")
 
 code("""def LV2(t, X, rho, k):
     h, p = X
