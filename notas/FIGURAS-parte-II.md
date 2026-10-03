@@ -19,7 +19,7 @@ Las figuras de los capítulos 11–15 salen de `notebooks/06-series`, `07-transf
 | `diente`, `diente-gibbs`, `diente-detalle` | 06 | ídem; referencia $f(t)+2\cdot0{,}0895$ |
 | `transformadas` (nueva; reemplaza `transformada1/2/3`, borradas) | 07 | panel 3×2, convención $e^{-2\pi i\xi x}$ del texto, 0.9\textwidth |
 | `aliasing` | 07 | ejemplo del texto ($f_s=16$, $13\to3$) con caja explicativa |
-| `señal1`, `espectro-señal`, `espectro-filtrado`, `señal-filtrada` | 08 | leyenda "umbral" (era "Threshold"); en `espectro-filtrado` las etiquetas original/filtrado estaban **invertidas** en la vieja; `default_rng(0)` |
+| `senal1`, `espectro-senal`, `espectro-filtrado`, `senal-filtrada` | 08 | leyenda "umbral" (era "Threshold"); en `espectro-filtrado` las etiquetas original/filtrado estaban **invertidas** en la vieja; `default_rng(0)` |
 | `imagen-original`, `imagen-3`, `imagen-1`, `imagen-01`, `imagen-001` | 08 | nueva imagen (NASA); reconstrucciones con 3 %, 1 %, 0,1 %, 0,01 % de los coeficientes de mayor módulo |
 
 ## Figuras nuevas (todas insertadas en el tex)

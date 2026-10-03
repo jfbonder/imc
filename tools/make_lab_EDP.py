@@ -66,7 +66,7 @@ La diferencia entre el esquema y la derivada exacta es el **error de truncamient
 
 **Esquemas generales.** Un esquema para $u^{(d)}(x)$ con esténcil $\{o_0,\dots,o_{n-1}\}$ (enteros distintos, los nodos son $x+o_kh$) es $\sum_k w_k\,u(x+o_kh) \approx h^d u^{(d)}(x)$. Por Taylor, $\sum_k w_k u(x+o_kh) = \sum_m \frac{h^m}{m!}\bigl(\sum_k w_k o_k^m\bigr)u^{(m)}(x)$, así que los pesos tienen que cumplir
 $$\sum_k w_k\,\frac{o_k^m}{m!} = \delta_{m,d},\qquad m = 0,\dots,n-1,$$
-un sistema lineal $Vw = e_d$ con $V_{mk} = o_k^m/m!$ (matriz de Vandermonde, invertible porque los $o_k$ son distintos). Con $n$ nodos se logra orden al menos $n-d$, y uno más si el esquema es simétrico y $n-d$ es impar. Es exactamente lo mismo que interpolar $u$ con el polinomio de grado $n-1$ que pasa por los $n$ nodos y derivarlo (Ejercicio 2 del texto): los pesos son los de $p'(x)$. Ejemplo: con $\{-1,0,1\}$ y $d=2$ el sistema da $w = (1,-2,1)$.
+un sistema lineal $Vw = e_d$ con $V_{mk} = o_k^m/m!$ (matriz de Vandermonde, invertible porque los $o_k$ son distintos). Con $n$ nodos se logra orden al menos $n-d$, y uno más si el esquema es simétrico y $n-d$ es impar. Es exactamente lo mismo que interpolar $u$ con el polinomio de grado $n-1$ que pasa por los $n$ nodos y derivarlo (el ejercicio de interpolación y fórmulas de orden superior en "Ejercicios de laboratorio" de la Parte III, Sección 21.2): los pesos son los de $p'(x)$. Ejemplo: con $\{-1,0,1\}$ y $d=2$ el sistema da $w = (1,-2,1)$.
 
 **Matrices de diferenciación.** Aplicar un esquema en todos los nodos es multiplicar por una matriz: $U'\approx DU$.
 
@@ -75,7 +75,7 @@ un sistema lineal $Vw = e_d$ con $V_{mk} = o_k^m/m!$ (matriz de Vandermonde, inv
 
 En ambos casos las filas suman cero (una constante tiene derivada cero) y cada fila tiene sólo 2–5 elementos no nulos: son matrices **ralas**. Acá $N\le 256$ y usamos matrices densas; en la Tarea 3 vamos a ver por qué en problemas grandes eso deja de ser razonable.
 
-**Para pensar (no hay celda).** (i) Con Taylor, comprobá que el error del esquema de cinco puntos $\{-2,-1,0,1,2\}$ es $\frac{h^4}{30}u^{(5)}(x)+\cdots$. (ii) ¿Por qué las fórmulas centradas ganan un orden "gratis" y las laterales no? (iii) El Ejercicio 2 pide interpolar en $x-2h,x-h,x$ y derivar: mostrá que da $\frac{3u(x)-4u(x-h)+u(x-2h)}{2h}$ y verificá que coincide con lo que da el sistema de Vandermonde.
+**Para pensar (no hay celda).** (i) Con Taylor, comprobá que el error del esquema de cinco puntos $\{-2,-1,0,1,2\}$ es $\frac{h^4}{30}u^{(5)}(x)+\cdots$. (ii) ¿Por qué las fórmulas centradas ganan un orden "gratis" y las laterales no? (iii) Ese ejercicio pide interpolar en $x-2h,x-h,x$ y derivar: mostrá que da $\frac{3u(x)-4u(x-h)+u(x-2h)}{2h}$ y verificá que coincide con lo que da el sistema de Vandermonde.
 """)
 
 lab.tarea(
@@ -87,7 +87,7 @@ Escribí:
 * `matriz_dif(offsets, pesos, N, h, periodica=False, d=1)`: devuelve `(D, idx)`, donde `D` es la matriz de diferenciación (con el factor $1/h^d$ incluido) y `idx` los índices de los nodos en los que el esquema está definido. En el caso no periódico `D` tiene forma `(len(idx), N+1)`; en el periódico `(N, N)` con `idx = arange(N)`.
 * `dif_forward`, `dif_backward`, `dif_centrada` (llaman a `matriz_dif` con el esténcil correspondiente).
 
-Después obtené con `pesos_taylor` los pesos de los dos esquemas del Ejercicio 2: backward de orden 2 con $\{-2,-1,0\}$ y centrado de orden 4 con $\{-2,-1,0,1,2\}$, y escribilos en un comentario.
+Después obtené con `pesos_taylor` los pesos de los dos esquemas del ejercicio de interpolación (Sección 21.2): backward de orden 2 con $\{-2,-1,0\}$ y centrado de orden 4 con $\{-2,-1,0,1,2\}$, y escribilos en un comentario.
 
 **Qué se espera.** Que la celda de verificación no proteste. Chequeá a mano que $\{-2,-1,0\}$ da $\frac12(1,-4,3)$ y que el de cinco puntos da $\frac1{12}(1,-8,0,8,-1)$. Errores típicos: olvidarse de dividir por $h^d$, indexar mal el caso periódico (`(j+o) % N`) y aplicar la matriz periódica a $N+1$ valores (el último nodo es el primero repetido).
 """,
@@ -1349,18 +1349,18 @@ lab.md(r"""
 lab.md(r"""
 ## Cobertura de los ejercicios del texto y ejercicios adicionales
 
-Los enunciados de la sección "Ejercicios de laboratorio" de la Parte III y dónde se resuelven:
+Los enunciados de la sección "Ejercicios de laboratorio" de la Parte III (Sección 21.2), por tema, y dónde se resuelven:
 
-* Ej. 1 (matrices forward/backward/centrada, no periódicas y periódicas): Tarea 1.
-* Ej. 2 (interpolación, fórmulas de orden superior, matrices periódicas): explicación y "Para pensar" de la Sección 1; el ítem (c) en la Tarea 1 (y su orden en la Tarea 2).
-* Ej. 3 (orden con $u$ y $v$; periódicas sobre $u$): Tarea 2.
-* Ej. 4, Dirichlet (a)–(c): Tarea 3 (con `solve_banded` de agregado).
-* Ej. capa límite (a), (b): Tarea 4 (con upwind de agregado).
-* Ej. Neumann: Tarea 5 (con $f=\cos2\pi x$ de agregado).
-* Ej. `forward` (a)–(c): explicación y "Para pensar" de la Sección 6 (los ítems demostrativos); se verifican numéricamente en las Tareas 6 y 7 (incluido el caso $r=1/6$).
-* Ej. `programita` (a), (b): Tarea 6; (c): Tarea 7.
-* Ej. implícito: Tarea 8.
-* Ej. `lab:leapfrog` ítems 1, 2: Tarea 9; ítem 3: Tarea 10; ítem 4 (fijo y libre): Tarea 10.
+* Matrices de diferenciación forward/backward/centrada, no periódicas y periódicas: Tarea 1.
+* Interpolación, fórmulas de orden superior y matrices periódicas: explicación y "Para pensar" de la Sección 1; el ítem (c) en la Tarea 1 (y su orden en la Tarea 2).
+* Orden de convergencia de los métodos de diferenciación (con $u$ y $v$; periódicas sobre $u$): Tarea 2.
+* Condiciones de Dirichlet (a)–(c): Tarea 3 (con `solve_banded` de agregado).
+* Capa límite en el borde (a), (b): Tarea 4 (con upwind de agregado).
+* Condiciones de Neumann: Tarea 5 (con $f=\cos2\pi x$ de agregado).
+* Esquema explícito (forward en el tiempo) para $U_t=\alpha U_{xx}$ y la condición $r\le 1/2$, (a)–(c): explicación y "Para pensar" de la Sección 6 (los ítems demostrativos); se verifican numéricamente en las Tareas 6 y 7 (incluido el caso $r=1/6$).
+* Programa del esquema explícito con datos iniciales dados (a), (b): Tarea 6; (c): Tarea 7.
+* Método implícito: Tarea 8.
+* Esquema explícito (leapfrog) para la ecuación de ondas, ítems 1, 2: Tarea 9; ítem 3: Tarea 10; ítem 4 (fijo y libre): Tarea 10.
 
 **Para experimentar.**
 

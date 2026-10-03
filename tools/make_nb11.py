@@ -32,6 +32,7 @@ from imc import estilo, numerico, espectro
 from imc.estilo import COLORES, CICLO
 
 estilo.activar(fuente=14)   # las figuras de un panel van a 0.6\textwidth (~9 cm): fuente grande para que se lean impresas
+plt.close(plt.figure())   # inicializa el backend inline fuera de los rc_context de abajo (si no, las figuras no se muestran)
 GUARDAR = False   # True para regenerar las figuras de las notas en figuras/
 
 
@@ -169,7 +170,7 @@ ax.set_xlabel("$x$"); ax.set_ylabel("$u(x, t)$"); ax.set_xlim(0, L); ax.set_ylim
 estilo.parametros(ax, f"$L = c = 1$, $h = 0$, {N} modos", loc="upper right", fontsize=12)
 if GUARDAR: estilo.guardar(fig, "sol-ondas-20nodos")""")
 
-md(r"""**Figura `energia-ondas`**: la energía cinética $E_{cin} = \int_0^L\tfrac12 u_t^2$, la potencial $E_{pot} = \int_0^L\tfrac{c^2}2 u_x^2$ y la total de esa solución, calculadas integrando numéricamente (regla del trapecio en $801$ puntos) las derivadas de la serie. La total es constante, y coincide con la suma por modos de la fórmula (20.x) del texto,
+md(r"""**Figura `energia-ondas`**: la energía cinética $E_{cin} = \int_0^L\tfrac12 u_t^2$, la potencial $E_{pot} = \int_0^L\tfrac{c^2}2 u_x^2$ y la total de esa solución, calculadas integrando numéricamente (regla del trapecio en $801$ puntos) las derivadas de la serie. La total es constante, y coincide con la suma por modos del texto (Sección 20.4, "La energía repartida entre los modos"),
 $$E = \sum_k E_k,\qquad E_k = \frac L4\,\omega_k^2\bigl(A_k^2 + B_k^2\bigr),$$
 que aquí da $E_1 = \pi^2/4$ y $E_3 = 9\pi^2/16$. Fijate que la energía se intercambia entre cinética y potencial (con la frecuencia $2\omega_1$ del modo fundamental, modulada por el tercer modo) pero cada $E_k$ es constante por separado.""")
 
@@ -242,7 +243,7 @@ code(r"""with fuente(15):
 
 md(r"""## 20.5 La fórmula de d'Alembert
 
-En toda la recta, $u(x,t) = \tfrac12\bigl(g(x-ct) + g(x+ct)\bigr) + \tfrac1{2c}\int_{x-ct}^{x+ct}h(s)\,ds$: la mitad del dato viaja hacia cada lado. La implementamos con una antiderivada $H$ de $h$ ($\int_{x-ct}^{x+ct}h = H(x+ct) - H(x-ct)$). *Figura nueva `dalembert-pulso`* (iría junto a la fórmula (20.x)): un pulso inicial $g$ gaussiano angosto con $h = 0$ se parte en dos mitades $g(x\mp ct)/2$ que viajan en sentidos opuestos con velocidad $c$; cuatro instantes apilados. Los perfiles no se deforman, y nada pasa fuera de $|x - x_0| \le ct + $ (ancho del pulso).""")
+En toda la recta, $u(x,t) = \tfrac12\bigl(g(x-ct) + g(x+ct)\bigr) + \tfrac1{2c}\int_{x-ct}^{x+ct}h(s)\,ds$: la mitad del dato viaja hacia cada lado. La implementamos con una antiderivada $H$ de $h$ ($\int_{x-ct}^{x+ct}h = H(x+ct) - H(x-ct)$). *Figura nueva `dalembert-pulso`* (iría junto a la fórmula de d'Alembert, Sección 20.5): un pulso inicial $g$ gaussiano angosto con $h = 0$ se parte en dos mitades $g(x\mp ct)/2$ que viajan en sentidos opuestos con velocidad $c$; cuatro instantes apilados. Los perfiles no se deforman, y nada pasa fuera de $|x - x_0| \le ct + $ (ancho del pulso).""")
 
 code(r"""def dalembert(x, t, g, H, c):
     '''Fórmula de d'Alembert: g dato inicial, H antiderivada de la velocidad inicial h (H' = h).'''
@@ -419,7 +420,7 @@ md(r"""## Para experimentar
 1. Repetí la Figura `sol-ondas-20nodos` con el dato triangular de la cuerda pulsada ($x_0 = L/5$): ahora la truncación a $20$ modos no es exacta (fijate el fenómeno de Gibbs cerca del pico) y, por d'Alembert, el pico *viaja* sin suavizarse: mirá $u(\cdot,t)$ en $t = 0.1, 0.2, 0.3$ y contá cuántos picos hay. ¿Cómo se compara con lo que hace la ecuación del calor con el mismo dato?
 2. Con la cuerda pulsada, calculá la fracción de energía en cada modo para $x_0 = L/2$, $L/5$ y $L/20$ (cerca del puente) y graficá las tres: ¿cuál suena más "brillante"? Después la cuerda golpeada: $g = 0$ y $h$ un bump angosto en $x_0$; verificá que los $B_k$ decaen como $1/k$.
 3. Cambiá el extremo derecho por uno libre ($u_x(L,t) = 0$): en `ondas_leapfrog` eso se impone con un nodo fantasma, `u[n, -1] = u[n, -2]`, o copiando el esquema con $u_{N+1} = u_{N-1}$. ¿Con qué signo se refleja ahora el pulso? ¿Qué extensión (par o impar) hay que usar en d'Alembert para reproducirlo?
-4. Agregá amortiguamiento, $u_{tt} + \gamma u_t = c^2 u_{xx}$ (fricción con el aire), al leapfrog y a la serie (cada modo pasa a ser un oscilador amortiguado), y mirá cómo decae la energía por modo. ¿Con qué $\gamma$ el modo $k$ decae el doble de rápido que el modo $1$? Compará con lo que dice el texto sobre el espectro de una cuerda real.""")
+4. Agregá amortiguamiento, $u_{tt} + 2\gamma u_t = c^2 u_{xx}$ (fricción con el aire, como en el ejercicio de amortiguamiento de la Sección 21.1), al leapfrog y a la serie (cada modo pasa a ser un oscilador amortiguado, $q_k'' + 2\gamma q_k' + \omega_k^2 q_k = 0$), y mirá cómo decae la energía por modo. ¿Por qué, con $\gamma$ constante, *todos* los modos decaen con la misma tasa $e^{-\gamma t}$? Agregá ahora un término de fricción que crezca con la frecuencia, el viscoelástico: $u_{tt} + 2\gamma u_t - \nu u_{xxt} = c^2 u_{xx}$ con $\nu > 0$. Mostrá que el modo $k$ decae con tasa $\gamma_k = \gamma + \frac{\nu}{2}\bigl(\frac{k\pi}{L}\bigr)^2$, que crece como $k^2$, y que entonces los armónicos altos se apagan antes, como en la cuerda real del laboratorio `lab-cuerda`. ¿Con qué $\nu$ el modo $k$ decae el doble de rápido que el modo $1$?""")
 
 nb["cells"] = cells
 nb.metadata["kernelspec"] = {"name": "python3", "display_name": "Python 3", "language": "python"}

@@ -33,6 +33,7 @@ from imc import estilo, fases
 from imc.estilo import COLORES, CICLO
 
 estilo.activar(fuente=14)   # las figuras van a 0.6\textwidth (~9 cm): fuente grande para que se lean impresas
+plt.close(plt.figure())   # inicializa el backend inline fuera de los rc_context de abajo (si no, las figuras no se muestran)
 GUARDAR = False   # True para regenerar las figuras de las notas en figuras/
 
 
@@ -54,7 +55,7 @@ LEYENDA_EQ = [Line2D([], [], marker="o", ls="", ms=8, color="black", label="equi
 
 md(r"""## 8.1 Estabilidad estructural: la norma $C^0$ no alcanza
 
-**Figura `c0-cerca`**: dos campos escalares $C^0$-cercanos con dinámicas distintas. $F(x) = -x$ tiene un único equilibrio, hiperbólico y estable. $G(x) = -x + 3\varepsilon\sin(x/\varepsilon)$ está a distancia $\|F-G\|_0 = 3\varepsilon$ de $F$, pero su derivada en el origen es $-1+3 = 2$: el origen pasa a ser *inestable* y aparecen dos equilibrios estables nuevos. La diferencia $\|F-G\|_1 \ge \sup|G'-F'| = 3$ no es chica: es la proximidad $C^1$ la que preserva los equilibrios hiperbólicos (Teorema 8.1).
+**Figura `c0-cerca`**: dos campos escalares $C^0$-cercanos con dinámicas distintas. $F(x) = -x$ tiene un único equilibrio, hiperbólico y estable. $G(x) = -x + 3\varepsilon\sin(x/\varepsilon)$ está a distancia $\|F-G\|_0 = 3\varepsilon$ de $F$, pero su derivada en el origen es $-1+3 = 2$: el origen pasa a ser *inestable* y aparecen dos equilibrios estables nuevos. La diferencia $\|F-G\|_1 \ge \sup|G'-F'| = 3$ no es chica: es la proximidad $C^1$ la que preserva los equilibrios hiperbólicos (teorema de estabilidad estructural de los equilibrios hiperbólicos, Sección 8.1).
 
 Corrección respecto de la figura original: la leyenda dice cuál campo es cuál y el eje vertical tiene nombre; además, ahora los dos campos son genuinamente cercanos sólo en $C^0$ (en la figura original, $x^3$ y $x^3-\varepsilon x$, también eran $C^1$-cercanos).""")
 

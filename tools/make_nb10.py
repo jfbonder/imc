@@ -35,6 +35,7 @@ from imc import estilo, numerico
 from imc.estilo import COLORES, CICLO
 
 estilo.activar(fuente=14)   # las figuras de un panel van a 0.4-0.6\textwidth (~6-9 cm): fuente grande para que se lean impresas
+plt.close(plt.figure())   # inicializa el backend inline fuera de los rc_context de abajo (si no, las figuras no se muestran)
 GUARDAR = False   # True para regenerar las figuras de las notas en figuras/
 
 

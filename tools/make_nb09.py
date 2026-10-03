@@ -35,6 +35,7 @@ from imc import estilo, numerico, datos
 from imc.estilo import COLORES, CICLO
 
 estilo.activar(fuente=14)   # las figuras de un panel van a 0.5-0.6\textwidth (~8-9 cm): fuente grande para que se lean impresas
+plt.close(plt.figure())   # inicializa el backend inline fuera de los rc_context de abajo (si no, las figuras no se muestran)
 GUARDAR = False   # True para regenerar las figuras de las notas en figuras/
 
 
@@ -223,7 +224,7 @@ with fuente(17):
     fig.suptitle(r"$u_t - D\Delta u = 1$ en $[0,1]^2$, $u = 0$ en el borde, $u(\cdot, 0) = 0$, $D = 0.4$", fontsize=16, y=0.97)
     if GUARDAR: estilo.guardar(fig, "heat2d")""")
 
-md(r"""**Figura `errores-heat-log`**: $\|u(\cdot,t) - u^*\|_2$ en escala logarítmica, con la recta ajustada por mínimos cuadrados en $t\in[0.05, 0.5]$. La teoría (desigualdad de Poincaré con la mejor constante, Observación 18.x) dice que la tasa es $D\lambda_1$ con $\lambda_1 = 2\pi^2$ en el cuadrado unitario, es decir $0.8\pi^2 \simeq 7.90$, mientras que la cota general $\pi^2/d^2$ con $d = \sqrt2$ sólo garantiza $1.97$. El ajuste da $7.90$. El texto reporta una pendiente de $7.6$ y la atribuye al error de discretización y al transitorio inicial; en realidad es la huella del esquema *implícito* con $\Delta t = 0.01$ con que se hizo la figura original: cada paso multiplica el primer modo por $(1 + D\lambda_1\Delta t)^{-1}$, así que la tasa observada es $\ln(1 + D\lambda_1\Delta t)/\Delta t = 7.60$. Lo comprobamos corriendo ese esquema.""")
+md(r"""**Figura `errores-heat-log`**: $\|u(\cdot,t) - u^*\|_2$ en escala logarítmica, con la recta ajustada por mínimos cuadrados en $t\in[0.05, 0.5]$. La teoría (desigualdad de Poincaré con la mejor constante $\lambda_1$, el primer autovalor de $-\Delta$; Sección 18.5) dice que la tasa es $D\lambda_1$ con $\lambda_1 = 2\pi^2$ en el cuadrado unitario, es decir $0.8\pi^2 \simeq 7.90$, mientras que la cota general $\pi^2/d^2$ con $d = \sqrt2$ sólo garantiza $1.97$. El ajuste da $7.90$. El texto reporta una pendiente de $7.6$ y la atribuye al error de discretización y al transitorio inicial; en realidad es la huella del esquema *implícito* con $\Delta t = 0.01$ con que se hizo la figura original: cada paso multiplica el primer modo por $(1 + D\lambda_1\Delta t)^{-1}$, así que la tasa observada es $\ln(1 + D\lambda_1\Delta t)/\Delta t = 7.60$. Lo comprobamos corriendo ese esquema.""")
 
 code(r"""sel = t2 >= 0.05
 pend, ordenada = np.polyfit(t2[sel], np.log(err2[sel]), 1)

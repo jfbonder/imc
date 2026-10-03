@@ -37,7 +37,7 @@ Este laboratorio cierra el primer problema conductor de las notas: la epidemia. 
 
 **Herramientas disponibles.** `imc.datos.obtener` (los datos), `imc.estilo` (colores y figuras), `scipy.integrate.solve_ivp` (del laboratorio anterior: `t_eval`, `args`, tolerancias) y `scipy.optimize`. No vamos a volver a construir nada del notebook `01-poblaciones`: allí están el plano $(s,i)$ y la relación del tamaño final; acá los *usamos*.
 
-**Cómo se evalúa.** Como siempre: la sección final de **interpretación escrita**. Cada tarea dice qué se espera y trae una celda de verificación. Tiempo estimado: una sesión de 4 h (la Tarea 7 es opcional).
+**Cómo se evalúa.** Como siempre: la sección final de **interpretación escrita**. Cada tarea dice qué se espera y trae una celda de verificación. Tiempo estimado: una sesión de 4 h (las Tareas 7 y 8 son opcionales).
 """)
 
 lab.configuracion(extra="""
@@ -738,6 +738,133 @@ print("intervenciones: OK")
 ''')
 figura_revision("intervenciones")
 
+# =============================================================================
+# 7. Identificabilidad en otro modelo: la logística (opcional)
+# =============================================================================
+lab.md(r"""
+## 7. (Opcional) La misma pregunta en otro modelo: la logística y la población de un país
+
+Lo que vimos con el SIR no es una rareza de la epidemiología. Tomemos el modelo más simple del Capítulo 2, la logística $\dot P = rP(1 - P/K)$, cuya solución es
+
+$$P(t) = \frac{K}{1 + \left(K/P_0 - 1\right)e^{-rt}},$$
+
+y ajustémosla a la población de algunos países entre 1960 y 2021 (datos del Banco Mundial, `poblacion_banco_mundial.csv`; ver `datos/README.md`). Los parámetros son tres: $P_0$, la tasa $r$ y la capacidad de carga $K$. La pregunta es la misma de la Sección 4: **¿qué determinan los datos?** Mientras la población crece lejos de $K$, la logística es indistinguible de la exponencial $P_0e^{rt}$ y $K$ no aparece en los datos: es el valle de los cinco primeros días de la epidemia. $K$ solo se puede estimar cuando la curva ya *se dobló*, igual que $R_0$ solo se estima después del pico.
+
+Hay además una lección nueva. Los errores estándar de la Sección 2 suponen que **el modelo es correcto** y que lo único que separa el modelo de los datos es ruido. Con la población, el error de medición es minúsculo y lo que domina es el error del *modelo* (migraciones, cambios en la natalidad, la logística no puede decrecer): los errores estándar salen diminutos y, aun así, la estimación de $K$ se mueve mucho más que eso cuando se agregan datos.
+""")
+
+lab.tarea(
+    titulo="(Opcional) Exponencial contra logística, y cuánto vale el error estándar de K",
+    consigna=r"""
+Cargá `poblacion_banco_mundial.csv` con `np.genfromtxt(..., delimiter=",", names=True)` (columnas `anio`, `argentina`, `nigeria`, `japon`, `corea_del_sur`, `china`, `mundo`, en habitantes). Trabajá en millones de habitantes y con $t = $ año $- 1960$.
+
+1. Escribí `P_exp(t, P0, r)`, `P_log(t, P0, r, K)` y `ajustar(t, P)`, que ajuste las dos con `curve_fit` y devuelva `(pe, pl, se)`: los parámetros de la exponencial, los de la logística y los errores estándar de la logística. Para la logística usá `p0=(P[0], 0.03, 2 * P[-1])` y cotas `([0, 0, 0], [np.inf, 1, 1e6])` (es decir, $K$ hasta un billón de habitantes: si el ajuste se va a la cota, $K$ no está determinado).
+2. Para los seis casos, guardá en el diccionario `tabla` (clave: nombre de la columna) la tupla `(r_exp, err_exp, r_log, K, se_K, err_log)`, donde los errores son el RMSE relativo a la media de $P$. Imprimí la tabla y graficá datos y ajustes para Argentina, Nigeria, Japón y Corea del Sur (cuatro paneles).
+3. Para Argentina, ajustá la logística con los datos hasta 1980, 1990, 2000, 2010 y 2021, y guardá en `K_arg` un array de forma `(5, 2)` con $K$ y su error estándar. Graficá $K$ con barras de error (`ax.errorbar`) en función del último año usado.
+
+**Qué se espera.** Para Nigeria, $K$ se va a la cota con un error estándar absurdo y $r$ coincide con el de la exponencial: los datos no ven ninguna desaceleración. Para Japón y Corea, $K$ sale con un error estándar de décimas de millón… y aun así está mal: la población de Japón empezó a bajar en 2010 (mirá los residuos), y la de Corea, en 2021. En Argentina, cada estimación de $K$ cae muy lejos de la anterior, fuera de sus propias barras de error. Anotá los números para la interpretación.
+""",
+    esqueleto='''
+ruta = datos.obtener("poblacion_banco_mundial.csv")
+pob = np.genfromtxt(ruta, delimiter=",", names=True)
+anio = pob["anio"]
+t_p = anio - 1960
+paises = ["argentina", "nigeria", "japon", "corea_del_sur", "china", "mundo"]
+
+def P_exp(t, P0, r):
+    # TODO
+    pass
+
+def P_log(t, P0, r, K):
+    # TODO
+    pass
+
+def ajustar(t, P):
+    """Ajusta exponencial y logística; devuelve (pe, pl, se) con se = errores estándar de la logística."""
+    # TODO
+    pass
+
+tabla = {}
+# TODO: llenar `tabla` e imprimirla; figura de cuatro paneles
+# TODO: K_arg (5 x 2) con los datos hasta 1980, 1990, 2000, 2010, 2021; figura con errorbar
+''',
+    solucion='''
+ruta = datos.obtener("poblacion_banco_mundial.csv")
+pob = np.genfromtxt(ruta, delimiter=",", names=True)
+anio = pob["anio"]
+t_p = anio - 1960
+paises = ["argentina", "nigeria", "japon", "corea_del_sur", "china", "mundo"]
+
+def P_exp(t, P0, r):
+    return P0 * np.exp(r * t)
+
+def P_log(t, P0, r, K):
+    return K / (1 + (K / P0 - 1) * np.exp(-r * t))
+
+def ajustar(t, P):
+    """Ajusta exponencial y logística; devuelve (pe, pl, se) con se = errores estándar de la logística."""
+    pe, _ = curve_fit(P_exp, t, P, p0=(P[0], 0.02))
+    pl, cl = curve_fit(P_log, t, P, p0=(P[0], 0.03, 2 * P[-1]), bounds=([0, 0, 0], [np.inf, 1, 1e6]), max_nfev=20000)
+    return pe, pl, np.sqrt(np.diag(cl))
+
+tabla = {}
+print("                 exponencial          logística")
+print("                 r        error       r        K (millones)          error")
+for p in paises:
+    P = pob[p] / 1e6
+    pe, pl, se = ajustar(t_p, P)
+    err_e = np.sqrt(np.mean((P_exp(t_p, *pe) - P) ** 2)) / P.mean()
+    err_l = np.sqrt(np.mean((P_log(t_p, *pl) - P) ** 2)) / P.mean()
+    tabla[p] = (pe[1], err_e, pl[1], pl[2], se[2], err_l)
+    print(f"{p:14s}  {pe[1]:.4f}   {100 * err_e:4.1f} %     {pl[1]:.4f}   {pl[2]:9.4g} ± {se[2]:<9.3g}  {100 * err_l:4.2f} %")
+
+fig, axs = plt.subplots(2, 2, figsize=(11, 6.5))
+for ax, p in zip(axs.flat, ["argentina", "nigeria", "japon", "corea_del_sur"]):
+    P = pob[p] / 1e6
+    pe, pl, se = ajustar(t_p, P)
+    ax.plot(anio, P, "o", ms=3, color=COLORES["dato"], label="datos")
+    ax.plot(anio, P_exp(t_p, *pe), "--", color=CICLO[2], label="exponencial")
+    ax.plot(anio, P_log(t_p, *pl), color=COLORES["modelo"], label="logística")
+    ax.set_title({"argentina": "Argentina", "nigeria": "Nigeria", "japon": "Japón", "corea_del_sur": "Corea del Sur"}[p]); ax.set_ylabel("millones")
+    estilo.parametros(ax, rf"$K = {pl[2]:.4g} \\pm {se[2]:.2g}$", loc="lower right")
+axs[0, 0].legend(loc="upper left", fontsize=8)
+fig.tight_layout()
+
+P = pob["argentina"] / 1e6
+finales = [1980, 1990, 2000, 2010, 2021]
+K_arg = []
+for f in finales:
+    _, pl, se = ajustar(t_p[anio <= f], P[anio <= f])
+    K_arg.append([pl[2], se[2]])
+K_arg = np.array(K_arg)
+for f, (K, s) in zip(finales, K_arg):
+    print(f"Argentina, datos hasta {f}: K = {K:.4g} ± {s:.3g} millones")
+fig, ax = plt.subplots(figsize=(6.5, 3.5))
+ok = K_arg[:, 0] < 1e5
+ax.errorbar(np.array(finales)[ok], K_arg[ok, 0], yerr=K_arg[ok, 1], fmt="o", capsize=4, color=COLORES["modelo"])
+ax.axhline(P[-1], color=COLORES["gris"], ls=":", label="población 2021")
+ax.set_xlabel("último año usado en el ajuste"); ax.set_ylabel("$K$ estimado (millones)"); ax.legend()
+ax.set_title("Argentina: la estimación de $K$ y su error estándar")
+fig.tight_layout()
+''',
+    verificacion='''
+# Verificación
+assert set(tabla) == set(paises) and all(len(v) == 6 for v in tabla.values())
+assert tabla["nigeria"][3] > 1e4, "Nigeria: K debería irse a la cota (no identificable)"
+assert abs(tabla["nigeria"][2] - tabla["nigeria"][0]) < 1e-3, "Nigeria: r de la logística = r de la exponencial"
+assert 125 < tabla["japon"][3] < 135 and tabla["japon"][4] < 1, "Japón: K ~ 130 con error estándar chico"
+assert tabla["argentina"][5] < tabla["argentina"][1], "la logística debería ajustar mejor que la exponencial"
+assert K_arg.shape == (5, 2)
+saltos = np.abs(np.diff(K_arg[1:, 0])) / K_arg[2:, 1]
+assert saltos[:2].min() > 3, "las estimaciones de K deberían moverse más que su error estándar"
+print("logística y población: OK")
+''')
+figura_revision("poblacion")
+
+lab.md(r"""
+**Para el docente.** Tabla (millones): Argentina $r = 0.0264$, $K = 66.6 \pm 0.9$ (error 0.5 % contra 2.4 % de la exponencial); Nigeria $K$ en la cota ($10^6$) con error estándar $\sim 10^8$ y $r = 0.0263$ igual al de la exponencial; Japón $K = 129.5 \pm 0.4$ (máximo real: 128.1 en 2010, y bajando); Corea $K = 55.05 \pm 0.15$ (máximo real: 51.8 en 2020; está 20 errores estándar por encima); China $K = 1533 \pm 8$; mundo $K = 12\,120 \pm 74$ (las proyecciones de Naciones Unidas, *World Population Prospects 2024*, dan un máximo de unos 10 300 millones hacia 2080: otra vez, decenas de errores estándar). Argentina según el último año: 1980, $K$ en la cota (no identificable, como la epidemia a los 5 días); 1990, $221 \pm 34$; 2000, $88 \pm 4$; 2010, $66.4 \pm 1.5$; 2021, $66.6 \pm 0.9$. Cada salto es de 4 a 30 errores estándar: el error estándar mide la incertidumbre *si el modelo fuera cierto*, y acá lo que domina es el error de modelo. Es la contracara de la Tarea 5: allá el problema era que los datos no alcanzaban; acá alcanzan de sobra y el problema es el modelo. Los datos y la idea vienen de la guía de laboratorio de 2023 (ejercicio del Banco Mundial). Tiempo: 30 minutos.
+""", destino="docente")
+
 lab.md(r"""
 **Para el docente.** Picos (y totales, integrando hasta el día 60) con vacunación: $v = 0$: 298 (745); $0.25$: 165 (534); $0.5$: 55 (296, con el pico recién el día 12: la epidemia se estira); $0.74$: 2 (28: no hay epidemia); $0.9$: 2 (4). Aislamiento desde el día 5 (el modelo tiene 204 en cama ese día): $f = 0.7$: pico 243 (710); $0.5$: 209 (648); $0.3$: 204, es decir el propio día 5 (520). La discusión interesante: el aislamiento el día 5 llega tarde porque en el SIR ajustado el pico es el día 6 y $s$ ya bajó a 0.6; reduce poco el pico y bastante el total; con $t_a = 3$ el efecto es mucho mayor (proponerlo). La vacunación al 50 % no evita la epidemia ($R_0 s_0 = 1.9$) pero la reduce a un quinto y la estira: es la diferencia entre "aplanar" y "evitar". Tiempo: 30 minutos; es opcional.
 """, destino="docente")
@@ -751,6 +878,7 @@ lab.interpretacion([
     r"**Identificabilidad.** Describí los dos mapas del error de la Tarea 5. ¿Qué combinación de $\beta$ y $\gamma$ determinan los datos de la fase de crecimiento, y por qué? ¿Qué información de la curva es la que permite estimar $R_0$? Con esto, explicá por qué a mitad de un brote (antes del pico) las estimaciones de $R_0$ son tan inciertas aunque los datos parezcan seguir perfectamente una exponencial.",
     r"**SIR contra SEIR.** El SEIR ajusta mejor. Con el estadístico $F$, los errores estándar, el valor de $R_0$ que necesita y el error de predicción, argumentá cuál de los dos modelos elegirías para (a) describir esta epidemia, (b) predecir la segunda mitad a partir de la primera. ¿Qué haría falta (más datos, otro tipo de datos, o fijar algún parámetro) para que el SEIR fuera preferible?",
     r"**Qué puede decir el modelo y qué no.** Escribí el párrafo de conclusión que pide el ejercicio de las notas: qué responde el SIR ajustado sobre esta epidemia (las preguntas 1 a 4 del problema conductor, con números) y qué no puede decir, mencionando al menos tres hipótesis del modelo o del dato (por ejemplo: qué es \"en cama\" respecto de \"infeccioso\", la mezcla homogénea, $\gamma$ constante, el tamaño final del modelo contra el de los datos) y cómo afectan la confianza en las predicciones y en los escenarios de la Tarea 7.",
+    r"**(Si hiciste la Tarea 8.)** ¿En qué se parece el problema de estimar $K$ con la población de Nigeria al de estimar $R_0$ con los primeros cinco días de la epidemia? Para Argentina, Japón y Corea los errores estándar de $K$ son chicos: ¿por qué no hay que creerles? ¿Qué mide el error estándar y qué no mide?",
 ])
 
 lab.md(r"""
@@ -766,7 +894,9 @@ lab.md(r"""
 
 **5.** El párrafo debe contener: (1) hay epidemia porque $R_0 s_0 \approx 3.8 > 1$; (2) el pico se alcanza cuando $s = 1/R_0 = 0.26$, el día 6, con un 38 % del internado en cama; (3) según el modelo se enferma el 98 % ($s_\infty = 0.023$); (4) hacía falta vacunar al 74 % para evitarla, y un aislamiento el día 5 reduce poco el pico y algo el total. Y lo que no puede decir: el tamaño final del modelo (745) es mayor que la estimación con los datos ($\gamma\sum I = 708$) y que lo que informa la fuente original (512 alumnos pasaron por la cama, si el dato es correcto): el modelo supone remoción a tasa constante (y por eso su cola exponencial no reproduce la meseta y caída de los datos) e identifica "en cama" con "infeccioso"; la mezcla homogénea ignora la estructura (dormitorios, cursos) que probablemente frenó la epidemia antes; el $\gamma$ ajustado incluye el tiempo de cama y no el de contagio; y los escenarios de la Tarea 7 heredan todas estas limitaciones: son comparaciones cualitativas entre medidas, no predicciones numéricas.
 
-**Tiempos.** Tareas 1–3: 80 min; Tarea 4: 30; Tarea 5: 45; Tarea 6: 40; Tarea 7 (opcional): 30; interpretación: en casa. Si el tiempo es justo, la Tarea 7 se salta y la 6 puede hacerse solo con el ajuste completo (sin la validación).
+**6.** (Tarea 8.) Es el mismo valle: mientras la población crece sin desacelerarse, la logística coincide con la exponencial y los datos fijan $r$ (como fijaban $\beta-\gamma$) pero no $K$ (como no fijaban $R_0$); hace falta ver la curva doblarse. En Argentina, Japón y Corea los datos sí ven la desaceleración, y los errores estándar son chicos, pero el error estándar mide cuánto variaría $K$ si el modelo fuera exacto y las diferencias con los datos fueran ruido independiente; no mide el error de *modelo*. Cuando la logística es una mala descripción (migración, caída de la natalidad, una población que decrece), la estimación se mueve decenas de errores estándar al agregar datos (Argentina: 221, 88, 66) y queda lejos de lo que pasó después (Corea, Japón).
+
+**Tiempos.** Tareas 1–3: 80 min; Tarea 4: 30; Tarea 5: 45; Tarea 6: 40; Tareas 7 y 8 (opcionales): 30 cada una; interpretación: en casa. Si el tiempo es justo, la Tarea 7 se salta y la 6 puede hacerse solo con el ajuste completo (sin la validación).
 """, destino="docente")
 
 rutas = lab.escribir()

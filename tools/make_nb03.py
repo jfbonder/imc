@@ -32,6 +32,7 @@ from imc import estilo, fases
 from imc.estilo import COLORES, CICLO
 
 estilo.activar()
+plt.close(plt.figure())   # inicializa el backend inline fuera de los rc_context de abajo (si no, las figuras no se muestran)
 GUARDAR = False   # True para regenerar las figuras de las notas en figuras/
 
 def fuente(F):

@@ -12,5 +12,11 @@ license = {text = "MIT"}
 authors = [{name = "Julián Fernández Bonder", email = "jfbonder@dm.uba.ar"}]
 dependencies = ["numpy", "scipy", "matplotlib"]
 
+[project.optional-dependencies]
+# lo que usan los notebooks y laboratorios además de imc: pip install -e ".[notebooks]"
+notebooks = ["pandas", "scikit-image"]
+# para regenerar y ejecutar los notebooks con tools/make_*.py: pip install -e ".[notebooks,dev]"
+dev = ["nbformat", "nbconvert", "ipykernel"]
+
 [tool.setuptools]
 packages = ["imc"]

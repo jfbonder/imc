@@ -250,7 +250,7 @@ for ax, (lam, T), c in zip(axs, casos, CICLO):
     ax.set_ylabel("corriente $x(t)$")
     estilo.parametros(ax, rf"$\\lambda = {lam}$, $x(0) = 0.01$, $\\dot x(0) = 0$" + "\\n" + rf"período $\\approx {Tm:.2f}$, amplitud $\\approx {amp:.2f}$", loc="upper left", fontsize=12)
     print(f"lambda = {lam}: período medido = {Tm:.3f} (natural: 2 pi = {2 * np.pi:.3f}), amplitud en régimen permanente = {amp:.3f}")
-axs[-1].set_xlabel("$t$ (en unidades de $\\sqrt{LC}$)")
+axs[-1].set_xlabel(r"$t$ (en unidades de $\\sqrt{LC}$)")
 fig.tight_layout(); fuente()
 if GUARDAR: estilo.guardar(fig, "circuito-vdp-corriente")""")
 

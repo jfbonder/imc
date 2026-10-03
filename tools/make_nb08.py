@@ -35,6 +35,7 @@ from imc import estilo, espectro, datos
 from imc.estilo import COLORES, CICLO
 
 estilo.activar(fuente=14)   # las figuras van a 0.6-0.7\textwidth (~9-11 cm): fuente grande para que se lean impresas
+plt.close(plt.figure())   # inicializa el backend inline fuera de los rc_context de abajo (si no, las figuras no se muestran)
 GUARDAR = False   # True para regenerar las figuras de las notas en figuras/
 
 
@@ -60,7 +61,7 @@ def truncar(F, fraccion):
 
 md(r"""## 15.1 Filtrado de ruido en señales unidimensionales
 
-La señal del texto: $s(t) = \sum_{j=1}^3 a_j\cos(2\pi f_j t + \varphi_j)$ con frecuencias $f_j = 5, 12, 20$ Hz y amplitudes $a_j = 1, 0.6, 0.4$, muestreada durante $T = 1$ s a $f_s = 1000$ Hz ($N = 1000$), y la señal observada $u = s + \eta$ con $\eta$ ruido blanco gaussiano de desvío $\sigma = 0.8$ (más grande que la amplitud de dos de los tres cosenos). **Figura `señal1`**: arriba $s$, abajo $u$.""")
+La señal del texto: $s(t) = \sum_{j=1}^3 a_j\cos(2\pi f_j t + \varphi_j)$ con frecuencias $f_j = 5, 12, 20$ Hz y amplitudes $a_j = 1, 0.6, 0.4$, muestreada durante $T = 1$ s a $f_s = 1000$ Hz ($N = 1000$), y la señal observada $u = s + \eta$ con $\eta$ ruido blanco gaussiano de desvío $\sigma = 0.8$ (más grande que la amplitud de dos de los tres cosenos). **Figura `senal1`**: arriba $s$, abajo $u$.""")
 
 code(r"""fs, T_s = 1000, 1.0
 N = int(fs * T_s); t = np.arange(N) / fs
@@ -80,9 +81,9 @@ with fuente(16):
     estilo.parametros(ax1, r"$f_j = 5, 12, 20$ Hz;  $a_j = 1, 0.6, 0.4$", loc="upper right", fontsize=13)
     estilo.parametros(ax2, rf"ruido blanco, $\sigma = {sigma}$", loc="upper right", fontsize=13)
     fig.tight_layout()
-    if GUARDAR: estilo.guardar(fig, "señal1")""")
+    if GUARDAR: estilo.guardar(fig, "senal1")""")
 
-md(r"""**Figura `espectro-señal`**: el espectro de amplitudes $|\hat u[k]|/N$ de la señal ruidosa hasta $40$ Hz. Los tres cosenos aparecen como picos en $5, 12, 20$ Hz de altura $a_j/2$ (exactamente, porque $f_j T$ es entero: no hay fuga espectral), mientras que el ruido blanco se reparte de manera aproximadamente uniforme en todas las frecuencias: cada $|\hat\eta[k]|/N$ es del orden de $\sigma/\sqrt N \approx 0.025$, cuarenta veces menor que el pico más alto aunque $\sigma$ sea comparable a las amplitudes. Esa es la clave del filtrado: en el tiempo señal y ruido se confunden, en frecuencia no.""")
+md(r"""**Figura `espectro-senal`**: el espectro de amplitudes $|\hat u[k]|/N$ de la señal ruidosa hasta $40$ Hz. Los tres cosenos aparecen como picos en $5, 12, 20$ Hz de altura $a_j/2$ (exactamente, porque $f_j T$ es entero: no hay fuga espectral), mientras que el ruido blanco se reparte de manera aproximadamente uniforme en todas las frecuencias: cada $|\hat\eta[k]|/N$ es del orden de $\sigma/\sqrt N \approx 0.025$, cuarenta veces menor que el pico más alto aunque $\sigma$ sea comparable a las amplitudes. Esa es la clave del filtrado: en el tiempo señal y ruido se confunden, en frecuencia no.""")
 
 code(r"""U = np.fft.fft(u); S = np.fft.fft(s)
 xi = np.arange(N) / T_s                                   # xi_k = k/T en Hz
@@ -97,11 +98,11 @@ with fuente(15):
     ax.stem(xi[m], A_u[m], linefmt=COLORES["dato"], markerfmt="o", basefmt="k-")
     ax.set_xlabel(r"$\xi$ (Hz)"); ax.set_ylabel(r"$|\hat u[k]|/N$"); ax.set_xlim(-0.5, 40.5); ax.set_ylim(0, 0.56)
     ax.set_title("Espectro de la señal ruidosa")
-    if GUARDAR: estilo.guardar(fig, "espectro-señal")""")
+    if GUARDAR: estilo.guardar(fig, "espectro-senal")""")
 
 md(r"""### Filtrado en el dominio de Fourier
 
-El filtro más simple: $H(k) = 1$ si $|\hat u[k]|/N$ supera un umbral y $0$ si no; acá el umbral es el $20\%$ del pico más alto. Como $u$ es real, $|\hat u[-k]| = |\hat u[k]|$ y el filtro conserva automáticamente los pares $\pm k$, así que la antitransformada $u_{\rm filtrada} = \mathcal F^{-1}(H\hat u)$ es real. **Figura `espectro-filtrado`**: el espectro original, el umbral y el espectro filtrado (correcciones respecto de la figura original: la leyenda dice "umbral" y no "Threshold", y las etiquetas "Original"/"Filtrado" están en el orden correcto). **Figura `señal-filtrada`**: $u$ y $u_{\rm filtrada}$. El filtro conserva $6$ de los $1000$ coeficientes y recupera $s$ con un error relativo de unos pocos por ciento: lo único que queda es el ruido que cae en esos seis coeficientes. Como $\mathbb E|\hat\eta[k]|^2 = N\sigma^2$, por Plancherel la energía media de ese resto es $6\sigma^2/N$ y el error relativo esperado es $\sqrt{6\sigma^2/N}\,/\sqrt{\overline{s^2}} \approx 0.07$, contra $\sigma/\sqrt{\overline{s^2}} \approx 0.92$ antes de filtrar.""")
+El filtro más simple: $H(k) = 1$ si $|\hat u[k]|/N$ supera un umbral y $0$ si no; acá el umbral es el $20\%$ del pico más alto. Como $u$ es real, $|\hat u[-k]| = |\hat u[k]|$ y el filtro conserva automáticamente los pares $\pm k$, así que la antitransformada $u_{\rm filtrada} = \mathcal F^{-1}(H\hat u)$ es real. **Figura `espectro-filtrado`**: el espectro original, el umbral y el espectro filtrado (correcciones respecto de la figura original: la leyenda dice "umbral" y no "Threshold", y las etiquetas "Original"/"Filtrado" están en el orden correcto). **Figura `senal-filtrada`**: $u$ y $u_{\rm filtrada}$. El filtro conserva $6$ de los $1000$ coeficientes y recupera $s$ con un error relativo de unos pocos por ciento: lo único que queda es el ruido que cae en esos seis coeficientes. Como $\mathbb E|\hat\eta[k]|^2 = N\sigma^2$, por Plancherel la energía media de ese resto es $6\sigma^2/N$ y el error relativo esperado es $\sqrt{6\sigma^2/N}\,/\sqrt{\overline{s^2}} \approx 0.07$, contra $\sigma/\sqrt{\overline{s^2}} \approx 0.92$ antes de filtrar.""")
 
 code(r"""umbral = 0.2 * A_u.max()
 H = (A_u > umbral).astype(float)                          # función de transferencia H(k) in {0, 1}
@@ -127,7 +128,7 @@ code(r"""with fuente(15):
     ax.plot(t, s, color="black", lw=1.0, ls="--", label="original $s$")
     ax.set_xlabel("$t$ (s)"); ax.set_ylabel("amplitud"); ax.set_xlim(0, 1); ax.set_ylim(-4, 4.6)
     ax.legend(loc="upper right", ncol=3, fontsize=12, columnspacing=1.0, handlelength=1.6)
-    if GUARDAR: estilo.guardar(fig, "señal-filtrada")""")
+    if GUARDAR: estilo.guardar(fig, "senal-filtrada")""")
 
 md(r"""## Volvemos al problema: la señal de temperatura
 
@@ -184,7 +185,7 @@ with fuente(18):
     ax_c.loglog(xi_w[1:], P_w[1:], color=COLORES["modelo"], lw=2.2, label="Welch (45 días)")
     for p_dias, txt in [(1, "1 día"), (7, "1 sem."), (30, "1 mes")]:
         ax_c.axvline(1 / p_dias, color="0.5", ls=":", lw=1.2); ax_c.text(1 / p_dias * 1.12, 1.5e-3, txt, fontsize=13, color="0.3", rotation=90, va="bottom")
-    ax_c.set_xlabel(r"$\xi$ (ciclos por día)"); ax_c.set_ylabel("potencia"); ax_c.set_xlim(1e-2, 12); ax_c.set_ylim(1e-3, 3e3)
+    ax_c.set_xlabel(r"$\xi$ (ciclos por día)"); ax_c.set_ylabel("potencia"); ax_c.set_xlim(1e-2, 12); ax_c.set_ylim(1e-3, 1e4)
     ax_c.legend(loc="upper right", fontsize=13); ax_c.set_title("(c) espectro del residuo")
     # (b) un mes: señal, regular y residuo
     ax_b.plot(d23.fecha_hora[mes], T[mes], color=COLORES["dato"], lw=1.2, label="temperatura $T$")

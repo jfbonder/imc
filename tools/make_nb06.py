@@ -36,6 +36,7 @@ from imc.estilo import COLORES, CICLO
 from imc.espectro import coeficientes, coeficientes_funcion, coeficientes_reales, suma_parcial
 
 estilo.activar(fuente=14)   # las figuras van a 0.6-0.7\textwidth (~9-11 cm): fuente grande para que se lean impresas
+plt.close(plt.figure())   # inicializa el backend inline fuera de los rc_context de abajo (si no, las figuras no se muestran)
 GUARDAR = False   # True para regenerar las figuras de las notas en figuras/
 
 
@@ -101,7 +102,7 @@ code(r"""tt = np.linspace(0, 2, 800)
 onda = lambda t, A=1.0, f=1.0, phi=0.0: A * np.cos(2 * np.pi * f * t + phi)
 casos = [("Variando la amplitud $A$", [dict(A=0.5), dict(A=1.0), dict(A=1.5)], lambda p: rf"$A = {p['A']}$"),
          ("Variando la frecuencia $f$", [dict(f=0.5), dict(f=1.0), dict(f=2.0)], lambda p: rf"$f = {p['f']}$, $T = {1 / p['f']:g}$"),
-         ("Variando la fase $\phi$", [dict(phi=0.0), dict(phi=np.pi / 4), dict(phi=np.pi / 2)], lambda p: rf"$\phi = {p['phi'] / np.pi:g}\pi$" if p['phi'] else r"$\phi = 0$")]
+         (r"Variando la fase $\phi$", [dict(phi=0.0), dict(phi=np.pi / 4), dict(phi=np.pi / 2)], lambda p: rf"$\phi = {p['phi'] / np.pi:g}\pi$" if p['phi'] else r"$\phi = 0$")]
 with fuente(18):
     fig, axs = plt.subplots(1, 3, figsize=(12, 4), sharey=True)
     for ax, (titulo, params, etiqueta) in zip(axs, casos):
@@ -197,7 +198,7 @@ with fuente(16):
 
 md(r"""## 12.1 Propiedades de los coeficientes de Fourier
 
-Proposición 12.1: (1) $|c_k|\le\frac1L\int_0^L|f|$; (3) si $f$ es continua y $C^1$ a trozos, $c_k(f') = \frac{2k\pi i}{L}c_k(f)$; (4)–(5) si $f$ es real y par los $c_k$ son reales, si es impar son imaginarios puros. Verificamos (3) con la función suave $f(t) = e^{\sin(2\pi t)}$ ($L = 1$) y (4)–(5) con $t^2$ y $\operatorname{sg}(t)$ en $[-1,1]$.
+Propiedades de los coeficientes de Fourier (Sección 12.1): (1) $|c_k|\le\frac1L\int_0^L|f|$; (3) si $f$ es continua y $C^1$ a trozos, $c_k(f') = \frac{2k\pi i}{L}c_k(f)$; (4)–(5) si $f$ es real y par los $c_k$ son reales, si es impar son imaginarios puros. Verificamos (3) con la función suave $f(t) = e^{\sin(2\pi t)}$ ($L = 1$) y (4)–(5) con $t^2$ y $\operatorname{sg}(t)$ en $[-1,1]$.
 
 De (1) y (3) sale que los coeficientes decaen tanto más rápido cuanto más regular es $f$: $|c_k|\le C/k$ si $f$ es continua con $f'$ integrable, $|c_k|\le C/k^2$ si además $f'$ es continua con $f''$ integrable, y así siguiendo; una función con un salto sólo tiene $c_k\to0$ (Riemann–Lebesgue), en general como $1/k$. *Figura nueva `decaimiento-coeficientes`*: $|c_k|$ en escala log-log para el signo (salto: $|c_k| = \frac{2}{k\pi}$ para $k$ impar), para $t^2$ (continua con un quiebre: $|c_k| = \frac{2}{k^2\pi^2}$) y para $e^{\sin(2\pi t)}$ ($C^\infty$: decaimiento más rápido que cualquier potencia; sus coeficientes están por debajo de $10^{-16}$, la precisión de la máquina, a partir de $k \approx 18$).""")
 
@@ -280,7 +281,7 @@ for N in [15, 100, 1000, 100000]:
 
 md(r"""### Ejemplo: $f(t) = t^2$ en $[-1,1]$
 
-Extendida con período $2$ es continua, con quiebres en $t = \pm1$ (**Figura `cuadratica`**). Es par: serie de cosenos, $t^2 = \frac13 + \frac4{\pi^2}\sum_{k\ge1}\frac{(-1)^k}{k^2}\cos(k\pi t)$; en $t = 0$ da $\frac{\pi^2}{12} = 1 - \frac14 + \frac19 - \cdots$. **Figura `cuadratica-aproximaciones`**: $S_N$ para $N = 1, 3, 5, 15$. Como $|c_k|\le C/k^2$ es sumable, acá la convergencia es **uniforme** (Corolario 12.2 y Proposición 12.3): el error máximo $\sup_t|f - S_N[f]|$ tiende a $0$, cosa que para el signo no pasa (lo vemos abajo).""")
+Extendida con período $2$ es continua, con quiebres en $t = \pm1$ (**Figura `cuadratica`**). Es par: serie de cosenos, $t^2 = \frac13 + \frac4{\pi^2}\sum_{k\ge1}\frac{(-1)^k}{k^2}\cos(k\pi t)$; en $t = 0$ da $\frac{\pi^2}{12} = 1 - \frac14 + \frac19 - \cdots$. **Figura `cuadratica-aproximaciones`**: $S_N$ para $N = 1, 3, 5, 15$. Como $|c_k|\le C/k^2$ es sumable, acá la convergencia es **uniforme** (Sección 12.3: si $\sum_k|c_k|<\infty$, la serie converge absoluta y uniformemente, por el criterio $M$ de Weierstrass): el error máximo $\sup_t|f - S_N[f]|$ tiende a $0$, cosa que para el signo no pasa (lo vemos abajo).""")
 
 code(r"""fig, ax = plt.subplots(figsize=(6.5, 3.0))
 ax.plot(tt, cuadr(tt), color=COLORES["dato"], lw=2.2)

@@ -3,7 +3,7 @@
 Laboratorio: resolución numérica de EDOs. Primer laboratorio de la Parte I: presenta los
 métodos numéricos que las notas no tratan (Euler, orden, estabilidad, rigidez, Runge--Kutta,
 sistemas y energía, solve_ivp con eventos) sobre los enunciados de la sección
-"Ejercicios de laboratorio" del Capítulo 2 de las notas.
+"Ejercicios de laboratorio" (Sección 9.2) del capítulo de Ejercicios de la Parte I (Capítulo 9) de las notas.
 
 Con la variable de entorno LAB_REVISION=1 la versión docente guarda además algunas figuras en
 /tmp/lab-EDO-*.png (celdas auxiliares de revisión; no forman parte del notebook final).
@@ -904,6 +904,138 @@ lab.md(r"""
 **Para el docente.** El SIR con $I_0 = 1$ e $I$ del orden de miles: `atol=1e-6` es irrelevante frente a `rtol`; vale la pena preguntar qué pasaría con `atol=1` (nada visible) y con `atol=100` al principio, cuando $I\approx 1$. La conservación de $N$ se cumple a $10^{-11}$ (redondeo puro, no la tolerancia) porque las ecuaciones suman cero exactamente y todo método RK es lineal en $f$: la suma de las componentes se propaga con incremento exactamente cero. Sirve para discutir la diferencia entre lo que el método conserva por estructura (cantidades lineales) y lo que no (la energía de la Tarea 6, cuadrática). En la tabla del ítem 5, por debajo de $\sim 5\cdot 10^{-7}$ los errores dejan de bajar: es el error de la propia referencia (`rtol=1e-12` sobre valores del orden de $10^4$); no es un defecto de los métodos. Sobre el evento: algún grupo va a poner `direction = +1` y no va a encontrar nada; es la oportunidad de explicar el signo. Tiempo: 45 minutos.
 """, destino="docente")
 
+lab.tarea(
+    titulo="(Opcional) Un termostato: eventos que cambian el campo",
+    consigna=r"""
+El ejercicio del termostato con histéresis de las notas (Parte I, ejercicios teóricos). La temperatura $T$ de un ambiente con aire acondicionado sigue
+
+$$C\,\dot T = \alpha\,(T_a - T) - u_0\,\sigma,\qquad \sigma \in \{0, 1\}\ \text{(apagado / encendido)},$$
+
+con $C = 7.2\times 10^6$ J/K, $\alpha = 200$ W/K, $T_a = 32$ °C, $u_0 = 3000$ W. El termostato, programado en $T_r = 24$ °C con tolerancia $\delta$, **enciende** el equipo cuando $T$ sube hasta $T_r + \delta$ y lo **apaga** cuando baja hasta $T_r - \delta$. Es el mismo esquema que la pelota de la Tarea 7 (integrar hasta un evento, cambiar algo, volver a arrancar), pero lo que cambia en cada evento no es el estado sino **el campo**. Medí el tiempo en horas: $\dot T = (T_a - T - (u_0/\alpha)\,\sigma)/\tau$ con $\tau = C/\alpha$ expresado en horas.
+
+1. Escribí `termostato(T0, encendido, t_fin, delta)` que, partiendo de $T(0) = T_0$ con el equipo en el estado `encendido` (0 o 1), integre con `solve_ivp` hasta el evento que corresponde al estado actual (`baja` en $T = T_r - \delta$ con `direction = -1` si está encendido, `sube` en $T = T_r + \delta$ con `direction = +1` si está apagado, los dos terminales), cambie el estado y siga. Que devuelva `(t, T, t_cambios, estados)`, donde `estados[j]` es el estado *después* del cambio `j`.
+2. Simulá 72 horas desde $T_0 = 30$ °C encendido con $\delta = 2$. Graficá $T(t)$ con las dos temperaturas de corte y sombreá los intervalos de encendido. Medí, a partir de `t_cambios`, cuánto dura cada tramo encendido y cada tramo apagado, y comparalo con las fórmulas que salen de resolver la ecuación lineal en cada tramo (el ejercicio de las notas): guardá los valores medidos en `t_on_med`, `t_off_med`.
+3. **El `if` dentro del bucle.** La forma "casera" de simular esto es un Euler de paso fijo con un `if` que cambia el estado cuando $T$ cruzó el umbral. Implementala (`euler_if(h)`), y medí el período para $h = 1, 0.5, 0.1, 0.01$ horas. ¿Con qué orden converge? ¿Mejoraría usando RK4 con el mismo `if`?
+4. Calculá el período y la fracción del tiempo encendido para $\delta = 2, 1, 0.5, 0.1$ y comparalos con el límite $\delta \to 0$ del ejercicio de las notas.
+
+**Qué se espera.** Tras un transitorio de unas 9.6 horas, un ciclo de unas 5.9 horas encendido y 5.1 apagado (período de 11 horas: $C$ corresponde a una casa entera, no a una habitación), que coincide con las fórmulas a la precisión de `rtol`. El Euler con `if` converge solo con orden 1, y lo mismo pasaría con RK4: el cambio se detecta con un paso de retraso, y ese error $O(h)$ domina cualquier error de truncamiento. Por eso los integradores profesionales localizan el evento. Al achicar $\delta$, el período se achica en proporción, pero la fracción del tiempo encendido (y por lo tanto el consumo) casi no cambia.
+""",
+    esqueleto='''
+C, alpha, Ta, u0, Tr = 7.2e6, 200.0, 32.0, 3000.0, 24.0
+tau = C / alpha / 3600          # escala de tiempo, en horas
+
+def campo_termo(t, T, encendido):
+    return [(Ta - T[0] - (u0 / alpha) * encendido) / tau]
+
+def termostato(T0, encendido, t_fin, delta):
+    """Termostato con histéresis. Devuelve (t, T, t_cambios, estados)."""
+    def sube(t, T, e): return T[0] - (Tr + delta)
+    def baja(t, T, e): return T[0] - (Tr - delta)
+    sube.terminal, sube.direction = True, +1
+    baja.terminal, baja.direction = True, -1
+    ts, Ts, cambios, estados = [], [], [], []
+    t_act, T_act = 0.0, T0
+    while t_act < t_fin:
+        # TODO: integrar hasta el evento que corresponde; si lo hubo, cambiar `encendido` y registrar
+        pass
+    return np.concatenate(ts), np.concatenate(Ts), np.array(cambios), np.array(estados)
+
+# TODO: simular 72 h con delta = 2; figura; t_on_med, t_off_med y comparación con las fórmulas
+# TODO: euler_if(h) y período en función de h
+# TODO: período y fracción encendida para delta = 2, 1, 0.5, 0.1
+''',
+    solucion='''
+C, alpha, Ta, u0, Tr = 7.2e6, 200.0, 32.0, 3000.0, 24.0
+tau = C / alpha / 3600          # escala de tiempo, en horas
+
+def campo_termo(t, T, encendido):
+    return [(Ta - T[0] - (u0 / alpha) * encendido) / tau]
+
+def termostato(T0, encendido, t_fin, delta):
+    """Termostato con histéresis. Devuelve (t, T, t_cambios, estados)."""
+    def sube(t, T, e): return T[0] - (Tr + delta)
+    def baja(t, T, e): return T[0] - (Tr - delta)
+    sube.terminal, sube.direction = True, +1
+    baja.terminal, baja.direction = True, -1
+    ts, Ts, cambios, estados = [], [], [], []
+    t_act, T_act = 0.0, T0
+    while t_act < t_fin:
+        ev = baja if encendido else sube
+        sol = solve_ivp(campo_termo, (t_act, t_fin), [T_act], args=(encendido,), events=ev, max_step=0.05, rtol=1e-10, atol=1e-10)
+        ts.append(sol.t); Ts.append(sol.y[0])
+        if sol.status != 1:          # llegó a t_fin sin evento
+            break
+        t_act, T_act = sol.t_events[0][0], sol.y_events[0][0][0]
+        encendido = 1 - encendido
+        cambios.append(t_act); estados.append(encendido)
+    return np.concatenate(ts), np.concatenate(Ts), np.array(cambios), np.array(estados)
+
+def tiempos_teoricos(delta):
+    """Duración de los tramos encendido y apagado (resolviendo la ecuación lineal en cada tramo)."""
+    Te = Ta - u0 / alpha             # equilibrio con el equipo encendido
+    t_on = tau * np.log((Tr + delta - Te) / (Tr - delta - Te))
+    t_off = tau * np.log((Ta - (Tr - delta)) / (Ta - (Tr + delta)))
+    return t_on, t_off
+
+delta = 2.0
+t, T, cambios, estados = termostato(30.0, 1, 72.0, delta)
+dur = np.diff(cambios)
+t_on_med, t_off_med = dur[estados[:-1] == 1].mean(), dur[estados[:-1] == 0].mean()
+t_on, t_off = tiempos_teoricos(delta)
+print(f"transitorio: primer apagado a las {cambios[0]:.2f} h")
+print(f"encendido: medido {t_on_med:.4f} h, fórmula {t_on:.4f} h;  apagado: medido {t_off_med:.4f} h, fórmula {t_off:.4f} h")
+print(f"período {t_on + t_off:.3f} h, fracción encendido {t_on / (t_on + t_off):.3f}")
+
+fig, ax = plt.subplots(figsize=(7.5, 3.6))
+ax.plot(t, T, color=COLORES["traj"])
+for s in (-1, 1):
+    ax.axhline(Tr + s * delta, color=COLORES["gris"], ls=":")
+bordes = np.concatenate([[0.0], cambios, [72.0]])
+estado_tramo = np.concatenate([[1], estados])
+for a, b, e in zip(bordes[:-1], bordes[1:], estado_tramo):
+    if e == 1:
+        ax.axvspan(a, b, color=COLORES["traj2"], alpha=0.25, lw=0)
+ax.set_xlabel("$t$ [horas]"); ax.set_ylabel("$T$ [°C]")
+estilo.parametros(ax, rf"$T_r = {Tr:g}$ °C, $\\delta = {delta:g}$ °C, $\\tau = C/\\alpha = {tau:g}$ h" + "\\n" + "sombreado: equipo encendido", loc="upper right")
+
+def euler_if(h, t_fin=72.0, delta=2.0):
+    """Euler de paso fijo con un if que cambia el estado; devuelve los instantes de cambio."""
+    T_, enc, cambios_ = 30.0, 1, []
+    for k in range(int(t_fin / h)):
+        if enc and T_ <= Tr - delta:
+            enc = 0; cambios_.append(k * h)
+        elif not enc and T_ >= Tr + delta:
+            enc = 1; cambios_.append(k * h)
+        T_ = T_ + h * campo_termo(0, [T_], enc)[0]
+    return np.array(cambios_)
+
+print("\\n h [horas]   período con Euler + if   error")
+for h in [1.0, 0.5, 0.1, 0.01]:
+    c = euler_if(h)
+    per = np.mean(np.diff(c[::2]))
+    print(f"  {h:5.2f}        {per:8.4f}           {abs(per - (t_on + t_off)):.4f}")
+
+print("\\n delta   período [h]   fracción encendido")
+for dl in [2, 1, 0.5, 0.1]:
+    a, b = tiempos_teoricos(dl)
+    _, _, c, est = termostato(30.0, 1, 40 + 6 * (a + b), dl)
+    per = np.mean(np.diff(c[::2]))
+    print(f"  {dl:4.1f}    {per:8.4f}      {a / (a + b):.4f}")
+print(f"límite delta -> 0: fracción alpha (Ta - Tr) / u0 = {alpha * (Ta - Tr) / u0:.4f}")
+''',
+    verificacion='''
+# Verificación
+assert abs(t_on_med - 5.8779) < 1e-3 and abs(t_off_med - 5.1083) < 1e-3, "las duraciones de los tramos no coinciden con la solución exacta"
+assert abs(cambios[0] - 10 * np.log(13 / 5)) < 1e-3, "el primer apagado debería ser a las 10 ln(13/5) = 9.56 h"
+assert np.all(np.diff(estados) != 0), "los estados deberían alternarse"
+print("termostato: OK")
+''')
+figura_revision("termostato")
+
+lab.md(r"""
+**Para el docente.** $\tau = 10$ h; equilibrios: 32 °C apagado y $T_a - u_0/\alpha = 17$ °C encendido. Primer apagado en $10\ln(13/5) = 9.56$ h; después $t_{\rm on} = 10\ln(9/5) = 5.878$ h y $t_{\rm off} = 10\ln(10/6) = 5.108$ h, período 10.99 h, fracción encendida 0.535. Euler con `if`, error del período: 2.0, 0.81, 0.094, 0.012 h para $h = 1, 0.5, 0.1, 0.01$: orden 1 (el cambio se detecta tarde hasta un paso en cada umbral). Con RK4 y el mismo `if` el error sigue siendo $O(h)$: vale la pena que lo prueben, porque desarma la idea de que "RK4 es siempre mejor". Para $\delta \to 0$: período $\approx 2\delta\,\tau\,\bigl(\frac{1}{T_a - T_r} + \frac{1}{T_r - T_e}\bigr) = 2.68\,\delta$ h, fracción $\to \alpha (T_a - T_r)/u_0 = 0.533$: la tolerancia no cambia el consumo medio, cambia cuántas veces arranca el compresor (desgaste). Es la discusión de modelado que vale la pena: en la realidad nadie pone $\delta = 0$. La idea y los datos vienen de una práctica de parcial de una cursada anterior. Tiempo: 30 minutos.
+""", destino="docente")
+
 # =============================================================================
 # Interpretación
 # =============================================================================
@@ -912,6 +1044,7 @@ lab.interpretacion([
     r"**Estabilidad no es precisión.** En la Tarea 4, con $h = 0.05$ el error de Euler explícito es $O(h)$ según la teoría del orden, y sin embargo la solución numérica explota. ¿Qué hipótesis de la teoría del orden falla? ¿Qué determina el $h$ máximo en la ecuación rígida, y por qué el implícito no tiene ese límite? ¿Qué método de `solve_ivp` elegirías para la ecuación $\dot y = -1000(y - \cos t)$ y en qué te basás (citá los `nfev` de la celda de tolerancias)?",
     r"**Energía.** En la Tarea 6, Euler multiplica la energía por $1 + h^2$ en cada paso. Con $h = 0.05$ y $t = 1000$, ¿por cuánto la multiplicó al final, y coincide con lo que mediste? Si tuvieras que simular un planeta durante un millón de años, ¿qué integrador usarías y por qué no alcanza con «RK4 con $h$ chico»? ¿Qué te dice el gráfico del Euler simpléctico al respecto?",
     r"**SIR contra SEIR.** Con los números de la Tarea 8: ¿cuánto se retrasa el pico al incluir la incubación, y cambia el tamaño final de la epidemia ($R(200)$)? Explicá por qué en el SIR el pico ocurre exactamente cuando $S = N/R_0$, por qué en el SEIR ocurre un poco después (con $S$ menor), y qué información da eso a un epidemiólogo que solo ve la curva de infectados. ¿Qué haría más útil al modelo que las tolerancias de `solve_ivp`?",
+    r"**(Si hiciste la Tarea 9.)** El termostato es una ecuación de primer orden y sin embargo oscila, aunque en el Capítulo 2 vimos que una ecuación autónoma $\\dot x = f(x)$ en dimensión uno no puede tener soluciones periódicas no constantes. ¿Qué hipótesis de ese resultado no se cumple? ¿Por qué el Euler con `if` converge con orden 1 aunque el campo en cada tramo sea lineal, y qué hace distinto `solve_ivp` con eventos?",
 ])
 
 lab.md(r"""
@@ -925,7 +1058,9 @@ lab.md(r"""
 
 **4.** SIR: pico el día 91 con $S = 5000$ e $I_{\max}\approx 1535$; SEIR: pico el día 121 (retraso de ~30 días), más bajo ($I_{\max}\approx 1275$); el tamaño final $R(200)$ es casi el mismo (el SEIR llega un poco después, pero la fracción final solo depende de $R_0$: $1 - s_\infty = 1 - e^{-R_0(1 - s_\infty)}$, unos 7970 de 10000 para $R_0 = 2$). En el SIR, en el pico $\dot I = \beta SI/N - \gamma I = 0$ da $S = N/R_0 = 5000$ exactamente (la verificación lo confirma a menos de 20 personas, que es el error del evento con `rtol=1e-8`). En el SEIR, $\dot I = \sigma E - \gamma I = 0$ en el pico, y $E$ depende de lo que $S$ *venía* haciendo: cuando $S$ cruza $N/R_0$ los expuestos todavía alimentan a $I$, que sigue creciendo hasta que $E$ baja lo suficiente; en el pico de $I$ se mide $S\approx 4790 < 5000$. Quien ve solo la curva de $I$ puede leer, del día del pico, que la fracción de susceptibles cruzó $1/R_0$ (un poco antes, si hay incubación), e inferir $R_0$. El modelo mejora con datos: parámetros ajustados a una epidemia real (eso es el laboratorio siguiente), heterogeneidad de contactos, intervenciones que hacen $\beta = \beta(t)$; las tolerancias no son la limitación.
 
-**Tiempos.** Tareas 1–5: ~2 h 20; Tareas 6–8: ~2 h; interpretación: 40 minutos en casa. Si hay una sola sesión de 4 h, la Tarea 5 puede darse con `rk2_mio` y `rk4_mio` resueltos (están en `imc.numerico`) y hacer solo la comparación.
+**5.** (Tarea 9.) El estado del sistema no es solo $T$: es el par $(T, \sigma)$, con $\sigma$ el estado del equipo, y el campo depende de $\sigma$. Para una misma temperatura entre $T_r - \delta$ y $T_r + \delta$ el sistema puede estar bajando (encendido) o subiendo (apagado): el resultado del Capítulo 2 usa que por cada punto de la recta pasa una sola trayectoria, y acá eso es falso (la histéresis es memoria). La órbita periódica vive en dos copias del intervalo pegadas por los umbrales. Euler con `if` comete en cada umbral un error de hasta un paso en el instante del cambio, y ese error $O(h)$ domina al de truncamiento aunque se use un método de orden alto; `solve_ivp` con un evento terminal localiza el cruce por interpolación (con la precisión de `rtol`) y reinicia la integración exactamente ahí.
+
+**Tiempos.** Tareas 1–5: ~2 h 20; Tareas 6–8: ~2 h; Tarea 9 (opcional): 30 min; interpretación: 40 minutos en casa. Si hay una sola sesión de 4 h, la Tarea 5 puede darse con `rk2_mio` y `rk4_mio` resueltos (están en `imc.numerico`) y hacer solo la comparación.
 """, destino="docente")
 
 lab.md(r"""
@@ -941,7 +1076,7 @@ Con lo que hicieron acá pueden resolver el resto de la sección "Ejercicios de 
 * **SEIRS**: agregar $\omega$; el período interepidémico se mide con un evento no terminal en $\dot I = 0$ con `direction = -1` (cada máximo de $I$), y el equilibrio endémico se lee de la solución a tiempos largos.
 * **Hutchinson y SIR con retardo**: `solve_ivp` no resuelve ecuaciones con retardo. Se puede hacer con Euler o RK a mano, guardando la historia y leyendo $N(t - \tau)$ del array (con $\tau$ múltiplo de $h$), o con la biblioteca `ddeint`.
 * **Oscilador forzado** (ítems 2 y 3 del ejercicio del oscilador): agregar $f(t)/m$ al campo de la Tarea 6; en el ítem 3 la resonancia se ve como una amplitud que crece hasta saturar por el amortiguamiento.
-* **Partícula cargada**: sistema de 6 variables; el período de la órbita circular se mide con un evento en $y = 0$, `direction = +1`, `terminal = True`; el resultado $2\pi m/(qB)$ no depende de la velocidad.
+* **Partícula cargada**: sistema de 6 variables; el período de la órbita circular se mide con un evento no terminal en $x = 0$ con `direction = +1` (tiempo entre dos cruces consecutivos); el resultado $2\pi m/(|q|B)$ no depende de la velocidad.
 """)
 
 rutas = lab.escribir()

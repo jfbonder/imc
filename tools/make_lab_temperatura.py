@@ -177,9 +177,9 @@ lab.md(r"""
 
 Para $x$ real de $N$ muestras con la media restada, el **espectro de potencia** (o **periodograma**) es
 
-$$P[k] = \frac{|\hat x[k]|^2}{N}, \qquad \xi_k = \frac{k}{N\,\Delta t}.$$
+$$P[k] = \frac{2\,|\hat x[k]|^2}{N}\quad (0<k<N/2), \qquad P[0] = \frac{|\hat x[0]|^2}{N},\quad P[N/2] = \frac{|\hat x[N/2]|^2}{N}, \qquad \xi_k = \frac{k}{N\,\Delta t}.$$
 
-Es el que calcula `espectro.periodograma(x, dt)` (con la normalización que hace que valga la identidad de Plancherel–Parseval discreta $\sum_{k=0}^{N-1} P[k] = \sum_j x_j^2$; en la mitad $0 < k < N/2$ que se devuelve cada valor cuenta dos veces, por $\pm k$). $P[k]$ mide *cuánta energía de la señal hay en la frecuencia $\xi_k$*; un coseno de amplitud $A$ y frecuencia $\xi_k$ exactamente en la grilla produce $P[k] = A^2 N/4$: la altura de un pico depende de $N$ y de $A^2$, no es una "densidad" que se pueda comparar entre tramos de distinta longitud sin dividir por algo (Sección 5).
+Es el que calcula `espectro.periodograma(x, dt)` (sólo para $0 \le k \le N/2$: como $x$ es real, $|\hat x[-k]| = |\hat x[k]|$, y el factor $2$ junta la potencia de $k$ y de $-k$; con esa normalización la identidad de Plancherel–Parseval discreta queda $\sum_{k=0}^{N/2} P[k] = \sum_j x_j^2$: la suma del espectro es la energía de la señal). $P[k]$ mide *cuánta energía de la señal hay en la frecuencia $\xi_k$*; un coseno de amplitud $A$ y frecuencia $\xi_k$ exactamente en la grilla produce $P[k] = A^2 N/2$: la altura de un pico depende de $N$ y de $A^2$, no es una "densidad" que se pueda comparar entre tramos de distinta longitud sin dividir por algo (Sección 5).
 
 ### Por qué escala logarítmica
 
@@ -258,7 +258,7 @@ xx = np.array([0.05, 11.5])
 ax2.plot(xx, np.exp(np.polyval([-2, np.log(P[m_bajo]).mean() + 2 * np.log(xi[m_bajo]).mean()], np.log(xx))),
          "--", color="0.4", lw=1.2, label=r"$\\propto \\xi^{-2}$")
 ax2.legend(loc="lower left")
-ax1.set_xlim(0, 12); ax1.set_ylim(1e-3, 3e5); ax1.set_xlabel(r"$\\xi$ (ciclos por día)"); ax1.set_ylabel(r"$P[k] = |\\hat T[k]|^2/N$")
+ax1.set_xlim(0, 12); ax1.set_ylim(1e-3, 3e5); ax1.set_xlabel(r"$\\xi$ (ciclos por día)"); ax1.set_ylabel(r"$P[k] = 2|\\hat T[k]|^2/N$")
 ax1.set_title("(a) escala semilogarítmica"); ax2.set_title("(b) escala log-log")
 ax2.set_xlabel(r"$\\xi$ (ciclos por día)")
 estilo.parametros(ax1, f"$N = {N}$, $\\\\Delta\\\\xi = 1/365$", loc="upper right")
@@ -275,7 +275,7 @@ print("espectro de potencia: OK")
 figura_revision("espectro")
 
 lab.md(r'''
-**Para el docente (Tarea 2).** Realces (mediana de $\pm 20$ vecinos): anual 162, semianual 2.3, cuatro meses 0.5, diario 744, 12 h 660, 8 h 14, 6 h 82, 4.8 h 3.3. Con $P[k]$: 104737, 1386, 329, 16652, 1502, 10.9, 36.3, 0.8. Es la primera sorpresa del laboratorio: **el semianual no es un pico** (su amplitud, 0.80 °C, es comparable a las fluctuaciones de baja frecuencia de su entorno; un solo año no alcanza). El 8 h sí sobresale, pero menos que el de 6 h (0.13 °C contra 0.07 °C): el ciclo diario no es simétrico (sube rápido a la mañana y baja lento a la noche), así que no tiene solo los tres primeros armónicos. Los cinco máximos más altos a baja frecuencia fuera de los candidatos: períodos de 14.6, 36.5, 18.2, 8.3 y 28.1 días, con realces de 3 a 6: son fluctuaciones del ruido rojo (el periodograma tiene dispersión del 100 %), no ciclos. Pendientes del piso: $\alpha = 1.84$ en $[0.05, 0.8]$ y $1.96$ en $[5, 11.5]$: ley de potencias $\xi^{-2}$ (potencia que decae como $1/\xi^2$ es la de un paseo al azar: la temperatura de hoy es la de ayer más un cambio aleatorio, con memoria de varios días). Errores típicos: `dt = 1` (todo queda en ciclos por hora: el diario en $1/24$), graficar `P[0]` (que es cero, la media restada) en `semilogy`, ajustar la pendiente incluyendo los picos. Tiempo: 30 minutos. **Discrepancia con las notas**: el notebook `08-aplicaciones` y el texto tratan a $k = 2$ como pico (conserva $k = 1, 2, 365, 730, 1095$); en el laboratorio se conserva igual (para reproducir el 71 %), pero se lo discute.
+**Para el docente (Tarea 2).** Realces (mediana de $\pm 20$ vecinos): anual 162, semianual 2.3, cuatro meses 0.5, diario 744, 12 h 660, 8 h 14, 6 h 82, 4.8 h 3.3. Con $P[k]$: 209473, 2772, 658, 33304, 3003, 21.7, 72.6, 1.6. Es la primera sorpresa del laboratorio: **el semianual no es un pico** (su amplitud, 0.80 °C, es comparable a las fluctuaciones de baja frecuencia de su entorno; un solo año no alcanza). El 8 h sí sobresale, pero menos que el de 6 h (0.13 °C contra 0.07 °C): el ciclo diario no es simétrico (sube rápido a la mañana y baja lento a la noche), así que no tiene solo los tres primeros armónicos. Los cinco máximos más altos a baja frecuencia fuera de los candidatos: períodos de 14.6, 36.5, 18.2, 8.3 y 28.1 días, con realces de 3 a 6: son fluctuaciones del ruido rojo (el periodograma tiene dispersión del 100 %), no ciclos. Pendientes del piso: $\alpha = 1.84$ en $[0.05, 0.8]$ y $1.96$ en $[5, 11.5]$: ley de potencias $\xi^{-2}$ (potencia que decae como $1/\xi^2$ es la de un paseo al azar: la temperatura de hoy es la de ayer más un cambio aleatorio, con memoria de varios días). Errores típicos: `dt = 1` (todo queda en ciclos por hora: el diario en $1/24$), graficar `P[0]` (que es cero, la media restada) en `semilogy`, ajustar la pendiente incluyendo los picos. Tiempo: 30 minutos. **Discrepancia con las notas**: el notebook `08-aplicaciones` y el texto tratan a $k = 2$ como pico (conserva $k = 1, 2, 365, 730, 1095$); en el laboratorio se conserva igual (para reproducir el 71 %), pero se lo discute.
 ''', destino="docente")
 
 
@@ -395,7 +395,7 @@ La **identidad de Plancherel discreta** dice que $\sum_{j} x_j^2 = \frac1N\sum_{
 
 $$\operatorname{Var}(x) = \frac1{N^2}\sum_{k\ne0}|\hat x[k]|^2 .$$
 
-Cada frecuencia contribuye a la varianza con su parte: para una señal real, $k$ y $N-k$ contribuyen igual, así que un ciclo en $\xi_k$ (con $0<k<N/2$) explica la fracción $2P[k]/\sum_{k\neq0}P[k]$ de la varianza. Fijate que **es un porcentaje de la varianza (la variabilidad alrededor de la media), no de la señal**, y que coincide con el $R^2$ de la regresión con esas componentes: para una componente de amplitud $A$ sola, $\operatorname{Var} = A^2/2$ (el promedio de $\cos^2$ es $1/2$). Es una manera de chequear la cuenta: con $A_1$ y $A_{365}$ de la tarea anterior tiene que dar lo mismo.
+Cada frecuencia contribuye a la varianza con su parte: para una señal real, $k$ y $N-k$ contribuyen igual, así que un ciclo en $\xi_k$ (con $0<k<N/2$) explica la fracción $2|\hat x[k]|^2/\sum_{k\neq0}|\hat x[k]|^2$ de la varianza (la suma, sobre todos los $k\ne0$ de la DFT completa; con el $P$ unilateral de `espectro.periodograma`, que ya incluye el factor $2$, es $P[k]/\sum_{k\ge1}P[k]$). Fijate que **es un porcentaje de la varianza (la variabilidad alrededor de la media), no de la señal**, y que coincide con el $R^2$ de la regresión con esas componentes: para una componente de amplitud $A$ sola, $\operatorname{Var} = A^2/2$ (el promedio de $\cos^2$ es $1/2$). Es una manera de chequear la cuenta: con $A_1$ y $A_{365}$ de la tarea anterior tiene que dar lo mismo.
 
 Un par de cuidados: (i) la varianza explicada por *sumar* componentes es la suma de las de cada una porque las columnas de la DFT son ortogonales; (ii) los picos de la DFT tienen "hombros" (frecuencias vecinas) que no se cuentan si se toma un solo $k$: eso subestima el porcentaje real de los ciclos.
 """)
@@ -587,7 +587,7 @@ print("fuga espectral y ventanas: OK")
 figura_revision("ventanas")
 
 lab.md(r'''
-**Para el docente (Tarea 5).** Control (coseno de amplitud 1, 10.5 días): amplitud leída 0.65 (rectangular) y 0.85 (Hann, con $A = 2|X_w|/\sum w$); con 10 días exactos ambas dan 1.00. La cola lejos del pico ($\xi \in [2.5, 3.5]$) relativa al máximo es $1.3\times10^{-3}$ para el rectangular y $2.8\times10^{-9}$ para Hann: seis órdenes de magnitud. En 2023: $P[364..366]$ es $[180,\ 16652,\ 176]$ (rectangular) y $[1804,\ 9627,\ 2305]$ (Hann); el piso en $[3.3, 3.6]$ baja de 0.49 a 0.44 y en $[8, 9]$ de 0.089 a 0.069. En el tramo de 100.5 días: 0.58 a 0.54 y 0.093 a 0.062. **El efecto en los datos reales es modesto**, mucho menos espectacular que en el control: el piso real (ruido rojo) queda por encima de la fuga, y es importante que lo vean: no es una regla que Hann "limpie" el piso, lo hace donde hay picos fuertes fuera de la grilla, y con datos como estos la cuestión aparece sobre todo al medir amplitudes en tramos cortos. Errores típicos: leer la amplitud con Hann sin dividir por $\sum w$ (sale la mitad), comparar la altura del pico del periodograma de `espectro.periodograma` entre ventanas creyendo que es la amplitud (está normalizado por potencia, no por amplitud), ver un pico de Hann "más chico" y decir que Hann pierde energía. Tiempo: 35 minutos.
+**Para el docente (Tarea 5).** Control (coseno de amplitud 1, 10.5 días): amplitud leída 0.65 (rectangular) y 0.85 (Hann, con $A = 2|X_w|/\sum w$); con 10 días exactos ambas dan 1.00. La cola lejos del pico ($\xi \in [2.5, 3.5]$) relativa al máximo es $1.3\times10^{-3}$ para el rectangular y $2.8\times10^{-9}$ para Hann: seis órdenes de magnitud. En 2023: $P[364..366]$ es $[360,\ 33304,\ 353]$ (rectangular) y $[3608,\ 19255,\ 4610]$ (Hann); el piso en $[3.3, 3.6]$ baja de 0.98 a 0.88 y en $[8, 9]$ de 0.177 a 0.137. En el tramo de 100.5 días: 1.17 a 1.08 y 0.185 a 0.124. **El efecto en los datos reales es modesto**, mucho menos espectacular que en el control: el piso real (ruido rojo) queda por encima de la fuga, y es importante que lo vean: no es una regla que Hann "limpie" el piso, lo hace donde hay picos fuertes fuera de la grilla, y con datos como estos la cuestión aparece sobre todo al medir amplitudes en tramos cortos. Errores típicos: leer la amplitud con Hann sin dividir por $\sum w$ (sale la mitad), comparar la altura del pico del periodograma de `espectro.periodograma` entre ventanas creyendo que es la amplitud (está normalizado por potencia, no por amplitud), ver un pico de Hann "más chico" y decir que Hann pierde energía. Tiempo: 35 minutos.
 ''', destino="docente")
 
 
@@ -717,7 +717,7 @@ lab.tarea(
     titulo="Temperatura regular, residuo y promedios móviles",
     consigna=r"""
 1. **Filtro de picos.** Con `espectro.filtrar`, construí `T_reg` que conserva la media y los picos anual, semianual y diario con sus armónicos de 12 h y 8 h ($k = 1, 2, 365, 730, 1095$). Calculá `resid = T - T_reg`. Graficá un mes (por ejemplo mayo) con la señal, la temperatura regular y el residuo. Chequeá que la fracción de la energía del residuo es $1 - $ `frac_picos` (Tarea 4).
-2. **¿Es blanco el residuo?** Calculá su periodograma y su espectro de Welch (`espectro.welch(resid, dt, tramo=45*24)`). Graficalos en log-log junto con la línea del ruido blanco de la misma varianza ($P = \sigma^2$, `resid.var()`), y marcá los períodos de 1 día, 1 semana y 1 mes. Calculá la fracción de la energía del residuo en las bandas de período: más de 30 días, entre 7 y 30, entre 2 y 7, entre 1 y 2, y menos de 1 día (`fracs_banda`, un diccionario o lista con estas cinco fracciones, que suman 1). ¿En qué escalas tiene más energía? Calculá la autocorrelación a 1 hora y a 24 horas.
+2. **¿Es blanco el residuo?** Calculá su periodograma y su espectro de Welch (`espectro.welch(resid, dt, tramo=45*24)`). Graficalos en log-log junto con la línea del ruido blanco de la misma varianza ($P = 2\sigma^2$, con $\sigma^2$ = `resid.var()`: con la normalización de `periodograma`, el piso de un ruido blanco está en $2\sigma^2$), y marcá los períodos de 1 día, 1 semana y 1 mes. Calculá la fracción de la energía del residuo en las bandas de período: más de 30 días, entre 7 y 30, entre 2 y 7, entre 1 y 2, y menos de 1 día (`fracs_banda`, un diccionario o lista con estas cinco fracciones, que suman 1). ¿En qué escalas tiene más energía? Calculá la autocorrelación a 1 hora y a 24 horas.
 3. **Promedios móviles.** Con `uniform_filter1d(..., mode="wrap")` calculá `T_ma24` y `T_ma7d` ($L = 24$ y $L = 168$). Graficalos sobre un mes junto con la señal. Después, estimá la **respuesta en frecuencia empírica** de cada uno, `H_emp = |rfft(y)| / |rfft(T)|` (en los coeficientes $k$ donde `|rfft(T)|` no es despreciable), y compará con la fórmula teórica, que escribís como una función `H_teo(xi, L)` (¡cuidado con $\xi = 0$!). Graficá `|H|` contra $\xi$ para $\xi \in [0, 3]$ ciclos/día (curva teórica continua y puntos empíricos), marcando los ceros. Verificá que `|H_emp|` es cero (a $10^{-10}$ o menos) en $\xi = 1, 2$ para los dos promedios. Los ceros del de 7 días en $\xi = 1/7, 2/7, \dots$ no se ven en la DFT de un año ($365/7$ no es entero: esas frecuencias no están en la grilla); verificalos con la fórmula teórica.
 4. Respondé: ¿qué elimina cada promedio y qué deja? ¿En qué se diferencia el promedio de 24 h de "T menos el ciclo diario" (`T - ` la parte diaria del filtro de picos)? Miralo con las series y con los espectros.
 
@@ -776,10 +776,10 @@ ax_b.xaxis.set_major_locator(mdates.DayLocator(interval=5)); ax_b.xaxis.set_majo
 ax_b.set_ylabel("°C"); ax_b.legend(ncol=3, loc="upper center", fontsize=8); ax_b.set_ylim(-4, 30); ax_b.set_title("(a) mayo de 2023")
 ax_c.loglog(xi_r[1:], P_r[1:], color=COLORES["traj2"], lw=0.5, label="periodograma")
 ax_c.loglog(xi_w[1:], P_w[1:], color=COLORES["modelo"], lw=2, label="Welch (45 días)")
-ax_c.axhline(resid.var(), color="0.3", ls="--", lw=1.2, label="ruido blanco de igual varianza")
+ax_c.axhline(2 * resid.var(), color="0.3", ls="--", lw=1.2, label="ruido blanco de igual varianza")
 for pd_, txt in [(1, "1 día"), (7, "1 sem."), (30, "1 mes")]:
     ax_c.axvline(1 / pd_, color="0.6", ls=":", lw=1); ax_c.text(1 / pd_ * 1.08, 2e-3, txt, fontsize=9, rotation=90, va="bottom", color="0.3")
-ax_c.set_xlim(1e-2, 12); ax_c.set_ylim(1e-3, 3e3); ax_c.legend(loc="upper right", fontsize=8)
+ax_c.set_xlim(1e-2, 12); ax_c.set_ylim(1e-3, 1e4); ax_c.legend(loc="upper right", fontsize=8)
 ax_c.set_xlabel(r"$\\xi$ (ciclos por día)"); ax_c.set_ylabel("potencia"); ax_c.set_title("(b) espectro del residuo")
 fig.tight_layout()
 figura_residuo = fig
@@ -837,7 +837,7 @@ figura_revision("residuo", var="figura_residuo")
 figura_revision("ma")
 
 lab.md(r'''
-**Para el docente (Tarea 7).** La máscara conserva 6 coeficientes de la `rfft` (la media y los 5 picos), es decir 11 coeficientes complejos de la DFT completa; desvíos: $T$ 6.32 °C, $T_{\rm reg}$ 5.33, residuo 3.40 (29.0 % de la varianza $= 1 - 0.7104$). Energía del residuo por escala: $> 30$ d 16 %, 7–30 d 43 %, 2–7 d 27 %, 1–2 d 7 %, $< 1$ d 8 %. Autocorrelación del residuo: 0.982 a 1 h, 0.577 a 24 h, 0.013 a 7 días. Welch (45 días): 715 en $\xi \approx 0.03$ contra 0.124 en $\xi \approx 7$ (cociente $6\times10^3$; el ruido blanco de igual varianza sería una recta en $11.6$). Promedios móviles: $|H|$ vale $10^{-16}$ en $\xi = 1, 2$ (y $4\times10^{-17}$ en $1/7, 2/7$ para el de 7 días); $|H_{24}(1.5)| = 0.21$, $|H_{24}(2.5)| = 0.13$; la respuesta empírica coincide con la fórmula a $10^{-12}$. Desvíos: $T - {\rm MA}_{24}$: 2.38 °C; $T$ menos los tres ciclos diarios: 2.04 °C; diferencia entre ${\rm MA}_{24}$ y "T sin los ciclos diarios": 1.23 °C, porque el promedio de 24 h **también** atenúa las escalas de 2 a 7 días ($|H_{24}(0.3)| = 0.86$, $|H_{24}(0.5)| = 0.64$) y deja pasar lóbulos entre 1 y 3 ciclos/día, mientras que el filtro de picos quita solo las tres rayas exactas del diario y deja los "hombros" alrededor de $\xi = 1$ (la modulación estacional del ciclo diario). Esa diferencia es un buen tema: son dos definiciones distintas de "la temperatura sin el ciclo diario". Errores típicos: `mode="same"` de `np.convolve` (borde con ceros: distorsiona los extremos y rompe la coincidencia exacta con la fórmula), mascarar con `xi == f` (falla por redondeo: usar `np.isclose`), olvidar que la máscara de `rfft` solo necesita frecuencias positivas. Tiempo: 60 minutos: es la tarea más larga; si el tiempo aprieta, se puede pedir solo (1), (2) y la primera mitad de (3).
+**Para el docente (Tarea 7).** La máscara conserva 6 coeficientes de la `rfft` (la media y los 5 picos), es decir 11 coeficientes complejos de la DFT completa; desvíos: $T$ 6.32 °C, $T_{\rm reg}$ 5.33, residuo 3.40 (29.0 % de la varianza $= 1 - 0.7104$). Energía del residuo por escala: $> 30$ d 16 %, 7–30 d 43 %, 2–7 d 27 %, 1–2 d 7 %, $< 1$ d 8 %. Autocorrelación del residuo: 0.982 a 1 h, 0.577 a 24 h, 0.013 a 7 días. Welch (45 días): 1430 en $\xi \approx 0.03$ contra 0.249 en $\xi \approx 7$ (cociente $6\times10^3$; el ruido blanco de igual varianza, $\sigma^2 = 11.6$, sería una recta en $2\sigma^2 = 23.1$). Promedios móviles: $|H|$ vale $10^{-16}$ en $\xi = 1, 2$ (y $4\times10^{-17}$ en $1/7, 2/7$ para el de 7 días); $|H_{24}(1.5)| = 0.21$, $|H_{24}(2.5)| = 0.13$; la respuesta empírica coincide con la fórmula a $10^{-12}$. Desvíos: $T - {\rm MA}_{24}$: 2.38 °C; $T$ menos los tres ciclos diarios: 2.04 °C; diferencia entre ${\rm MA}_{24}$ y "T sin los ciclos diarios": 1.23 °C, porque el promedio de 24 h **también** atenúa las escalas de 2 a 7 días ($|H_{24}(0.3)| = 0.86$, $|H_{24}(0.5)| = 0.64$) y deja pasar lóbulos entre 1 y 3 ciclos/día, mientras que el filtro de picos quita solo las tres rayas exactas del diario y deja los "hombros" alrededor de $\xi = 1$ (la modulación estacional del ciclo diario). Esa diferencia es un buen tema: son dos definiciones distintas de "la temperatura sin el ciclo diario". Errores típicos: `mode="same"` de `np.convolve` (borde con ceros: distorsiona los extremos y rompe la coincidencia exacta con la fórmula), mascarar con `xi == f` (falla por redondeo: usar `np.isclose`), olvidar que la máscara de `rfft` solo necesita frecuencias positivas. Tiempo: 60 minutos: es la tarea más larga; si el tiempo aprieta, se puede pedir solo (1), (2) y la primera mitad de (3).
 ''', destino="docente")
 
 
@@ -986,7 +986,7 @@ Un único espectro promedia sobre todo el registro: si la amplitud del ciclo dia
 
 ### Amplitud a partir de un espectrograma
 
-Con Hann, un coseno de amplitud $A$ en la grilla da $|\hat{(xw)}[k]| = A\sum w/2$ y, con la normalización de `imc.espectro`, $S = |\hat{(xw)}|^2/\sum w^2$. Entonces $A = 2\sqrt{S\sum w^2}/\sum w$. Eso permite leer amplitudes en °C de la imagen, y compararlas con las que da un ajuste por mínimos cuadrados en cada ventana (el estimador "fuerte" de la Sección 3).
+Con Hann, un coseno de amplitud $A$ en la grilla da $|\hat{(xw)}[k]| = A\sum w/2$ y, con la normalización de `imc.espectro`, $S = 2|\hat{(xw)}|^2/\sum w^2$ (fuera de $k = 0$ y de la frecuencia de Nyquist). Entonces $A = \sqrt{2S\sum w^2}/\sum w$. Eso permite leer amplitudes en °C de la imagen, y compararlas con las que da un ajuste por mínimos cuadrados en cada ventana (el estimador "fuerte" de la Sección 3).
 
 ### La guitarra
 
@@ -996,8 +996,8 @@ Con Hann, un coseno de amplitud $A$ en la grilla da $|\hat{(xw)}[k]| = A\sum w/2
 lab.tarea(
     titulo="El espectrograma: temperatura y guitarra",
     consigna=r"""
-1. **Implementación simple.** Escribí `espectrograma_simple(x, dt, tramo, paso)` que devuelve `(t_centros, xi, S)` con `S[k, j]` = periodograma del tramo $j$ con ventana de Hann, restando la media del tramo y con la normalización $|\hat{(xw)}[k]|^2/(N_v\,\overline{w^2})$ (la de `espectro.periodograma`). Comprobá que coincide con `espectro.espectrograma(x, dt, tramo, solapamiento=1 - paso/tramo)` para la temperatura (guardá el resultado propio como `ts, xi_s, S`).
-2. **Temperatura.** Usá la serie de los tres años (`df.temp.values`) con ventanas de 30 días (720 horas) y paso de 15 días (360). Graficá el espectrograma con `pcolormesh` (fechas en el eje horizontal, $\xi \in [0, 4]$ ciclos/día en el vertical, potencia en $\log_{10}$). Calculá, para cada ventana, la amplitud del ciclo diario de dos maneras: (a) la que se lee de la fila $\xi = 1$ del espectrograma con $A = 2\sqrt{S\sum w^2}/\sum w$, y (b) por mínimos cuadrados con $\xi = 1$ fijo (`ajuste_ls` de la Tarea 3) en el tramo. Guardalas en `A_esp` y `A_min` y graficá las dos curvas contra la fecha. ¿En qué época del año es máxima la amplitud del ciclo diario y en cuál mínima? ¿Es el mismo patrón los tres años?
+1. **Implementación simple.** Escribí `espectrograma_simple(x, dt, tramo, paso)` que devuelve `(t_centros, xi, S)` con `S[k, j]` = periodograma del tramo $j$ con ventana de Hann, restando la media del tramo y con la normalización de `espectro.periodograma`: $2|\hat{(xw)}[k]|^2/(N_v\,\overline{w^2})$ para $0<k<N_v/2$ y sin el $2$ en $k=0$ y en $k = N_v/2$. Comprobá que coincide con `espectro.espectrograma(x, dt, tramo, solapamiento=1 - paso/tramo)` para la temperatura (guardá el resultado propio como `ts, xi_s, S`).
+2. **Temperatura.** Usá la serie de los tres años (`df.temp.values`) con ventanas de 30 días (720 horas) y paso de 15 días (360). Graficá el espectrograma con `pcolormesh` (fechas en el eje horizontal, $\xi \in [0, 4]$ ciclos/día en el vertical, potencia en $\log_{10}$). Calculá, para cada ventana, la amplitud del ciclo diario de dos maneras: (a) la que se lee de la fila $\xi = 1$ del espectrograma con $A = \sqrt{2S\sum w^2}/\sum w$, y (b) por mínimos cuadrados con $\xi = 1$ fijo (`ajuste_ls` de la Tarea 3) en el tramo. Guardalas en `A_esp` y `A_min` y graficá las dos curvas contra la fecha. ¿En qué época del año es máxima la amplitud del ciclo diario y en cuál mínima? ¿Es el mismo patrón los tres años?
 3. **Guitarra.** Cargá `datos.obtener("cuerda_guitarra.wav")` con `wavfile.read`, pasala a `float` y normalizala por 32768. Calculá el espectrograma con ventanas de 5 ms, 50 ms y 500 ms (paso = mitad de la ventana) y graficá los tres en dB (`10*np.log10(S + 1e-12)`, con un rango dinámico de unos 60–70 dB) para $\xi \in [0, 2000]$ Hz, con las ventanas de 5 ms, 50 ms y 500 ms en paneles vecinos.
 4. **La nota y sus armónicos.** Con el periodograma con Hann de los primeros 3 s (`espectro.periodograma`), encontrá la frecuencia fundamental `f0` en Hz (el máximo en $[100, 400]$ Hz), decí de qué nota se trata (MIDI y nombre) y qué tan desafinada está (en *cents*: $1200\log_2(f_0/f_{\rm nota})$). Después, con el espectrograma de 50 ms, seguí la evolución temporal de la fundamental y de sus primeros cuatro armónicos (la potencia máxima en $\pm 20$ Hz de $m f_0$) y estimá para cada uno su velocidad de decaimiento en dB/s entre $t = 0.2$ y $2.5$ s (recta de mínimos cuadrados en dB). Guardá `decaimiento` (arreglo de 5, en dB/s, negativos).
 5. **Compromiso.** Con los tres espectrogramas de (3): ¿qué se ve y qué no se ve con 5 ms? ¿Y con 500 ms? ¿Cuánto vale $\Delta\xi$ para cada ventana y cómo se compara con la separación entre armónicos ($f_0 \approx 196$ Hz)? Lo mismo con la temperatura: ¿qué pasaría con una ventana de 3 días? ¿Y de 1 año?
@@ -1013,7 +1013,7 @@ def espectrograma_simple(x, dt, tramo, paso):
     ts, cols = [], []
     for i in range(0, len(x) - tramo + 1, paso):
         seg = x[i:i + tramo]
-        # TODO: restar la media del tramo, multiplicar por w, rfft, |.|^2 / (tramo * mean(w^2))
+        # TODO: restar la media del tramo, multiplicar por w, rfft, |.|^2 / (tramo * mean(w^2)), y duplicar 0 < k < tramo/2
         ts.append((i + tramo / 2) * dt)
     return np.array(ts), xi, np.array(cols).T
 
@@ -1031,7 +1031,9 @@ def espectrograma_simple(x, dt, tramo, paso):
     for i in range(0, len(x) - tramo + 1, paso):
         seg = x[i:i + tramo]
         Xs = np.fft.rfft((seg - seg.mean()) * w)
-        cols.append(np.abs(Xs) ** 2 / (tramo * np.mean(w ** 2)))
+        P = np.abs(Xs) ** 2 / (tramo * np.mean(w ** 2))
+        P[1:(tramo + 1) // 2] *= 2       # k y -k juntos (no en k = 0 ni en Nyquist)
+        cols.append(P)
         ts.append((i + tramo / 2) * dt)
     return np.array(ts), xi, np.array(cols).T
 
@@ -1044,7 +1046,7 @@ print(f"S: {S.shape} (frecuencias × ventanas); resolución {xi_s[1]:.4f} ciclos
 fechas_v = df.fecha_hora.iloc[0] + pd.to_timedelta(ts, unit="D")
 w = np.hanning(tramo)
 k1 = np.argmin(abs(xi_s - 1))
-A_esp = 2 * np.sqrt(S[k1] * np.sum(w ** 2)) / np.sum(w)
+A_esp = np.sqrt(2 * S[k1] * np.sum(w ** 2)) / np.sum(w)
 A_min = np.array([ajuste_ls(T3[i:i + tramo], np.arange(tramo) * dt, [1.0])[1][0] for i in range(0, len(T3) - tramo + 1, paso)])
 print(f"amplitud diaria por ventana: espectrograma {A_esp.min():.2f}–{A_esp.max():.2f} °C, mínimos cuadrados {A_min.min():.2f}–{A_min.max():.2f} °C; "
       f"correlación entre ambas {np.corrcoef(A_esp, A_min)[0, 1]:.3f}")
@@ -1118,7 +1120,7 @@ figura_armonicos = fig
     verificacion='''
 # Verificación
 _, _, S_imc = espectro.espectrograma(df.temp.values, dt, 720, solapamiento=0.5)
-assert np.allclose(S, S_imc, rtol=1e-8, atol=1e-10), "tu espectrograma debe coincidir con el de imc (resta de la media, Hann de np.hanning, |X|^2 / (N mean(w^2)))"
+assert np.allclose(S, S_imc, rtol=1e-8, atol=1e-10), "tu espectrograma debe coincidir con el de imc (resta de la media, Hann de np.hanning, 2|X|^2 / (N mean(w^2)) salvo en k = 0 y Nyquist)"
 assert np.corrcoef(A_esp, A_min)[0, 1] > 0.75, "las dos amplitudes diarias deben tener el mismo patrón general"
 assert 194 < f0 < 198 and round(69 + 12 * np.log2(f0 / 440)) == 55, "la fundamental es ~196 Hz: Sol3 (MIDI 55)"
 assert np.all(decaimiento < -5) and decaimiento[3] < decaimiento[0], "todos decaen, los agudos más rápido que la fundamental"
@@ -1165,7 +1167,7 @@ lab.md(r"""
 * *Espectrograma, ítem 2:* reemplazar "una escala tocada en un instrumento, grabada con el teléfono" por el archivo `datos/cuerda_guitarra.wav` (cuerda de guitarra, Sol$_3$, 6 s, ver `datos/README.md`): identificar la nota y los armónicos y estimar su decaimiento. La escala grabada con el teléfono queda como extensión opcional para quien tenga un instrumento.
 * *Espectro de la serie de temperatura, ítem 2:* la pregunta "¿aparece algún otro pico?" tiene como respuesta honesta que el semianual **no** se distingue de las fluctuaciones vecinas con un solo año (realce 2.3), y sí el armónico de 6 h (más alto que el de 8 h). Convendría sacar el ciclo semianual de la lista de picos (también en el notebook `08-aplicaciones`, que lo incluye) o aclarar que se lo conserva por convención.
 * *Filtrado y compresión, ítem 3:* el número "cuántos coeficientes hacen falta para un error del 5 %" depende de la norma (respecto de $\|T\|$: 462; respecto de $\|T - \bar T\|$: 2150). Convendría precisar en el enunciado cuál se usa y pedir ambos: es una diferencia conceptual importante, y la comparación con la imagen cambia de signo según la norma.
-* *Espectro de potencia:* el enunciado dice $|\hat u[k]|^2$; en el código (`imc.espectro.periodograma`) está normalizado por $N$ ($|\hat u[k]|^2/N$, para que valga Parseval); vale la pena unificar la convención.
+* *Espectro de potencia:* el enunciado dice $|\hat u[k]|^2$; en el código (`imc.espectro.periodograma`) es el espectro unilateral $2|\hat u[k]|^2/N$ para $0<k<N/2$ (sin el $2$ en $k=0$ y en Nyquist), normalizado para que su suma sea la energía $\sum_j u_j^2$ (Parseval); vale la pena unificar la convención.
 * *Problema conductor, pregunta 3:* las notas mencionan una medición por semana; se cubre en la discusión (misma historia que la diaria porque 7 días es múltiplo de 24 h) y con el muestreo de 25 h como ejemplo de aliasing genuino, que no aparece en las notas.
 """, destino="docente")
 

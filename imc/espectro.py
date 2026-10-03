@@ -1,15 +1,16 @@
 """Análisis espectral con las convenciones de las notas (Parte II).
 
 * ``dft(x, dt)`` devuelve las frecuencias físicas ``xi_k = k/T`` y los coeficientes
-  ``hat f[k]`` de la definición (14.2.1), sin normalizar.
+  ``hat f[k]`` de la definición de la transformada discreta (Sección 14.2), sin normalizar.
 * ``amplitudes(x, dt)`` devuelve, para señales reales, la amplitud ``A_k`` de cada
   componente ``A_k cos(2 pi xi_k t + phi_k)`` (es decir ``2|hat f[k]|/N`` para
   ``0<k<N/2``), que es lo que se compara con los coeficientes de Fourier.
-* ``periodograma(x, dt, ventana=None)`` devuelve el espectro de potencia.
+* ``periodograma(x, dt, ventana=None)`` devuelve el espectro de potencia unilateral,
+  normalizado para que su suma sea la energía ``sum(x**2)``.
 
 Series de Fourier (Capítulos 11 y 12): ``coeficientes(x, L, N)`` y
 ``coeficientes_funcion(f, L, N)`` calculan los coeficientes ``c_k`` de la
-definición (coef.fourier) aproximando la integral por la suma de Riemann
+definición de la Sección 11.4 aproximando la integral por la suma de Riemann
 ``<f, e_k>_n`` sobre una grilla uniforme del período; ``coeficientes_reales``
 da los ``a_k, b_k`` de la serie en senos y cosenos y ``suma_parcial`` evalúa
 ``S_N[f](t)``.
@@ -100,10 +101,19 @@ def amplitudes(x, dt=1.0):
 
 
 def periodograma(x, dt=1.0, ventana=None, quitar_media=True):
-    """Espectro de potencia ``|hat f[k]|^2 / N`` (normalizado para que su suma sea
-    la energía de la señal, por la identidad de Plancherel discreta).
+    """Espectro de potencia unilateral (frecuencias ``0 <= xi_k <= 1/(2 dt)``).
 
-    ``ventana``: None, "hann" o un vector de longitud ``len(x)``.
+    Convención: ``P[k] = 2 |hat x[k]|^2 / N`` para ``0 < k < N/2`` (cada frecuencia
+    positiva junta su potencia con la de ``-k``) y ``P[k] = |hat x[k]|^2 / N`` en
+    ``k = 0`` y, si ``N`` es par, en la de Nyquist ``k = N/2``. Así, por la identidad
+    de Plancherel discreta, ``sum(P) == sum(x**2)``: la suma es la energía de la
+    señal (con la media restada si ``quitar_media``). Un coseno de amplitud ``A``
+    con frecuencia en la grilla da un pico ``P[k] = A**2 N / 2``, y un ruido blanco
+    de varianza ``sigma**2`` un piso de altura media ``2 sigma**2``.
+
+    ``ventana``: None, "hann", "hamming", "blackman" o un vector de longitud ``len(x)``.
+    Con ventana se divide además por ``mean(w**2)``, de modo que la suma conserva
+    (en promedio) la energía de la señal sin ventana.
     """
     x = np.asarray(x, dtype=float)
     if quitar_media:
@@ -118,6 +128,7 @@ def periodograma(x, dt=1.0, ventana=None, quitar_media=True):
     xw = x * w
     xi, X = dft(xw, dt)
     P = np.abs(X) ** 2 / (N * np.mean(w ** 2))
+    P[1:(N + 1) // 2] *= 2          # 0 < k < N/2: se suman las frecuencias k y -k (no DC ni Nyquist)
     return xi, P
 
 

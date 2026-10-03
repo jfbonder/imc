@@ -33,6 +33,7 @@ from imc import estilo, espectro, datos
 from imc.estilo import COLORES, CICLO
 
 estilo.activar(fuente=14)   # las figuras van a 0.6-0.7\textwidth (~9-11 cm): fuente grande para que se lean impresas
+plt.close(plt.figure())   # inicializa el backend inline fuera de los rc_context de abajo (si no, las figuras no se muestran)
 GUARDAR = False   # True para regenerar las figuras de las notas en figuras/
 
 
@@ -88,7 +89,7 @@ with fuente(16):
 
 md(r"""## Propiedades: dilatación, derivación y la dualidad ancho/ancho de banda
 
-Verificamos numéricamente dos propiedades de las Proposiciones 13.2 y 13.3 sobre la gaussiana: la regla de derivación $\widehat{f'}(\xi) = 2\pi i\xi\hat f(\xi)$ y la de dilatación en la forma de la Observación 13.1, $g(x) = \frac1\lambda f(x/\lambda)\Rightarrow \hat g(\xi) = \hat f(\lambda\xi)$, que es la que usa la demostración de la fórmula de inversión: $\widehat{e^{-\pi t^2 x^2}}(\xi) = \frac1t e^{-\pi\xi^2/t^2}$.
+Verificamos numéricamente dos propiedades de las propiedades algebraicas y analíticas de la transformada (Sección 13.2) sobre la gaussiana: la regla de derivación $\widehat{f'}(\xi) = 2\pi i\xi\hat f(\xi)$ y la de dilatación en la forma de la observación sobre cambios de escala de la Sección 13.2, $g(x) = \frac1\lambda f(x/\lambda)\Rightarrow \hat g(\xi) = \hat f(\lambda\xi)$, que es la que usa la demostración de la fórmula de inversión: $\widehat{e^{-\pi t^2 x^2}}(\xi) = \frac1t e^{-\pi\xi^2/t^2}$.
 
 Esa fórmula ya dice todo sobre la **dualidad ancho/ancho de banda**: si $f$ está concentrada en un intervalo de longitud $\sim t^{-1}$, $\hat f$ está desparramada en uno de longitud $\sim t$. Cuantificándolo con el desvío estándar de $|f|^2$ y de $|\hat f|^2$ (normalizados como densidades), para la gaussiana $\sigma_x\sigma_\xi = \frac{1}{4\pi}$ **para todo** $t$: es el caso de igualdad del principio de incertidumbre $\sigma_x\sigma_\xi\ge\frac1{4\pi}$, que vale para toda $f$ con esta convención. Para $\mathbf 1_{[-a,a]}$, $\sigma_\xi = \infty$ (la transformada decae como $1/\xi$ y $\xi^2|\hat f|^2$ no es integrable), pero el primer cero de $\hat f$ está en $\xi = 1/(2a)$: de nuevo, ancho $\times$ ancho de banda $\approx$ constante.""")
 
@@ -117,7 +118,7 @@ for a in [0.5, 1.0, 2.0]:
 
 md(r"""## 13.4–13.5 Convolución y Plancherel
 
-Teorema 13.3 (convolución): $\widehat{f*g} = \hat f\,\hat g$. Con $f = g = \mathbf 1_{[-1,1]}$ la convolución es el triángulo $(f*f)(x) = \max(0, 2-|x|)$ y su transformada tiene que ser $\bigl(\frac{\sin 2\pi\xi}{\pi\xi}\bigr)^2$. Teorema de Plancherel: $\int|f|^2 = \int|\hat f|^2$; para la indicadora, $\int|f|^2 = 2$ y $\int\frac{\sin^2(2\pi\xi)}{\pi^2\xi^2}d\xi$ tiene que dar $2$ (la cola de $|\hat f|^2$ decae como $1/\xi^2$, así que hay que integrar lejos). Identidad de Parseval entre la indicadora y la gaussiana: $\int f\bar g = \int\hat f\,\overline{\hat g}$.""")
+Teorema de la convolución (Sección 13.4): $\widehat{f*g} = \hat f\,\hat g$. Con $f = g = \mathbf 1_{[-1,1]}$ la convolución es el triángulo $(f*f)(x) = \max(0, 2-|x|)$ y su transformada tiene que ser $\bigl(\frac{\sin 2\pi\xi}{\pi\xi}\bigr)^2$. Teorema de Plancherel (Sección 13.5): $\int|f|^2 = \int|\hat f|^2$; para la indicadora, $\int|f|^2 = 2$ y $\int\frac{\sin^2(2\pi\xi)}{\pi^2\xi^2}d\xi$ tiene que dar $2$ (la cola de $|\hat f|^2$ decae como $1/\xi^2$, así que hay que integrar lejos). Identidad de Parseval entre la indicadora y la gaussiana: $\int f\bar g = \int\hat f\,\overline{\hat g}$.""")
 
 code(r"""ind = lambda x: np.where(np.abs(x) <= 1, 1.0, 0.0)
 tri = lambda x: np.maximum(0.0, 2 - np.abs(x))
@@ -135,7 +136,7 @@ print(f"Parseval: int 1_[-1,1] e^(-x^2) = {np.trapezoid(gauss(np.linspace(-1, 1,
 
 md(r"""## 14.2–14.4 La DFT, su matriz y su inversa
 
-$\hat f[k] = \sum_{j=0}^{N-1} f[j]\,\omega^{jk}$ con $\omega = e^{-2\pi i/N}$, o sea $\hat{\mathbf f} = A(\omega)\mathbf f$ con la matriz de Vandermonde $A(\omega)_{kj} = \omega^{jk}$. Verificamos que coincide con `np.fft.fft`, que $A(\omega)A(\bar\omega) = N I$ (de donde $\mathbf f = \frac1N A(\bar\omega)\hat{\mathbf f}$, la fórmula de inversión discreta), el lema de ortogonalidad $\sum_j e^{2\pi ij(k-l)/N} = N\delta_{kl}$, la identidad de Plancherel discreta $\sum|f[k]|^2 = \frac1N\sum|\hat f[k]|^2$ y las dos propiedades de traslación de la Proposición 14.1. Y el caso $N = 4$ del texto: $\omega = -i$ y la matriz con filas $(1,1,1,1)$, $(1,-i,-1,i)$, $(1,-1,1,-1)$, $(1,i,-1,-i)$.""")
+$\hat f[k] = \sum_{j=0}^{N-1} f[j]\,\omega^{jk}$ con $\omega = e^{-2\pi i/N}$, o sea $\hat{\mathbf f} = A(\omega)\mathbf f$ con la matriz de Vandermonde $A(\omega)_{kj} = \omega^{jk}$. Verificamos que coincide con `np.fft.fft`, que $A(\omega)A(\bar\omega) = N I$ (de donde $\mathbf f = \frac1N A(\bar\omega)\hat{\mathbf f}$, la fórmula de inversión discreta), el lema de ortogonalidad $\sum_j e^{2\pi ij(k-l)/N} = N\delta_{kl}$, la identidad de Plancherel discreta $\sum|f[k]|^2 = \frac1N\sum|\hat f[k]|^2$ y las dos propiedades de traslación (en el tiempo y en frecuencia) de la Sección 14.2. Y el caso $N = 4$ del texto: $\omega = -i$ y la matriz con filas $(1,1,1,1)$, $(1,-i,-1,i)$, $(1,-1,1,-1)$, $(1,i,-1,-i)$.""")
 
 code(r"""N = 64
 rng = np.random.default_rng(0)
@@ -152,23 +153,6 @@ n0 = 5; k = np.arange(N)
 print(f"        traslación en el tiempo (n = {n0}): {np.allclose(np.fft.fft(np.roll(f, n0)), F * np.exp(-2j * np.pi * k * n0 / N))};"
       f"  en frecuencia: {np.allclose(np.fft.fft(f * np.exp(2j * np.pi * k * n0 / N)), np.roll(F, n0))}")
 print("\nN = 4, omega = e^(-2 pi i / 4) =", np.round(np.exp(-2j * np.pi / 4), 12), "\n", np.round(matriz_fourier(4), 12))""")
-
-md(r"""## 14.6 Convolución circular
-
-$(f*g)[k] = \sum_j f[j]\,g[k-j]$ con $g$ extendida periódicamente ($g[k-j] = g[(k-j)\bmod N]$): es una convolución **circular**, y $\widehat{f*g}[k] = \hat f[k]\,\hat g[k]$. La calculamos con la definición (dos bucles), la comparamos con `ifft(fft(f) fft(g))` y mostramos que **no** es la convolución lineal de `np.convolve`: en la circular, la cola de $g$ "da la vuelta" y se pega al principio.""")
-
-code(r"""def convolucion_circular(f, g):
-    '''(f*g)[k] = sum_j f[j] g[(k - j) mod N], la definición del texto.'''
-    N = len(f)
-    return np.array([sum(f[j] * g[(k - j) % N] for j in range(N)) for k in range(N)])
-
-f = np.array([1.0, 2.0, 3.0, 0.0, 0.0, 0.0, 0.0, 0.0]); g = np.array([1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0])
-h = convolucion_circular(f, g)
-print("f     =", f, "\ng     =", g, "\nf*g   =", h.round(10))
-print("ifft(fft f fft g) =", np.fft.ifft(np.fft.fft(f) * np.fft.fft(g)).real.round(10), " -> error", f"{np.abs(h - np.fft.ifft(np.fft.fft(f) * np.fft.fft(g))).max():.1e}")
-print("np.convolve (lineal, largo 2N-1) =", np.convolve(f, g))
-g2 = np.roll(g, 6)     # g con soporte que 'da la vuelta': [1 1 0 0 0 0 1 1]
-print("\ncon g desplazada (circularmente) 6 lugares:", g2, "\n   f*g circular =", convolucion_circular(f, g2).round(10), "\n   lineal       =", np.convolve(f, g2))""")
 
 md(r"""## 14.5 La DFT de una señal muestreada: interpolación trigonométrica
 
@@ -191,6 +175,23 @@ for nombre, f in [("sombrero", sombrero), ("e^(sen 2 pi x)", suave)]:
           f"  max |c_(N-j) - c_(-j)(f)| (0 < j < N/2) = {np.abs(c[kf[kf < 0] % N] - cf[kf < 0]).max():.1e}")
     print(f"      en los nodos: max |p - f| = {np.abs(p_texto[::50] - f(xx[::50])).max():.1e};   entre nodos: |p_texto - f| max = {np.abs(p_texto - f(xx)).max():.2f}, "
           f"|Im p_texto| max = {np.abs(p_texto.imag).max():.2f};   con índices simétricos: |p - f| max = {np.abs(p_sim - f(xx)).max():.1e}")""")
+
+md(r"""## 14.6 Convolución circular
+
+$(f*g)[k] = \sum_j f[j]\,g[k-j]$ con $g$ extendida periódicamente ($g[k-j] = g[(k-j)\bmod N]$): es una convolución **circular**, y $\widehat{f*g}[k] = \hat f[k]\,\hat g[k]$. La calculamos con la definición (dos bucles), la comparamos con `ifft(fft(f) fft(g))` y mostramos que **no** es la convolución lineal de `np.convolve`: en la circular, la cola de $g$ "da la vuelta" y se pega al principio.""")
+
+code(r"""def convolucion_circular(f, g):
+    '''(f*g)[k] = sum_j f[j] g[(k - j) mod N], la definición del texto.'''
+    N = len(f)
+    return np.array([sum(f[j] * g[(k - j) % N] for j in range(N)) for k in range(N)])
+
+f = np.array([1.0, 2.0, 3.0, 0.0, 0.0, 0.0, 0.0, 0.0]); g = np.array([1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0])
+h = convolucion_circular(f, g)
+print("f     =", f, "\ng     =", g, "\nf*g   =", h.round(10))
+print("ifft(fft f fft g) =", np.fft.ifft(np.fft.fft(f) * np.fft.fft(g)).real.round(10), " -> error", f"{np.abs(h - np.fft.ifft(np.fft.fft(f) * np.fft.fft(g))).max():.1e}")
+print("np.convolve (lineal, largo 2N-1) =", np.convolve(f, g))
+g2 = np.roll(g, 6)     # g con soporte que 'da la vuelta': [1 1 0 0 0 0 1 1]
+print("\ncon g desplazada (circularmente) 6 lugares:", g2, "\n   f*g circular =", convolucion_circular(f, g2).round(10), "\n   lineal       =", np.convolve(f, g2))""")
 
 md(r"""## 14.7 La grilla de frecuencias, la resolución y la fuga
 

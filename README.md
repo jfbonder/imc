@@ -9,16 +9,17 @@ Notas de clase, guías y notebooks de la materia *Introducción al Modelado Cont
 | Carpeta | Qué hay |
 | --- | --- |
 | `notas/` | `Notas-IMC.tex` (fuente LaTeX de las notas), `Notas-IMC.pdf` (última compilación), `biblio.bib`, `CAMBIOS.md` (registro de la revisión), `FIGURAS-parte-I.md`, `FIGURAS-parte-II.md`, `FIGURAS-parte-III.md` (figuras generadas por los notebooks y dónde van) |
-| `figuras/` | Figuras de las notas. Las genera cada notebook con `estilo.guardar(fig, "nombre")` |
+| `figuras/` | Figuras de las notas. Casi todas las genera un notebook con `estilo.guardar(fig, "nombre")` (con `GUARDAR = True`); tres salen de los scripts `tools/fig_*.py` (`casos-internado-1978`, `ranura-placas`, `espectro-cuerda`) y unas pocas son esquemas dibujados a mano (`Pendulo`, `Resorte`, `QT`, `ondas-resorte`, `ondas-tension`, `rlc-serie`) o logos (`DM`, `IC`) |
 | `imc/` | Módulo Python común a los notebooks (estilo, retratos de fase, espectros, esquemas numéricos, datos) |
 | `notebooks/` | Notebooks del texto (uno por capítulo) y de laboratorio (uno por problema conductor, con su guía del docente en `notebooks/docente/`) |
 | `datos/` | Datos usados en los laboratorios, con fuente y licencia en `datos/README.md` |
+| `tools/` | Generadores de los notebooks (`make_nbXX.py` para los del texto, `make_lab_*.py` con `labkit.py` para los laboratorios) y scripts de las figuras que no salen de un notebook (`fig_*.py`) |
 
 Para compilar las notas: `cd notas && pdflatex Notas-IMC && bibtex Notas-IMC && pdflatex Notas-IMC && pdflatex Notas-IMC` (las figuras se buscan en `../figuras`, ver el `\graphicspath` del preámbulo).
 
 ## Notebooks
 
-Cada notebook se abre directamente en Google Colab con el botón; la primera celda instala el módulo `imc` desde este repositorio y descarga los datos que necesite. Para trabajar en una copia local, `pip install -e .` en la raíz del repositorio y abrir los notebooks con Jupyter.
+Cada notebook se abre directamente en Google Colab con el botón; la primera celda instala el módulo `imc` desde este repositorio y descarga los datos que necesite. Para trabajar en una copia local, `pip install -e ".[notebooks]"` en la raíz del repositorio (instala `imc` y lo que usan los notebooks además: pandas y scikit-image) y abrir los notebooks con Jupyter.
 
 ### Del texto (acompañan a los capítulos)
 
@@ -50,6 +51,20 @@ Cada laboratorio viene en dos versiones generadas por el mismo script (`tools/ma
 | `lab-suelo` | Temperatura del suelo: ajuste de la difusividad | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/lab-suelo.ipynb) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/docente/lab-suelo.ipynb) |
 | `lab-cuerda` | Cuerda vibrante: espectro real, inarmonicidad, leapfrog | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/lab-cuerda.ipynb) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/docente/lab-cuerda.ipynb) |
 | `lab-laplace-datos` | Cinco puntos vs. Monte Carlo, inpainting | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/lab-laplace-datos.ipynb) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jfbonder/imc/blob/main/notebooks/docente/lab-laplace-datos.ipynb) |
+
+## Regenerar los notebooks
+
+Los notebooks no se editan a mano: cada uno sale de un script de `tools/`, y todo cambio se hace en el script. Con `pip install -e ".[notebooks,dev]"` y desde la raíz del repositorio:
+
+```bash
+python tools/make_nb06.py            # escribe notebooks/06-series.ipynb (sin salidas)
+python tools/make_lab_SIR.py         # escribe notebooks/lab-SIR.ipynb y notebooks/docente/lab-SIR.ipynb
+# los del texto y las guías del docente se guardan ejecutados (los de estudiantes, sin ejecutar)
+jupyter nbconvert --to notebook --execute --inplace notebooks/06-series.ipynb
+jupyter nbconvert --to notebook --execute --inplace notebooks/docente/lab-SIR.ipynb
+```
+
+`tools/make_lab_vdP.py` además reescribe `datos/vanderpol_registro.csv` (el registro sintético del laboratorio de van der Pol). Los notebooks del texto no tocan `figuras/` salvo que se ponga `GUARDAR = True` en su celda de configuración; las tres figuras de `tools/fig_*.py` se regeneran con `python tools/fig_XX.py`.
 
 ## Convenciones
 

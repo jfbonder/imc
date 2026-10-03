@@ -16,7 +16,7 @@ Todas las figuras matplotlib de los capítulos 2–8 salen ahora de `notebooks/0
 | `energia_pendulo` | 04 | niveles etiquetados, separatriz $E=2\omega^2$ resaltada, centros y sillas marcados | 0.6 |
 | `pendulo_potencial`, `potencial` | 04 | paneles alineados en $x$, niveles de energía punteados en el potencial, separatriz | 0.6 |
 | `vanderPol` | 04 | $\lambda=0.5$ (ciclo estable) y $\lambda=-0.5$ (ciclo inestable a trazos, que antes no se veía) | **subir a 0.9** |
-| `Lorentz` | 04 | atractor 3D con parámetros | 0.6 |
+| `Lorenz` | 04 | atractor 3D con parámetros | 0.6 |
 | `ciclo_limite` | 04 | agrega la región anular $r_1\le r\le r_2$ con el campo apuntando hacia adentro (Poincaré–Bendixson) | 0.6 |
 | `nulclinas` | 04 | $\mathcal N_1,\mathcal N_2$ etiquetadas, equilibrios con su tipo. Parámetros: $\rho=1$; izq. $\alpha_1=0.6,\alpha_2=0.8$; der. $\alpha_1=1.4,\alpha_2=1.25$ (para el caption) | **subir a 0.9** |
 | `c0-cerca` | 05 | **cambia el ejemplo**: antes $x^3$ vs $x^3-\varepsilon x$ (que también son $C^1$-cercanos y con equilibrio no hiperbólico); ahora $F=-x$ y $G=-x+3\varepsilon\,\mathrm{sen}(x/\varepsilon)$: $\|F-G\|_0=3\varepsilon$ pero aparecen dos equilibrios nuevos. Si se prefiere el original, son dos líneas en `make_nb05.py` | 0.6 |

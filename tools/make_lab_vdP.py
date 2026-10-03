@@ -6,9 +6,11 @@ régimen transitorio y permanente, período y amplitud con eventos, oscilaciones
 espectro (anticipo de la Parte II) y el problema inverso (estimar lambda de un registro con ruido)
 por dos estrategias: curva de calibración del período y ajuste de la forma de onda completa.
 
-No hay registro real: el registro se genera en una celda común con una semilla fija y un lambda
-"oculto" (función ``_registro_secreto``); este script escribe la misma serie en
-``datos/vanderpol_registro.csv`` para que quede documentada en ``datos/README.md``.
+No hay registro real: el registro es sintético, generado con una semilla fija y un lambda "oculto"
+(función ``_registro_secreto`` de ``REGISTRO_CODIGO``). Este script escribe la serie en
+``datos/vanderpol_registro.csv`` (documentada en ``datos/README.md``): la versión de estudiantes lee
+el registro de ese archivo con ``datos.obtener`` sin ver los parámetros, y sólo la guía del docente
+contiene la celda que lo genera (con lambda y sigma verdaderos) y comprueba que coincide con el csv.
 
 Con la variable de entorno LAB_REVISION=1 la versión docente guarda además algunas figuras en
 /tmp/lab-vdP-*.png (celdas auxiliares de revisión; no forman parte del notebook final).
@@ -31,8 +33,8 @@ def figura_revision(nombre, var="fig"):
         lab.code(f'{var}.savefig("/tmp/lab-vdP-{nombre}.png")  # celda auxiliar de revisión', destino="docente")
 
 
-# Código del registro sintético: es una celda común del notebook y también lo ejecuta este
-# script para escribir datos/vanderpol_registro.csv (misma semilla, misma serie).
+# Código del registro sintético: es una celda de la guía del docente (no de la versión de estudiantes)
+# y también lo ejecuta este script para escribir datos/vanderpol_registro.csv (misma semilla, misma serie).
 REGISTRO_CODIGO = '''
 def _registro_secreto():
     """Registro sintético de corriente: NO MIRAR el valor de lambda (es lo que hay que estimar).
@@ -47,7 +49,23 @@ def _registro_secreto():
 t_r, x_r = _registro_secreto()
 dt_r = t_r[1] - t_r[0]
 print(f"registro: {len(t_r)} muestras, paso dt = {dt_r}, duración {t_r[-1]:.0f} (en unidades de sqrt(LC))")
-# La misma serie está en el repositorio: datos.obtener("vanderpol_registro.csv"), columnas t, x
+'''
+
+# Versión de estudiantes: el registro se lee del repositorio, sin los parámetros con que se generó.
+REGISTRO_ESTUDIANTE = '''
+# El registro (sintético, generado con un lambda que no conocemos) está en datos/vanderpol_registro.csv, columnas t, x
+_reg = np.genfromtxt(datos.obtener("vanderpol_registro.csv"), delimiter=",", names=True)
+t_r, x_r = _reg["t"], _reg["x"]
+dt_r = t_r[1] - t_r[0]
+print(f"registro: {len(t_r)} muestras, paso dt = {dt_r}, duración {t_r[-1]:.0f} (en unidades de sqrt(LC))")
+'''
+
+# Guía del docente: después de generar el registro, comprobar que coincide con el csv que leen los estudiantes.
+CHEQUEO_CSV = '''
+# La versión de estudiantes lee esta misma serie de datos/vanderpol_registro.csv (la escribe tools/make_lab_vdP.py)
+_csv = np.genfromtxt(datos.obtener("vanderpol_registro.csv"), delimiter=",", names=True)
+assert np.allclose(_csv["t"], t_r) and np.allclose(_csv["x"], x_r, atol=1e-9), "el csv no coincide con _registro_secreto()"
+print("datos/vanderpol_registro.csv coincide con el registro generado")
 '''
 
 # =============================================================================
@@ -60,7 +78,7 @@ Este laboratorio cierra el segundo problema conductor de las notas: el circuito 
 
 **Lo que las notas no explican y este notebook sí.** Cómo se descarta un transitorio, cómo se usa un evento para medir un período, qué es un armónico y por qué una onda de relajación tiene muchos, cómo se construye y se invierte una curva de calibración, cómo se propaga el error de una medición a un parámetro, y el problema de la **fase** al ajustar una señal periódica (la solución no es una función de $t$ sino una familia de traslaciones). Mínimos cuadrados no lineales ya los usaron en el laboratorio del SIR; acá repasamos lo indispensable.
 
-**Herramientas disponibles.** `scipy.integrate.solve_ivp` (`dense_output`, `events`, `t_eval`), `scipy.optimize.least_squares`, `numpy.fft`, `imc.estilo` (colores y figuras) e `imc.datos` (el registro está también en `datos/vanderpol_registro.csv`). Los notebooks `02-mecanicos` y `04-lyapunov-global` ya muestran el ciclo de van der Pol y su retrato de fase: acá no los repetimos, medimos.
+**Herramientas disponibles.** `scipy.integrate.solve_ivp` (`dense_output`, `events`, `t_eval`), `scipy.optimize.least_squares`, `numpy.fft`, `imc.estilo` (colores y figuras) e `imc.datos` (el registro está en `datos/vanderpol_registro.csv`). Los notebooks `02-mecanicos` y `04-lyapunov-global` ya muestran el ciclo de van der Pol y su retrato de fase: acá no los repetimos, medimos.
 
 **Cómo se evalúa.** La sección final de **interpretación escrita**. Cada tarea dice qué se espera y trae una celda de verificación. Tiempo estimado: una sesión de 4 h (la Tarea 7 es opcional).
 """)
@@ -407,7 +425,7 @@ lab.md(r"""
 
 Hasta acá, dado $\lambda$ calculamos la forma de onda (**problema directo**). La pregunta 4 del problema conductor es la inversa: dado un registro de la corriente de un circuito real, ¿cuánto vale $\lambda$? Un registro real es una lista de valores $x_j$ medidos en instantes $t_j = j\,\Delta t$ (un osciloscopio digital), con **ruido** de medición, y en régimen permanente (el circuito está encendido desde hace rato). No sabemos en qué fase del ciclo empezó la grabación.
 
-No tenemos un circuito, así que el registro es sintético: la celda siguiente lo genera con un $\lambda$ que **no tienen que mirar** (está dentro de `_registro_secreto`; el objetivo es estimarlo, y al final lo comparan con la respuesta del docente). La misma serie está en `datos/vanderpol_registro.csv`. Lo que sí sabemos: el registro dura 60 unidades de tiempo, con paso $\Delta t = 0.02$ (3001 muestras), y el ruido es aditivo, de media cero y de tamaño desconocido.
+No tenemos un circuito, así que el registro es sintético: lo generamos simulando el modelo con un $\lambda$ que no les decimos (el objetivo es estimarlo, y al final lo comparan con la respuesta del docente) y está en `datos/vanderpol_registro.csv`, que la celda siguiente lee. Lo que sí sabemos: el registro dura 60 unidades de tiempo, con paso $\Delta t = 0.02$ (3001 muestras), y el ruido es aditivo, de media cero y de tamaño desconocido.
 
 Dos estrategias, que son las dos formas generales de resolver un problema inverso con un modelo de simulación:
 
@@ -424,7 +442,8 @@ en el parámetro (es la regla de propagación de errores de primer orden, la "de
 **Suavizar antes de medir.** Los cruces por cero de una señal con ruido son un desastre: cerca de cada cruce verdadero el ruido produce varios cruces espurios. La solución más simple es un **promedio móvil** de $m$ muestras, `np.convolve(x, np.ones(m) / m, mode="same")`, con $m$ tal que la ventana $m\,\Delta t$ sea mucho menor que el período y mayor que la escala del ruido: acá $m = 11$ (ventana $0.22$, contra un período de varias unidades) alcanza. (Con `mode="same"` los primeros y últimos $m/2$ valores promedian con ceros y no valen; es visible en los bordes del gráfico y no molesta para los cruces.) El promedio móvil sesga un poco la forma (redondea los saltos) y puede desplazar un poco *todos* los cruces por igual (si la onda no es simétrica alrededor del cruce), pero no las diferencias entre cruces, que es lo que mide el período. Aun así, con mucho ruido sobreviven cruces espurios; el remedio es usar lo que sabemos del modelo: **el período del ciclo es mayor que $2\pi$ para todo $\lambda$** (Tarea 2), así que dos cruces ascendentes a menos de $2\pi$ no pueden ser verdaderos los dos, y nos quedamos con el primero de cada grupo. La amplitud, en cambio, no tiene arreglo: el máximo de una señal con ruido está sesgado hacia arriba (al pico se le suma el máximo del ruido) y el suavizado lo sesga hacia abajo (promedia el pico con sus vecinos): otra razón para no usarla.
 """)
 
-lab.code(REGISTRO_CODIGO)
+lab.code(REGISTRO_ESTUDIANTE, destino="estudiante")
+lab.code("# Solo en la guía del docente: el registro se genera acá con los parámetros verdaderos\n" + REGISTRO_CODIGO.strip("\n") + "\n\n" + CHEQUEO_CSV.strip("\n"), destino="docente")
 
 lab.tarea(
     titulo="El registro: graficar, suavizar y medir el período a mano",
@@ -791,14 +810,6 @@ lab.md(r"""
 
 **Tiempos.** Tareas 1–3: 100 min; Tareas 4–6: 90 min; Tarea 7 (opcional): 30; interpretación: en casa. Si el tiempo es justo, la Tarea 3 puede quedar como lectura (el espectro se retoma en la Parte II).
 """, destino="docente")
-
-if REVISION:
-    lab.code('''
-# celda auxiliar de revisión: el csv del repositorio coincide con el registro del notebook
-_csv = np.genfromtxt(datos.obtener("vanderpol_registro.csv"), delimiter=",", names=True)
-assert np.allclose(_csv["t"], t_r) and np.allclose(_csv["x"], x_r, atol=1e-9), "el csv no coincide con _registro_secreto()"
-print("datos/vanderpol_registro.csv coincide con el registro del notebook")
-''', destino="docente")
 
 rutas = lab.escribir()
 
