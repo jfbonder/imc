@@ -8,6 +8,9 @@ notas/*.blg
 notas/*.synctex.gz
 notas/*.fdb_latexmk
 notas/*.fls
+notas/*.idx
+notas/*.ilg
+notas/*.ind
 # Python
 __pycache__/
 *.pyc

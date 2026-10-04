@@ -1,0 +1,5 @@
+% Estilo de makeindex para Notas-IMC: encabezado con la letra inicial de cada grupo
+headings_flag 1
+heading_prefix "\n\\par\\penalty-50\\medskip{\\bfseries "
+heading_suffix "}\\par\\nopagebreak\n"
+symhead_positive "Símbolos"

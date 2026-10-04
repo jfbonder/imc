@@ -15,7 +15,7 @@ Notas de clase, guías y notebooks de la materia *Introducción al Modelado Cont
 | `datos/` | Datos usados en los laboratorios, con fuente y licencia en `datos/README.md` |
 | `tools/` | Generadores de los notebooks (`make_nbXX.py` para los del texto, `make_lab_*.py` con `labkit.py` para los laboratorios) y scripts de las figuras que no salen de un notebook (`fig_*.py`) |
 
-Para compilar las notas: `cd notas && pdflatex Notas-IMC && bibtex Notas-IMC && pdflatex Notas-IMC && pdflatex Notas-IMC` (las figuras se buscan en `../figuras`, ver el `\graphicspath` del preámbulo).
+Para compilar las notas: `cd notas && pdflatex Notas-IMC && bibtex Notas-IMC && makeindex -s indice.ist Notas-IMC && pdflatex Notas-IMC && pdflatex Notas-IMC` (las figuras se buscan en `../figuras`, ver el `\graphicspath` del preámbulo; la portada usa `lmodern` y `tikz`; el índice alfabético se arma con `makeindex` y el estilo `notas/indice.ist`). Las entradas del índice se marcan en el texto con `\index{...}`: la página donde se define cada término va en negrita (`|textbf`) y las entradas con tildes llevan una clave de orden sin tildes (`\index{ecuacion del calor@ecuación del calor}`).
 
 ## Notebooks
 
