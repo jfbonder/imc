@@ -1570,7 +1570,7 @@ El teorema es \emph{local} (vale en un entorno de $\xx^*$, no en todo $\R^n$) y 
 \end{figure}
 
 \begin{proof}
-La demostración de este teorema es bastante técnica y elaborada y el interesado puede encontrarla en \cite{Coddington}. Para tener alguna intuición sobre el porqué de la validez de este teorema vamos a desarrollar un argumento puramente formal.
+La demostración de este teorema es bastante técnica y elaborada y el interesado puede encontrarla en \cite[Sección 2.8]{Perko}. Para tener alguna intuición sobre el porqué de la validez de este teorema vamos a desarrollar un argumento puramente formal.
 
 Si realizamos una expansión de Taylor para el campo $F$, obtenemos
 $$
@@ -2097,6 +2097,10 @@ Todo conjunto límite compacto y no vacío de un flujo en dimensión dos, defini
 
 Una demostración de este resultado puede encontrarse, por ejemplo, en \cite{Hirsch-Smale}.
 
+\begin{obs}\label{obs:PB-general}
+Hay una versión más general, que necesitamos cuando la región que estudiamos contiene equilibrios en su borde: si un conjunto $\omega$-límite compacto contiene sólo un número finito de equilibrios, entonces es un equilibrio, una órbita cerrada, o está formado por equilibrios y por órbitas que salen de uno de ellos y llegan a otro (o al mismo). En el último caso se habla de un \emph{ciclo heteroclínico} (u homoclínico), y no es un ciclo límite. Además, si un $\omega$-límite contiene una silla y no se reduce a ella, contiene algún punto de la variedad estable de esa silla distinto de ella \cite{Perko}.
+\end{obs}
+
 \begin{defi}
 Un {\em ciclo límite}\index{ciclo limite@ciclo límite|textbf} es una órbita cerrada $\gamma$ tal que $\gamma\subset L_\omega(\xx)$ o $\gamma\subset L_\alpha(\xx)$ para algún punto $\xx\notin\gamma$.
 \end{defi}
@@ -2132,7 +2136,7 @@ es positivamente invariante y no contiene puntos de equilibrio. Por el Teorema d
 \end{figure}
 
 \begin{volvemos}{el circuito}
-El sistema de van der Pol \eqref{eq:vdP-sistema} es el ejemplo histórico de ciclo límite, y el Teorema de Poincaré--Bendixson es la herramienta para demostrar que existe. Sabemos que para $\lambda>0$ el origen es una fuente (Capítulo \ref{cap:HG}) y que la energía decrece cuando $|x|>1$ (Sección \ref{sec:energia-herramienta}). Para aplicar el teorema hace falta construir una región anular $D$ positivamente invariante que rodee al origen sin contenerlo: el borde interior puede ser un círculo chico (que las trayectorias cruzan hacia afuera, porque el origen es una fuente), pero el borde exterior no puede ser un círculo, porque en la franja $|x|<1$ la energía crece y las trayectorias salen de cualquier disco. La construcción correcta usa un contorno adaptado al campo y es laboriosa; puede verse en \cite{Strogatz} o \cite{Perko}. El resultado, que enunciamos sin demostración, es más general y se debe a Liénard (1928):
+El sistema de van der Pol \eqref{eq:vdP-sistema} es el ejemplo histórico de ciclo límite, y el Teorema de Poincaré--Bendixson es la herramienta para demostrar que existe. Sabemos que para $\lambda>0$ el origen es una fuente (Capítulo \ref{cap:HG}) y que la energía decrece cuando $|x|>1$ (Sección \ref{sec:energia-herramienta}). Para aplicar el teorema hace falta construir una región anular $D$ positivamente invariante que rodee al origen sin contenerlo: el borde interior puede ser un círculo de radio menor que $1$, que las trayectorias no cruzan hacia adentro porque sobre él $\dot E=-\lambda(x^2-1)y^2\ge 0$ (que el origen sea una fuente no alcanza por sí solo: en general, el círculo chico tiene que reemplazarse por una elipse adaptada a la matriz $DF(0)$), pero el borde exterior no puede ser un círculo, porque en la franja $|x|<1$ la energía crece y las trayectorias salen de cualquier disco. La construcción correcta usa un contorno adaptado al campo y es laboriosa; puede verse en \cite{Strogatz} o \cite{Perko}. El resultado, que enunciamos sin demostración, es más general y se debe a Liénard (1928):
 
 \begin{teo}[Liénard]\label{teo:lienard}\index{Lienard, teorema de@Liénard, teorema de|textbf}
 Consideremos la ecuación $\ddot x + f(x)\dot x + g(x) = 0$ con $f,g$ de clase $C^1$, $g$ impar con $g(x)>0$ para $x>0$, $f$ par, y tal que $G(x) = \int_0^x f(s)\,ds$ es negativa en $(0,a)$, positiva y creciente en $(a,\infty)$ y tiende a $+\infty$. Entonces la ecuación tiene una única órbita cerrada, que es un ciclo límite estable y atrae a todas las trayectorias salvo el origen.
@@ -2412,7 +2416,7 @@ y supongamos que para $\mu^*$ tenemos que $x^*$ es un punto de equilibrio no hip
 \begin{equation}\label{no-hiper}
 f(x^*, \mu^*)=0\quad \text{y}\quad f_x(x^*,\mu^*)=0.
 \end{equation}
-Sin pérdida de generalidad y para simplificar la exposición, podemos suponer que $(x^*, \mu^*)=(0,0)$. Como $0$ es un equilibrio no hiperbólico, tenemos que $\mu=0$ es un punto de bifurcación para \eqref{eq:general}. Como el análisis de bifurcación es un análisis local cerca del punto $(0,0)$ hacemos una expansión de Taylor para $f$ para realizar el análisis.
+Sin pérdida de generalidad y para simplificar la exposición, podemos suponer que $(x^*, \mu^*)=(0,0)$. Como $0$ es un equilibrio no hiperbólico, $\mu=0$ es un \emph{candidato} a punto de bifurcación para \eqref{eq:general}; que efectivamente lo sea depende de los términos de orden superior (por ejemplo, $\dot x=\mu-x^3$ tiene un equilibrio no hiperbólico en $(0,0)$ y no bifurca: para todo $\mu$ hay un único equilibrio, estable). Como el análisis de bifurcación es un análisis local cerca del punto $(0,0)$ hacemos una expansión de Taylor para $f$ para realizar el análisis.
 
 \subsubsection*{Silla-nodo}
 Por Taylor,
@@ -2484,7 +2488,7 @@ Vamos a argumentar de manera similar al caso anterior. Asumamos que ahora, adem�
 $$
 f(0,\mu)=0 \text{ para todo } \mu,\ f_x(0,0)=0,\ f_\mu(0,0)=0,
 $$
-se tiene que $f_{xx}(0,0)=0$. Luego, el desarrollo de Taylor de $f$ en un entorno del $(0,0)$ es
+se tiene que $f_{xx}(0,0)=0$, $f_{x\mu}(0,0)\neq0$ y $f_{xxx}(0,0)\neq0$. Luego, el desarrollo de Taylor de $f$ en un entorno del $(0,0)$ es
 $$
 f(x, \mu) = f_{x\mu}(0,0)\mu x +  \frac{1}{6}f_{xxx}(0,0) x^3 + \cdots
 $$
@@ -2514,7 +2518,9 @@ y diferenciando, obtenemos
 &\frac{d\mu}{dx}(0) = -\frac{g_x(0,0)}{g_\mu(0,0)} = -\frac{f_{xx}(0,0)}{2f_{x\mu}(0,0)} = 0\\
 &\frac{d^2\mu}{dx^2}(0) = -\frac{g_{xx}(0,0)}{g_\mu(0,0)} = -\frac{f_{xxx}(0,0)}{3f_{x\mu}(0,0)} \neq 0.
 \end{align*}
-En consecuencia tenemos dos curvas de equilibrios, una que es exactamente la recta $x=0$, es decir $\{(0,\mu)\}$, y la otra $(x,\mu(x))$ con $\mu(x) \sim cx^2$. Ver Figura \ref{fig:diagrama-pitchfork}.
+En consecuencia tenemos dos curvas de equilibrios, una que es exactamente la recta $x=0$, es decir $\{(0,\mu)\}$, y la otra $(x,\mu(x))$ con $\mu(x) \simeq -\frac{f_{xxx}(0,0)}{6f_{x\mu}(0,0)}\,x^2$. Ver Figura \ref{fig:diagrama-pitchfork}.
+
+La estabilidad de las ramas nuevas se lee del signo de $f_x$ sobre ellas: a lo largo de la curva, $f_x(x,\mu(x)) \simeq f_{x\mu}(0,0)\,\mu(x) + \frac12 f_{xxx}(0,0)\,x^2 \simeq \frac13 f_{xxx}(0,0)\,x^2$. Por lo tanto, si $f_{xxx}(0,0)<0$ las dos ramas son estables y la bifurcación se llama \emph{supercrítica} (es el caso de $\dot x=\mu x-x^3$); si $f_{xxx}(0,0)>0$ son inestables y se llama \emph{subcrítica} ($\dot x=\mu x+x^3$).
 
 \subsection{Resumen}
 
@@ -2541,7 +2547,7 @@ Calculamos entonces $f_{xx}(0,0)$.
 Calculamos entonces $f_{x\mu}(0,0)$. Si $f_{x\mu}(0,0)=0$ no tenemos clasificación disponible, pero si $f_{x\mu}(0,0)\neq 0$ y $f(0,\mu)=0$ para todo $\mu$ (la situación de las secciones anteriores), entonces calculamos $f_{xx}(0,0)$ y
 \begin{enumerate}
 \item si $f_{xx}(0,0)\neq 0$ es una bifurcación transcrítica (Figura \ref{fig:diagrama-transcritica}).
-\item Si $f_{xx}(0,0)=0$ es una bifurcación tipo horquilla (Figura \ref{fig:diagrama-pitchfork}).
+\item Si $f_{xx}(0,0)=0$ y $f_{xxx}(0,0)\neq0$ es una bifurcación tipo horquilla (Figura \ref{fig:diagrama-pitchfork}), supercrítica si $f_{xxx}(0,0)<0$ y subcrítica si $f_{xxx}(0,0)>0$. Si también $f_{xxx}(0,0)=0$, no tenemos clasificación disponible.
 \end{enumerate}
 \end{enumerate}
 
@@ -2952,7 +2958,7 @@ Estudiar la estabilidad del origen como punto crítico para los sistemas:
 \begin{enumerate}
 \item $x' = -y - x^3$, $y' = x - y^3$, usando la función de Lyapunov $V(x, y) = x^2 + y^2$;
 \item $x' = x(x - \alpha)$, $y' = y(y - \beta)$, usando la función de Lyapunov $V(x, y) =(x/\alpha)^2 + (y/\beta)^2$;
-\item $x' = y$, $y' = y - x^3$, usando la función de Lyapunov $V(x, y) = a x^4 + b x^2 + c xy + d y^2$.
+\item $x' = y$, $y' = -y - x^3$, usando una función de Lyapunov de la forma $V(x, y) = a x^4 + b x^2 + c xy + d y^2$ (elegir los coeficientes y completar el argumento con el principio de LaSalle).
 \end{enumerate}
 \end{ejer}
 
@@ -2961,7 +2967,7 @@ Probar que el origen es el único punto crítico del sistema
 $$
 \dot x = -\frac12 y(1 + x) + x(1 - 4x^2 - y^2),\qquad \dot y = 2x(1 + x) + y(1 - 4x^2 - y^2).
 $$
-Determinar la estabilidad del origen usando la función de Lyapunov $V(x, y) = (1 - 4x^2 - y^2)^2$.
+Clasificar el origen. Usando $V(x, y) = (1 - 4x^2 - y^2)^2$, probar que la elipse $4x^2+y^2=1$ es invariante y que es un ciclo límite que atrae a todas las trayectorias salvo el origen. ¿Por qué $V$ no sirve como función de Lyapunov para el origen?
 \end{ejer}
 
 \begin{ejer}
@@ -3106,7 +3112,8 @@ Consideramos el sistema \eqref{bacteria2} con $k>2+\beta$.
 \begin{enumerate}
 \item Probar que la región $D=\{0\le h\le k,\ p\ge 0,\ h+\frac{\alpha_h}{\alpha_p}p\le M\}$ es positivamente invariante para $M$ suficientemente grande (sugerencia: si $W=h+\frac{\alpha_h}{\alpha_p}p$, verificar que $W' = h(1-h/k) - \frac{\alpha_h\gamma}{\alpha_p}p$ y deducir que $W'<0$ sobre el lado $W=M$ si $M>k\bigl(1+\frac{1}{4\gamma}\bigr)$; sobre el lado $h=k$, ver que $h'\le 0$).
 \item Probar que los equilibrios $(0,0)$ y $(k,0)$ son sillas cuyas variedades estables están sobre los ejes, de modo que ninguna trayectoria del interior de $D$ converge a ellos.
-\item Quitar de $D$ un disco chico alrededor de $(1,1)$ (que es una fuente) y concluir, usando el Teorema de Poincaré--Bendixson, que existe un ciclo límite.
+\item Usando la Observación \ref{obs:PB-general}, probar que el $\omega$-límite de un punto del interior de $D$ no contiene a $(0,0)$ ni a $(k,0)$ (sugerencia: si contuviera a $(k,0)$, contendría un punto del eje $h$ y, por invariancia, su órbita entera, que viene de $(0,0)$; seguir la cadena hasta llegar a una órbita sobre el eje $p$, que sale de $D$ hacia atrás en el tiempo).
+\item Quitar de $D$ un disco chico alrededor de $(1,1)$ (que es una fuente) y concluir que existe un ciclo límite.
 \end{enumerate}
 \end{ejer}
 
@@ -3623,7 +3630,7 @@ Desde el punto de vista de la ciencia de datos, la transformada de Fourier const
 
 \section{Problema conductor: una serie temporal de temperatura}\label{sec:conductor-senal}\index{problema conductor!temperatura del aire|textbf}
 
-Para fijar ideas, tomemos una señal concreta que nos va a acompañar en toda esta parte: el registro de la temperatura del aire en una estación meteorológica, medida cada hora durante varios años. Es una serie de unos $8760$ valores por año, que a simple vista muestra dos oscilaciones superpuestas, una diaria y una anual, más una cantidad importante de variabilidad que no sigue ningún patrón evidente (frentes, tormentas, ruido de medición). Sobre esta señal queremos responder:
+Para fijar ideas, tomemos una señal concreta que nos va a acompañar en toda esta parte: el registro de la temperatura del aire en una estación meteorológica, medida cada hora durante varios años. (En estas notas usamos, para Aeroparque, los valores horarios del reanálisis ERA5 \cite{Hersbach2020}: un modelo meteorológico que asimila las observaciones de las estaciones y produce una serie completa y sin huecos. No es la lectura directa de un termómetro; para lo que haremos con ella, ciclos y espectro, la diferencia importa poco, pero conviene saberlo.) Es una serie de unos $8760$ valores por año, que a simple vista muestra dos oscilaciones superpuestas, una diaria y una anual, más una cantidad importante de variabilidad que no sigue ningún patrón evidente (frentes, tormentas, ruido de medición). Sobre esta señal queremos responder:
 \begin{enumerate}
 \item ¿Qué frecuencias contiene? ¿Con qué amplitud y con qué fase contribuye cada una? ¿Cuánto de la variabilidad total explican el ciclo diario y el anual?
 \item ¿Cómo separar la parte ``regular'' de la señal (los ciclos) de la parte irregular, y qué queda cuando se lo hace?
@@ -5234,7 +5241,7 @@ La transformada de Fourier discreta\index{Fourier, transformada discreta de (DFT
 Observemos que con esta definición tenemos que $\hat f[k+N] = \hat f[k]$ para todo $k$, es decir que podemos considerar a $\hat f$ como un elemento de $\C^N$ o como una sucesión periódica de período $N$.
 
 \begin{obs}[Notación]
-Usamos la misma notación $\hat f[k]$ que para los coeficientes de Fourier de una función periódica, pero las normalizaciones son distintas: los coeficientes $c_k$ llevan el factor $\frac1L$ delante de la integral, mientras que la DFT \eqref{DFT} es una suma sin el factor $\frac1N$. Si $f[j]$ son muestras equiespaciadas de una función periódica, la relación es $c_k\approx \hat f[k]/N$ (ver la Sección \ref{sec:DFT-continuas}). Esta es también la convención de \texttt{numpy.fft.fft}.
+Usamos la misma notación $\hat f[k]$ que para los coeficientes de Fourier de una función periódica, pero las normalizaciones son distintas: los coeficientes $c_k$ llevan el factor $\frac1L$ delante de la integral, mientras que la DFT \eqref{DFT} es una suma sin el factor $\frac1N$. Si $f[j]$ son muestras equiespaciadas de una función periódica, la relación es $c_k\approx \hat f[k]/N$ para $|k|<N/2$ (ver la Sección \ref{sec:DFT-continuas}, donde se da la relación exacta). Esta es también la convención de \texttt{numpy.fft.fft}.
 \end{obs}
 
 Veamos las propiedades elementales de la transformada discreta.
@@ -5315,6 +5322,11 @@ Entonces, si llamamos $f[k]=f(\tfrac{kT}{N})$, la fórmula de inversión \eqref{
 $$
 c_j = \frac{\hat f[j]}{N}.
 $$
+Dos observaciones. La primera: la relación con los coeficientes de Fourier $c_n(f)$ de la función es exacta si se tiene en cuenta el plegado. Si $\sum_n|c_n(f)|<\infty$, reemplazando $f$ por su serie y usando la ortogonalidad discreta se obtiene la \emph{fórmula de aliasing}\index{aliasing}
+$$
+\frac{\hat f[j]}{N} = \sum_{m\in\Z} c_{j+mN}(f).
+$$
+Por eso $\hat f[j]/N\approx c_j(f)$ sólo para $|j|<N/2$, y el error es la suma de los coeficientes con $m\neq0$, que es chica si los coeficientes decaen rápido. La segunda: como $e^{2\pi i jk/N}=e^{2\pi i (j-N)k/N}$, en los nodos da lo mismo usar la frecuencia $j$ o $j-N$. Para interpolar conviene usar las frecuencias simétricas $|j|\le N/2$ (asignando los coeficientes con $j>N/2$ a la frecuencia $j-N$): con las frecuencias $0,\dots,N-1$ el polinomio interpola igual, pero oscila mucho entre los nodos. Es la convención de \texttt{numpy.fft.fftfreq}.
 
 \section{Propiedades adicionales}
 
@@ -6379,7 +6391,7 @@ En esta parte los problemas conductores se desarrollan principalmente en el labo
 
 \subsection*{La temperatura del suelo}\label{sec:conductor-suelo}\index{problema conductor!temperatura del suelo|textbf}
 
-En la Parte II estudiamos la temperatura del aire, que oscila con un ciclo diario y uno anual. Esa temperatura es la que ``ve'' la superficie del suelo, y el calor se difunde desde allí hacia abajo. Las estaciones meteorológicas miden la temperatura del suelo a varias profundidades (típicamente $5$, $10$, $20$, $50$ y $100$ cm), y los registros muestran algo notable (Figura \ref{fig:suelo-datos}): a medida que se baja, la oscilación diaria se atenúa muy rápido (a medio metro ya casi no se nota), la oscilación anual se atenúa mucho más lentamente, y ambas llegan \emph{retrasadas}: el máximo diario a $20$ cm ocurre varias horas después que en la superficie, y el máximo anual a un metro de profundidad ocurre semanas después que en la superficie. A suficiente profundidad la temperatura es constante todo el año (es el principio de las bodegas y de los sótanos).
+En la Parte II estudiamos la temperatura del aire, que oscila con un ciclo diario y uno anual. Esa temperatura es la que ``ve'' la superficie del suelo, y el calor se difunde desde allí hacia abajo. Las estaciones meteorológicas miden la temperatura del suelo a varias profundidades (típicamente $5$, $10$, $20$, $50$ y $100$ cm), y los registros muestran algo notable (Figura \ref{fig:suelo-datos}; los datos de la figura no son mediciones sino del reanálisis ERA5-Land \cite{MunozSabater2021}, que calcula la temperatura del suelo con un modelo de difusión en capas alimentado por observaciones en superficie, y volveremos sobre esto en la Sección \ref{sec:volvemos-suelo}): a medida que se baja, la oscilación diaria se atenúa muy rápido (a medio metro ya casi no se nota), la oscilación anual se atenúa mucho más lentamente, y ambas llegan \emph{retrasadas}: el máximo diario a $20$ cm ocurre varias horas después que en la superficie, y el máximo anual a un metro de profundidad ocurre semanas después que en la superficie. A suficiente profundidad la temperatura es constante todo el año (es el principio de las bodegas y de los sótanos).
 
 Las preguntas son:
 \begin{enumerate}
@@ -7739,7 +7751,7 @@ que para $H\gg\delta$ coincide con $u_{per}$ salvo un error del orden de $Ae^{-H
 
 Vale la pena detenerse en la moraleja. La ``convergencia al equilibrio'' del título de la sección anterior es, en realidad, convergencia al \emph{atractor}\index{atractor}\index{convergencia al equilibrio} del problema: cuando los datos no dependen del tiempo, el atractor es un estado estacionario; cuando los datos son periódicos, es un estado periódico. En ambos casos el argumento es el mismo (restar el atractor y ver que el resto decae) y la tasa está dada por $D\lambda_1$. Es el mismo esquema que en la Parte I: un equilibrio estable o un ciclo límite estable, ahora en dimensión infinita.
 
-En el laboratorio (Ejercicio \ref{lab:suelo}) se ajusta $D$ a partir de registros reales de temperatura a varias profundidades (usando la atenuación y el retraso del ciclo diario) y se compara la predicción \eqref{eq:suelo-periodica} con los datos, lo que responde la pregunta 4; la Figura \ref{fig:suelo-ajuste} adelanta el resultado con los datos de la Figura \ref{fig:suelo-datos}: la atenuación y el retraso del ciclo diario entre las dos capas superficiales dan $D\simeq 3$--$5\cdot10^{-7}$ m$^2$/s, el valor típico; el ciclo anual da un retraso consistente, pero una atenuación menor que la prevista; el promedio por capa no lo explica (para $\delta_{\text{anual}}\simeq 2$ m el efecto es despreciable), así que la discrepancia indica que el suelo no es homogéneo, como supone el modelo. La pregunta 5 (la profundidad a la que enterrar una cañería) se responde con \eqref{eq:suelo-periodica} pidiendo que $\bar T - A e^{-x/\delta} > 0$ para el ciclo anual (Figura \ref{fig:suelo-caneria}).
+En el laboratorio (Ejercicio \ref{lab:suelo}) se ajusta $D$ a partir de los datos de temperatura a varias profundidades (usando la atenuación y el retraso del ciclo diario) y se compara la predicción \eqref{eq:suelo-periodica} con los datos, lo que responde la pregunta 4; la Figura \ref{fig:suelo-ajuste} adelanta el resultado con los datos de la Figura \ref{fig:suelo-datos}: la atenuación y el retraso del ciclo diario entre las dos capas superficiales dan $D\simeq 3$--$5\cdot10^{-7}$ m$^2$/s, el valor típico; el ciclo anual da un retraso consistente, pero una atenuación menor que la prevista; el promedio por capa no lo explica (para $\delta_{\text{anual}}\simeq 2$ m el efecto es despreciable), así que la explicación más probable es que el suelo no es homogéneo, contra lo que supone el modelo, aunque hay otras posibles (humedad, calor latente, la propia estructura en capas del reanálisis). Y hay una advertencia de fondo: como ERA5-Land obtiene la temperatura del suelo resolviendo él mismo una ecuación de difusión, ajustar $D$ a esos datos es en buena medida recuperar la difusividad de ese modelo, no medir la del suelo de Aeroparque. Para poner a prueba el modelo de verdad harían falta mediciones de una estación (el SMN y el INTA registran temperatura del suelo); con estos datos, lo que se comprueba es que la teoría describe bien el comportamiento de un modelo de difusión en capas. La pregunta 5 (la profundidad a la que enterrar una cañería) se responde con \eqref{eq:suelo-periodica} pidiendo que $\bar T - A e^{-x/\delta} > 0$ para el ciclo anual (Figura \ref{fig:suelo-caneria}).
 
 \begin{figure}[ht]
   \centering
@@ -8547,7 +8559,7 @@ Dependen únicamente de la distancia $r = |\mathbf{x} - \mathbf{x}_0|$ a un punt
 \[
 u(\mathbf{x},t) = v(r,t).
 \]
-Por ejemplo, una onda esférica estacionaria puede escribirse $u(\mathbf{x},t) = e^{i\omega t} v(r)$, mientras que una onda esférica progresiva toma la forma $u(\mathbf{x},t) = v(r - ct)$, cuyas superficies de onda son esferas $r - ct = \text{constante}$. Ver Figura \ref{fig:catalogo-ondas}(e).
+Por ejemplo, una onda esférica estacionaria puede escribirse $u(\mathbf{x},t) = e^{i\omega t} v(r)$, mientras que, en tres dimensiones, una onda esférica progresiva toma la forma $u(\mathbf{x},t) = v(r - ct)/r$, cuyas superficies de onda son esferas $r - ct = \text{constante}$; el factor $1/r$ hace que la energía, repartida sobre esferas cada vez más grandes, se conserve. Ver Figura \ref{fig:catalogo-ondas}(e).
 
 \begin{figure}[ht]
   \centering
@@ -8981,7 +8993,7 @@ La solución en serie responde las preguntas 2 y 3 de la Sección \ref{sec:condu
 $$
 f_k = \frac{\omega_k}{2\pi} = \frac{k}{2L}\sqrt{\frac{T}{\rho}},\qquad k=1,2,3,\dots
 $$
-Todas son \emph{múltiplos enteros} de la fundamental\index{frecuencia!fundamental} $f_1 = \frac{1}{2L}\sqrt{T/\rho}$: por eso el sonido de una cuerda tiene una altura definida, y por eso un músico afina subiendo la tensión o acorta la cuerda con los dedos para subir la nota (a la mitad de la cuerda, una octava). Las frecuencias $f_k$ con $k\ge 2$ son los \emph{armónicos}\index{armonico@armónico!de una cuerda|textbf} (Figura \ref{fig:modos-cuerda}). El timbre\index{timbre|textbf} es el reparto de energía \eqref{eq:energia-modos} entre los armónicos, que depende de cómo se excita la cuerda: los coeficientes $A_k,B_k$ están determinados por la forma inicial $g$ y la velocidad inicial $h$. Una cuerda pulsada en un punto $x_0$ (forma inicial triangular, velocidad nula) tiene $A_k\propto \sin(k\pi x_0/L)/k^2$: pulsarla en el medio anula todos los armónicos pares, y pulsarla cerca del puente (como se hace para un sonido ``brillante'') reparte más energía en los armónicos altos. Una cuerda golpeada (piano: forma inicial nula, velocidad concentrada en un punto) tiene $B_k\propto\sin(k\pi x_0/L)/k$, con armónicos que decaen más lento: por eso suena distinto. Los detalles quedan como ejercicio (Ejercicio \ref{ejer:cuerda-guiado}).
+Todas son \emph{múltiplos enteros} de la fundamental\index{frecuencia!fundamental} $f_1 = \frac{1}{2L}\sqrt{T/\rho}$: por eso el sonido de una cuerda tiene una altura definida, y por eso un músico afina subiendo la tensión o acorta la cuerda con los dedos para subir la nota (a la mitad de la cuerda, una octava). Las frecuencias $f_k$ con $k\ge 2$ son los \emph{armónicos}\index{armonico@armónico!de una cuerda|textbf} (Figura \ref{fig:modos-cuerda}). El timbre\index{timbre|textbf} es el reparto de energía \eqref{eq:energia-modos} entre los armónicos, que depende de cómo se excita la cuerda: los coeficientes $A_k,B_k$ están determinados por la forma inicial $g$ y la velocidad inicial $h$. Una cuerda pulsada en un punto $x_0$ (forma inicial triangular, velocidad nula) tiene $A_k\propto \sin(k\pi x_0/L)/k^2$: pulsarla en el medio anula todos los armónicos pares, y pulsarla cerca del puente (como se hace para un sonido ``brillante'') reparte más energía en los armónicos altos. Una cuerda golpeada (piano: forma inicial nula y velocidad inicial concentrada en un intervalo corto de ancho $2\epsilon$ alrededor de $x_0$, el ancho del martillo) tiene $B_k\propto\sin(k\pi x_0/L)\sin(k\pi\epsilon/L)/k^2$; para $k\ll L/\epsilon$ eso es $\propto\sin(k\pi x_0/L)/k$, con armónicos que decaen más lento: por eso suena distinto. El ancho del martillo no es un detalle: fija el corte espectral. En el límite $\epsilon\to0$ (velocidad concentrada en un punto) la energía \eqref{eq:energia-modos} de cada modo dejaría de decaer y la energía total sería infinita. Los detalles quedan como ejercicio (Ejercicio \ref{ejer:cuerda-guiado}).
 
 La pregunta 4 se contesta en el laboratorio (Ejercicio \ref{lab:cuerda}): en el espectro de una cuerda real los picos están casi, pero no exactamente, en $kf_1$ (las cuerdas reales tienen rigidez, y eso corre los armónicos altos hacia arriba: \emph{inarmonicidad}\index{inarmonicidad|textbf}), y su amplitud decrece con el tiempo, más rápido para los armónicos altos, porque hay fricción con el aire y disipación interna. Ambos efectos se pueden incorporar al modelo con términos adicionales, y ese es un buen ejercicio de modelado: ver qué agrega cada término al espectro y compararlo con lo medido.
 \end{volvemos}
@@ -9690,8 +9702,8 @@ Encontrar una fórmula explícita para la solución.
 Consideramos la ecuación de ondas en $(0,L)$ con extremos fijos.
 \begin{enumerate}
 \item \emph{Cuerda pulsada.} Se suelta desde el reposo la forma inicial triangular $g(x) = a\,x/x_0$ para $x\le x_0$ y $g(x) = a\,(L-x)/(L-x_0)$ para $x\ge x_0$ (la cuerda tirada una distancia $a$ en el punto $x_0$). Calcular los coeficientes $A_k$ y verificar que $A_k = \frac{2aL^2}{\pi^2 x_0(L-x_0)}\,\frac{\sin(k\pi x_0/L)}{k^2}$. ¿Qué armónicos faltan si $x_0 = L/2$? ¿Y si $x_0=L/3$?
-\item \emph{Cuerda golpeada.} La cuerda parte de la posición de equilibrio con velocidad inicial $h(x) = v_0$ en $(x_0-\epsilon,x_0+\epsilon)$ y cero en el resto. Calcular $B_k$ y su límite cuando $\epsilon\to 0$ con $2\epsilon v_0 = I$ fijo. Comparar el decaimiento de los coeficientes con el del ítem anterior y explicar por qué el piano tiene un sonido más ``rico'' en armónicos altos que la guitarra.
-\item Verificar la fórmula \eqref{eq:energia-modos} y calcular la fracción de la energía en el modo fundamental en los dos casos anteriores, con $x_0 = L/5$.
+\item \emph{Cuerda golpeada.} La cuerda parte de la posición de equilibrio con velocidad inicial $h(x) = v_0$ en $(x_0-\epsilon,x_0+\epsilon)$ y cero en el resto. Calcular $B_k$ y su límite cuando $\epsilon\to 0$ con $2\epsilon v_0 = I$ fijo. Comparar el decaimiento de los coeficientes con el del ítem anterior y explicar por qué el piano tiene un sonido más ``rico'' en armónicos altos que la guitarra. Mostrar que, en ese límite, la energía $E_k$ de cada modo no tiende a cero cuando $k\to\infty$ y la energía total es infinita: ¿qué papel juega entonces el ancho $2\epsilon$ del martillo?
+\item Verificar la fórmula \eqref{eq:energia-modos} y calcular la fracción de la energía en el modo fundamental en los dos casos anteriores, con $x_0 = L/5$ (en el segundo, con $\epsilon=L/50$).
 \item Calcular la frecuencia fundamental de una cuerda de guitarra de $65$ cm y $3.5$ g/m sometida a una tensión de $70$ N. ¿Qué tensión hace falta para subirla un tono (un factor $2^{1/6}$)?
 \end{enumerate}
 \end{ejer}

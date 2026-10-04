@@ -81,3 +81,12 @@ Relectura de todo el material (texto, notebooks, labs, sitio) y corrección de l
 
 ## 2026-10-04 — Índice alfabético
 - Índice de términos al final (unas 250 entradas, con subentradas): definiciones, teoremas con nombre, modelos, métodos numéricos y fenómenos; la página donde se define cada término va en negrita. Se arma con `makeindex -s indice.ist Notas-IMC` (estilo con encabezados por letra en `notas/indice.ist`). Entra en el índice general; no cambia la paginación de los capítulos (el PDF pasa a 290 páginas).
+
+## 2026-10-04 — Correcciones surgidas del informe de referee
+- Bifurcaciones: "no hiperbólico" pasa a ser *candidato* a bifurcación (contraejemplo $\dot x=\mu-x^3$); horquilla con las hipótesis $f_{x\mu}\neq0$, $f_{xxx}\neq0$ y la estabilidad de las ramas (supercrítica si $f_{xxx}<0$, subcrítica si $f_{xxx}>0$), también en el resumen.
+- Poincaré–Bendixson: observación con la versión general (ω-límites con equilibrios, ciclos heteroclínicos) y el ejercicio de bacterias reescrito para usarla. Van der Pol: el borde interior del anillo se justifica con la energía, no con "el origen es una fuente".
+- Ejercicios de Lyapunov: $\dot y=-y-x^3$ (antes $y-x^3$, origen inestable); el de $V=(1-4x^2-y^2)^2$ ahora pide probar que la elipse es un ciclo límite.
+- Cuerda golpeada: coeficientes con el ancho del martillo, $B_k\propto\sin(k\pi x_0/L)\sin(k\pi\epsilon/L)/k^2$; con velocidad concentrada en un punto la energía sería infinita (texto y ejercicio).
+- Onda esférica en 3D: $v(r-ct)/r$. Hartman–Grobman: se cita Perko §2.8.
+- DFT: fórmula de aliasing exacta $\hat f[j]/N=\sum_m c_{j+mN}(f)$ e interpolante con frecuencias simétricas.
+- Datos de temperatura del aire y del suelo: se aclara que son reanálisis (ERA5, ERA5-Land, con citas) y que ajustar $D$ a ERA5-Land recupera en buena medida la difusividad de su propio modelo; la conclusión sobre la heterogeneidad del suelo queda como hipótesis.
