@@ -1,6 +1,6 @@
 # Figuras de la Parte III generadas por los notebooks (2026-09-29)
 
-Las figuras de los capítulos 18–20 salen de `notebooks/09-calor`, `10-laplace` y `11-ondas`. **Todo lo de este archivo ya está aplicado en `Notas-IMC.tex`.** Quedan como esquemas dibujados a mano (no los genera ningún script): `QT`, `ondas-resorte`, `ondas-tension`. El escaneo del Griffiths se reemplazó por `ranura-placas` (`tools/fig_ranura.py`) y el espectro de la cuerda real por `espectro-cuerda` (`tools/fig_cuerda.py`, con `datos/cuerda_guitarra.wav`): ya no queda ninguna `\figpendiente` en el texto.
+Las figuras de los capítulos 18–20 salen de `notebooks/09-calor`, `10-laplace` y `11-ondas`. **Todo lo de este archivo ya está aplicado en `Notas-IMC.tex`.** Quedan como esquemas dibujados a mano (no los genera ningún script): `QT`, `masas-resortes` (cadena de masas con desplazamientos longitudinales; reemplazó a `ondas-resorte`, que dibujaba desplazamientos transversales y no se correspondía con la deducción), `ondas-tension`. El escaneo del Griffiths se reemplazó por `ranura-placas` (`tools/fig_ranura.py`) y el espectro de la cuerda real por `espectro-cuerda` (`tools/fig_cuerda.py`, con `datos/cuerda_guitarra.wav`): ya no queda ninguna `\figpendiente` en el texto.
 
 ## Datos
 

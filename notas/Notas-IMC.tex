@@ -37,6 +37,15 @@
 
 %\usepackage{fontsmpl}
 \usepackage{graphicx}
+\usepackage{array}
+\usepackage{tikz}
+
+%% Colores del Instituto de Cálculo y del Departamento de Matemática (portada y enlaces)
+\definecolor{icnavy}{HTML}{013274}
+\definecolor{iccyan}{HTML}{029BDF}
+\definecolor{icmag}{HTML}{E2017B}
+\definecolor{dmred}{HTML}{A8000C}
+\hypersetup{colorlinks=true,linkcolor=icnavy,citecolor=icnavy,urlcolor=icnavy}
 \graphicspath{{../figuras/}}
 
 %\usepackage{tocbibind}
@@ -242,53 +251,63 @@
 %\maketitle
 
 
+%%
+%% PORTADA (las ilustraciones las genera tools/fig_portada.py)
+%%
 \thispagestyle{empty}
+\begin{tikzpicture}[remember picture,overlay]
+  % banda lateral: azul, cian, magenta
+  \fill[icnavy] (current page.north west) rectangle ([xshift=0.95cm]current page.south west);
+  \fill[iccyan] ([xshift=0.95cm]current page.north west) rectangle ([xshift=1.25cm]current page.south west);
+  \fill[icmag]  ([xshift=1.25cm]current page.north west) rectangle ([xshift=1.45cm]current page.south west);
+  % título
+  \node[anchor=north west,align=left,text=icnavy,inner sep=0] at ([xshift=3.1cm,yshift=-3.0cm]current page.north west)
+    {\fontsize{36}{44}\fontfamily{lmr}\selectfont\bfseries Introducción al\\[8pt]
+     \fontsize{36}{44}\fontfamily{lmr}\selectfont\bfseries Modelado\\[8pt]
+     \fontsize{36}{44}\fontfamily{lmr}\selectfont\bfseries Continuo};
+  % raya roja, autor
+  \fill[dmred] ([xshift=3.05cm,yshift=-8.85cm]current page.north west) rectangle ([xshift=-2.05cm,yshift=-8.97cm]current page.north east);
+  \node[anchor=north west,text=icnavy!75,inner sep=0] at ([xshift=3.1cm,yshift=-9.45cm]current page.north west)
+    {\Large Julián Fernández Bonder};
+  \node[anchor=north east,text=icnavy!60,inner sep=0] at ([xshift=-2.05cm,yshift=-9.55cm]current page.north east)
+    {\normalsize Notas de clase};
+  % una ilustración por parte
+  \node[anchor=north west,inner sep=0] at ([xshift=3.05cm,yshift=-13.6cm]current page.north west)
+    {\begin{tabular}{@{}p{5.1cm}@{\hspace{0.3cm}}p{5.1cm}@{\hspace{0.3cm}}p{5.1cm}@{}}
+      \centering{\color{dmred}$\ddot x+\lambda(x^2-1)\dot x+x=0$} &
+      \centering{\color{dmred}$f(t)=\sum c_k\,e^{2\pi i k t/L}$} &
+      \centering\arraybackslash{\color{dmred}$u_{tt}=c^2u_{xx}$}\\[6pt]
+      \centering\includegraphics[height=4.4cm,width=5.0cm,keepaspectratio]{portada-I} &
+      \centering\includegraphics[height=4.4cm,width=5.0cm,keepaspectratio]{portada-II} &
+      \centering\arraybackslash\includegraphics[height=4.4cm,width=5.0cm,keepaspectratio]{portada-III}\\[8pt]
+      \centering{\small\color{icnavy}\textsc{Parte I}\newline Dinámica no lineal} &
+      \centering{\small\color{icnavy}\textsc{Parte II}\newline Análisis de Fourier} &
+      \centering\arraybackslash{\small\color{icnavy}\textsc{Parte III}\newline Ecuaciones en derivadas parciales}
+    \end{tabular}};
+  % logos
+  \node[anchor=south] at ([xshift=-1.45cm,yshift=2.25cm]current page.south) {\includegraphics[height=1.9cm]{IC.jpeg}};
+  \node[anchor=south] at ([xshift=2.95cm,yshift=2.25cm]current page.south) {\includegraphics[height=1.9cm]{DM.png}};
+  \node[anchor=south,align=center,font=\small,text=icnavy!75] at ([xshift=0.75cm,yshift=1.15cm]current page.south)
+    {Instituto de Cálculo, FCEN--CONICET \quad$\cdot$\quad Departamento de Matemática, FCEN--UBA};
+\end{tikzpicture}
+\null
+\clearpage
 
-\begin{center}
-{\LARGE\sc Introducción al Modelado Continuo}
-\medskip
-
-{\LARGE\bf(Notas de clase)}
-
-
-\vskip 1.5cm
-
-{\LARGE Julián Fernández Bonder}
-\medskip
-
-(1er cuatrimestre 2026)
-
-\end{center}
-
-\vskip 1cm
-
-\begin{center}
-\includegraphics[height=0.12\textwidth]{IC.jpeg}\hskip 1cm
-\includegraphics[height=0.12\textwidth]{DM.png}\hskip 1cm \\
-\end{center}
-
-\vskip 1cm
-
-\begin{center}
-\begin{tabular}{l}
+%% REVERSO DE LA PORTADA
+\thispagestyle{empty}
+\null\vfill
+\begin{flushleft}\small
+Julián Fernández Bonder\\
 Instituto de Cálculo, FCEN--CONICET\\
 Departamento de Matemática, FCEN--UBA\\
-Ciudad Universitaria, Pabellón 0+$\infty$  (1428),\\
-Buenos Aires, Argentina.
-\end{tabular}
-\end{center}
-
-
-\vskip 1.5 cm
-
-\begin{center}
-\begin{tabular}{l}
-{\it Correo:} {\tt jfbonder@dm.uba.ar}\\
-{\it URL:} {\tt https://sites.google.com/view/jfbonder/}
-\end{tabular}
-\end{center}
-
-\vfill
+Ciudad Universitaria, Pabellón 0+$\infty$ (1428), Buenos Aires, Argentina.\\[6pt]
+{\it Correo:} \texttt{jfbonder@dm.uba.ar}\\
+{\it URL:} \url{https://sites.google.com/view/jfbonder/}\\[12pt]
+Sitio de la materia, con los notebooks, los laboratorios y los datos:\\
+\url{https://jfbonder.github.io/imc/}\\[12pt]
+Texto y figuras: licencia CC BY-NC-SA 4.0. Código: licencia MIT.
+\end{flushleft}
+\clearpage
 
 \tableofcontents 
 
@@ -8549,15 +8568,15 @@ donde $\kappa>0$ es la constante del resorte. La segunda ley de Newton ($F = ma$
 m x''(t) + \kappa x(t) = 0.
 \]
 
-Ahora consideremos una cuerda como un arreglo de pequeñas masas $m$ conectadas por resortes sin masa de longitud $h$ y constante $\kappa$ (ver Figura \ref{fig:ondas-resorte}). Sea $u(x,t)$ el desplazamiento de la masa situada en $x$ a tiempo $t$. La fuerza resultante sobre esta partícula es
+Ahora consideremos una cadena de pequeñas masas $m$ conectadas por resortes sin masa de longitud $h$ y constante $\kappa$, que se mueven a lo largo de la cadena (ver Figura \ref{fig:ondas-resorte}). Sea $u(x,t)$ el desplazamiento a tiempo $t$, respecto de su posición de equilibrio $x$, de la masa que está en equilibrio en $x$. El resorte entre las masas de $x$ y $x+h$ está estirado en $u(x+h,t)-u(x,t)$ (comprimido si es negativo), así que la fuerza resultante sobre la masa de $x$ es
 \[
 F = \kappa [u(x+h,t)-u(x,t)] - \kappa [u(x,t)-u(x-h,t)] = \kappa [u(x+h,t)-2u(x,t)+u(x-h,t)].
 \]
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.5\textwidth]{ondas-resorte.png}
-\caption{Esquema de una cuerda modelada como partículas unidas por resortes, con posiciones desplazadas para representar vibraciones.}
+\includegraphics[width=0.75\textwidth]{masas-resortes.pdf}
+\caption{Cadena de masas unidas por resortes. Arriba, en equilibrio: la masa correspondiente a $x$ está en $x$. Abajo, desplazada: cada masa se movió $u(x,t)$ a lo largo de la cadena, y cada resorte se estira o se comprime según la diferencia de los desplazamientos de sus extremos.}
 \label{fig:ondas-resorte}
 \end{figure}
 
@@ -8567,7 +8586,7 @@ Por la ley de Newton,
 m u_{tt}(x,t) = \kappa [u(x+h,t)-2u(x,t)+u(x-h,t)].
 \]
 
-Si la cuerda tiene longitud $L=Nh$ y masa total $M=Nm$, y definimos la constante efectiva $k = \kappa/N$, la ecuación se puede escribir como
+Si la cadena tiene longitud $L=Nh$ y masa total $M=Nm$, y definimos la constante efectiva $k = \kappa/N$, la ecuación se puede escribir como
 \[
 u_{tt}(x,t) = \frac{L^2 k}{M} \frac{u(x+h,t)-2u(x,t)+u(x-h,t)}{h^2}.
 \]
@@ -8577,6 +8596,8 @@ Finalmente, tomando el límite $h \to 0$ obtenemos la ecuación de ondas continu
 u_{tt}(x,t) = c^2 u_{xx}(x,t), 
 \end{equation}
 donde $c = \sqrt{\frac{L^2 k}{M}}$.
+
+Este es el modelo de las ondas \emph{longitudinales}, o de compresión: las del sonido en una barra elástica o en un resorte largo, donde $k$ es la constante de la cadena entera ($N$ resortes de constante $\kappa$ en serie). En una cuerda que vibra \emph{transversalmente} la fuerza de restitución no proviene de estirar resortes sino de la tensión de la cuerda, y hay que deducirla de otra manera; es lo que hacemos a continuación. El resultado es la misma ecuación.
 
 \subsection{Deducción de la ecuación de ondas mediante balance de tensiones}
 

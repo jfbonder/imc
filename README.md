@@ -9,7 +9,7 @@ Notas de clase, guías y notebooks de la materia *Introducción al Modelado Cont
 | Carpeta | Qué hay |
 | --- | --- |
 | `notas/` | `Notas-IMC.tex` (fuente LaTeX de las notas), `Notas-IMC.pdf` (última compilación), `biblio.bib`, `CAMBIOS.md` (registro de la revisión), `FIGURAS-parte-I.md`, `FIGURAS-parte-II.md`, `FIGURAS-parte-III.md` (figuras generadas por los notebooks y dónde van) |
-| `figuras/` | Figuras de las notas. Casi todas las genera un notebook con `estilo.guardar(fig, "nombre")` (con `GUARDAR = True`); tres salen de los scripts `tools/fig_*.py` (`casos-internado-1978`, `ranura-placas`, `espectro-cuerda`) y unas pocas son esquemas dibujados a mano (`Pendulo`, `Resorte`, `QT`, `ondas-resorte`, `ondas-tension`, `rlc-serie`) o logos (`DM`, `IC`) |
+| `figuras/` | Figuras de las notas. Casi todas las genera un notebook con `estilo.guardar(fig, "nombre")` (con `GUARDAR = True`); algunas salen de los scripts `tools/fig_*.py` (`casos-internado-1978`, `ranura-placas`, `espectro-cuerda` y las tres ilustraciones de la portada, `portada-I`, `portada-II`, `portada-III`) y unas pocas son esquemas dibujados a mano (`Pendulo`, `Resorte`, `QT`, `masas-resortes`, `ondas-tension`, `rlc-serie`) o logos (`DM`, `IC`) |
 | `imc/` | Módulo Python común a los notebooks (estilo, retratos de fase, espectros, esquemas numéricos, datos) |
 | `notebooks/` | Notebooks del texto (uno por capítulo) y de laboratorio (uno por problema conductor, con su guía del docente en `notebooks/docente/`) |
 | `datos/` | Datos usados en los laboratorios, con fuente y licencia en `datos/README.md` |
@@ -64,7 +64,7 @@ jupyter nbconvert --to notebook --execute --inplace notebooks/06-series.ipynb
 jupyter nbconvert --to notebook --execute --inplace notebooks/docente/lab-SIR.ipynb
 ```
 
-`tools/make_lab_vdP.py` además reescribe `datos/vanderpol_registro.csv` (el registro sintético del laboratorio de van der Pol). Los notebooks del texto no tocan `figuras/` salvo que se ponga `GUARDAR = True` en su celda de configuración; las tres figuras de `tools/fig_*.py` se regeneran con `python tools/fig_XX.py`.
+`tools/make_lab_vdP.py` además reescribe `datos/vanderpol_registro.csv` (el registro sintético del laboratorio de van der Pol). Los notebooks del texto no tocan `figuras/` salvo que se ponga `GUARDAR = True` en su celda de configuración; las figuras de `tools/fig_*.py` se regeneran con `python tools/fig_XX.py`.
 
 ## Convenciones
 
