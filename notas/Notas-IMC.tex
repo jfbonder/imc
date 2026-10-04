@@ -271,18 +271,21 @@
     {\Large Julián Fernández Bonder};
   \node[anchor=north east,text=icnavy!60,inner sep=0] at ([xshift=-2.05cm,yshift=-9.55cm]current page.north east)
     {\normalsize Notas de clase};
-  % una ilustración por parte
-  \node[anchor=north west,inner sep=0] at ([xshift=3.05cm,yshift=-13.6cm]current page.north west)
+  % una ilustración por parte, con datos reales de los problemas conductores (tools/fig_portada.py)
+  \node[anchor=north west,inner sep=0] at ([xshift=3.05cm,yshift=-12.2cm]current page.north west)
     {\begin{tabular}{@{}p{5.1cm}@{\hspace{0.3cm}}p{5.1cm}@{\hspace{0.3cm}}p{5.1cm}@{}}
-      \centering{\color{dmred}$\ddot x+\lambda(x^2-1)\dot x+x=0$} &
-      \centering{\color{dmred}$f(t)=\sum c_k\,e^{2\pi i k t/L}$} &
-      \centering\arraybackslash{\color{dmred}$u_{tt}=c^2u_{xx}$}\\[6pt]
-      \centering\includegraphics[height=4.4cm,width=5.0cm,keepaspectratio]{portada-I} &
-      \centering\includegraphics[height=4.4cm,width=5.0cm,keepaspectratio]{portada-II} &
-      \centering\arraybackslash\includegraphics[height=4.4cm,width=5.0cm,keepaspectratio]{portada-III}\\[8pt]
-      \centering{\small\color{icnavy}\textsc{Parte I}\newline Dinámica no lineal} &
-      \centering{\small\color{icnavy}\textsc{Parte II}\newline Análisis de Fourier} &
-      \centering\arraybackslash{\small\color{icnavy}\textsc{Parte III}\newline Ecuaciones en derivadas parciales}
+      \centering{\color{dmred}$s'=-\beta s i,\ \ i'=\beta s i-\gamma i$} &
+      \centering{\color{dmred}$\hat T[k]=\sum_j T[j]\,e^{-2\pi i jk/N}$} &
+      \centering\arraybackslash{\color{dmred}$u_t=D\,u_{xx}$}\\[6pt]
+      \centering\includegraphics[height=4.6cm,width=5.1cm,keepaspectratio]{portada-I} &
+      \centering\includegraphics[height=4.6cm,width=5.1cm,keepaspectratio]{portada-II} &
+      \centering\arraybackslash\includegraphics[height=4.6cm,width=5.1cm,keepaspectratio]{portada-III}\\[6pt]
+      \centering{\small\color{icnavy}\textsc{Parte I}\newline Dinámica no lineal}\par\vspace{2pt}
+        {\scriptsize\color{icnavy!70}Gripe en un internado (1978): el modelo SIR ajustado con los datos de los primeros $6,7,\dots,14$ días} &
+      \centering{\small\color{icnavy}\textsc{Parte II}\newline Análisis de Fourier}\par\vspace{2pt}
+        {\scriptsize\color{icnavy!70}Temperatura del aire, cada hora durante 2023: los ciclos anual y diario en el espectro} &
+      \centering\arraybackslash{\small\color{icnavy}\textsc{Parte III}\newline Ecuaciones en derivadas parciales}\par\vspace{2pt}
+        {\scriptsize\color{icnavy!70}Temperatura del suelo a cuatro profundidades: el ciclo diario se atenúa y se retrasa}
     \end{tabular}};
   % logos
   \node[anchor=south] at ([xshift=-1.45cm,yshift=2.25cm]current page.south) {\includegraphics[height=1.9cm]{IC.jpeg}};

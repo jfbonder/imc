@@ -1,75 +1,79 @@
-"""Figuras de la portada de las notas: una ilustración por parte, con los colores del IC y del DM.
+"""Figuras de la portada de las notas: una por parte, cada una con datos reales de un problema conductor.
 
-* portada-I.pdf   — van der Pol: órbitas que se acercan al ciclo límite (Parte I).
-* portada-II.pdf  — sumas parciales de Fourier de una onda cuadrada, en cascada (Parte II).
-* portada-III.pdf — un pulso en una cuerda con extremos fijos: se divide en dos y se refleja invertido (Parte III).
+* portada-I.pdf   — gripe en un internado (1978): el SIR ajustado con los datos de los primeros 6, 7, ..., 14 días.
+* portada-II.pdf  — temperatura horaria de 2023 (Aeroparque): espectro de amplitudes (DFT).
+* portada-III.pdf — temperatura del suelo a cuatro profundidades, diez días de enero de 2023.
 
-Correr desde la raíz del repositorio: ``python tools/fig_portada.py`` (escribe en ``figuras/``).
+Usa LaTeX para el texto de las figuras (text.usetex). Correr desde cualquier lado:
+``python tools/fig_portada.py`` (escribe en ``figuras/``).
 """
-import os
-import numpy as np
-import matplotlib
+import os, numpy as np, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 from scipy.integrate import solve_ivp
+from scipy.optimize import least_squares
+RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); CAR = os.path.join(RAIZ, "figuras")
+NAVY, CYAN, MAG, RED = "#013274", "#029BDF", "#E2017B", "#A8000C"
+cm = LinearSegmentedColormap.from_list("ic", [NAVY, CYAN, MAG])
+W, H = 2.3, 2.0
+plt.rcParams.update({"text.usetex": True, "text.latex.preamble": r"\usepackage[T1]{fontenc}\usepackage[utf8]{inputenc}", "font.family": "serif", "font.size": 7.5, "axes.edgecolor": NAVY, "xtick.color": NAVY, "ytick.color": NAVY, "axes.labelcolor": NAVY})
+def limpio(ax):
+    for s in ["top", "right"]: ax.spines[s].set_visible(False)
+    ax.spines["left"].set_linewidth(0.6); ax.spines["bottom"].set_linewidth(0.6)
+    ax.tick_params(width=0.6, length=2.5, labelsize=6)
+def guardar(fig, nombre):
+    fig.savefig(os.path.join(CAR, nombre), transparent=True, bbox_inches="tight", pad_inches=0.02); plt.close(fig)
 
-CARPETA = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "figuras")
-cm = LinearSegmentedColormap.from_list("ic", ["#A8000C", "#013274", "#029BDF", "#E2017B"])
-W, H = 3.0, 2.6
+# I: gripe del internado (1978): ajustes del SIR a medida que llegan los datos
+d = np.genfromtxt(f"{RAIZ}/datos/gripe_internado_1978.csv", delimiter=",", names=True, dtype=None, encoding="utf-8")
+t_d, I_d, N = d["dia"].astype(float), d["en_cama"].astype(float), 763
+def I_mod(t, b, g, i0):
+    s = solve_ivp(lambda t, u: [-b*u[0]*u[1], b*u[0]*u[1] - g*u[1]], (1, t[-1]), [1-i0, i0], t_eval=t, rtol=1e-8, atol=1e-10)
+    return N*s.y[1] if s.success and s.y.shape[1] == len(t) else np.full(len(t), 1e6)
+tt = np.linspace(1, 14, 300)
+fig, ax = plt.subplots(figsize=(W, H)); limpio(ax)
+ms = list(range(6, 15))
+for j, m in enumerate(ms):
+    a = least_squares(lambda p: I_mod(t_d[:m], *p) - I_d[:m], [1.8, 0.45, 0.003], bounds=([0.02, 0.02, 0], [20, 20, 0.5]))
+    ax.plot(tt, I_mod(tt, *a.x), color=cm(j/(len(ms)-1)), lw=0.9)
+ax.plot(t_d, I_d, "o", ms=3.2, color=RED, zorder=5)
+ax.set_xticks(range(2, 15, 2)); ax.set_xlabel("día (desde el 22/1/1978)"); ax.set_ylabel("alumnos en cama")
+guardar(fig, "portada-I.pdf")
 
+# II: temperatura horaria de 2023 (Aeroparque): espectro
+T = np.genfromtxt(f"{RAIZ}/datos/temperatura_horaria.csv", delimiter=",", names=True, dtype=None, encoding="utf-8")
+x = T["temp"][-8760:].astype(float)
+A = np.abs(np.fft.rfft(x - x.mean())) * 2 / len(x)
+k = np.arange(len(A))
+fig, ax = plt.subplots(figsize=(W, H)); limpio(ax)
+ax.loglog(k[1:], A[1:], color=NAVY, lw=0.5)
+for kk, txt in [(1, "1 año"), (365, "1 día"), (730, "12 h")]:
+    ax.plot(kk, A[kk], "o", ms=3.5, color=RED, zorder=5)
+    ax.annotate(txt, (kk, A[kk]), xytext=(4, 2), textcoords="offset points", fontsize=6.5, color=RED)
+ax.set_xlabel("frecuencia (ciclos por año)"); ax.set_ylabel("amplitud ($^\\circ$C)")
+guardar(fig, "portada-II.pdf")
 
-def guardar(fig, ax, nombre):
-    ax.set_axis_off()
-    fig.savefig(os.path.join(CARPETA, nombre), transparent=True, bbox_inches="tight", pad_inches=0.02)
-    plt.close(fig)
+# III: temperatura del suelo, diez días de enero de 2023, a cuatro profundidades
+S = np.genfromtxt(f"{RAIZ}/datos/suelo_horaria.csv", delimiter=",", names=True, dtype=None, encoding="utf-8")
+cols = ["t_suelo_0_7", "t_suelo_7_28", "t_suelo_28_100", "t_suelo_100_255"]
+nombres = ["0–7 cm", "7–28 cm", "28–100 cm", "100–255 cm"]
+i0, i1 = 24*9, 24*19
+dias = np.arange(i0, i1) / 24 + 1
+fig, ax = plt.subplots(figsize=(W, H)); limpio(ax)
+ys, etiquetas = [], []
+for j, (c, n_) in enumerate(zip(cols, nombres)):
+    y = S[c][i0:i1].astype(float)
+    ax.plot(dias, y, color=cm(j/3), lw=1.0)
+    ys.append(y[-24:].mean())
+    etiquetas.append((n_, cm(j/3)))
+orden = np.argsort(ys)[::-1]; pos = {}; ult = None
+for o in orden:                      # separar las etiquetas al menos 1.4 grados
+    p = ys[o] if ult is None else min(ys[o], ult - 1.4)
+    pos[o] = p; ult = p
+for o, (n_, col) in enumerate(etiquetas):
+    ax.text(dias[-1] + 0.25, pos[o], n_, fontsize=6, color=col, va="center")
+ax.set_xlabel("día (enero de 2023)"); ax.set_ylabel("temperatura del suelo ($^\\circ$C)")
+guardar(fig, "portada-III.pdf")
 
-
-# I: van der Pol, coloreado por el tiempo
-lam = 0.8
-def vdp(t, u):
-    return [u[1], -u[0] - lam * (u[0] ** 2 - 1) * u[1]]
-
-fig, ax = plt.subplots(figsize=(W, H))
-for x0, T in [((0.05, 0.0), 30), ((3.3, 0.0), 12), ((-3.3, 0.0), 12)]:
-    s = solve_ivp(vdp, (0, T), x0, max_step=0.01, rtol=1e-9)
-    x, y = s.y
-    n = len(x)
-    for i in range(0, n - 1, 5):
-        ax.plot(x[i:i + 6], y[i:i + 6], color=cm(0.95 * i / n), lw=1.0, solid_capstyle="round")
-ax.set_aspect("equal")
-guardar(fig, ax, "portada-I.pdf")
-
-# II: sumas parciales de la onda cuadrada (atrás la más suave, adelante la función)
-t = np.linspace(-1, 1, 2000)
-f = np.where(np.abs(t) < 0.5, 1.0, -1.0)
-def S(N):
-    s = np.zeros_like(t)
-    for k in range(1, N + 1, 2):
-        s += 4 / np.pi * (-1) ** ((k - 1) // 2) * np.cos(np.pi * k * t) / k
-    return s
-
-capas = [S(N) for N in range(1, 24, 2)] + [f]
-n = len(capas)
-fig, ax = plt.subplots(figsize=(W, H))
-for j, y in enumerate(capas):
-    d = n - 1 - j
-    ax.plot(t + 0.035 * d, 0.6 * y + 0.11 * d, color=cm(d / (n - 1)), lw=0.9 if d else 1.2, zorder=n - d)
-guardar(fig, ax, "portada-II.pdf")
-
-# III: pulso en una cuerda con extremos fijos (d'Alembert); adelante t = 0, hacia atrás el tiempo avanza
-x = np.linspace(0, 1, 1200)
-def g(z):
-    """Extensión impar y 2-periódica de un pulso gaussiano centrado en 0.4."""
-    z = np.mod(z + 1, 2) - 1
-    return np.exp(-((z - 0.4) / 0.05) ** 2) - np.exp(-((z + 0.4) / 0.05) ** 2)
-
-tiempos = np.linspace(0, 0.64, 9)
-n = len(tiempos)
-fig, ax = plt.subplots(figsize=(W, H))
-for j, tt in enumerate(tiempos[::-1]):
-    d = n - 1 - j
-    u = 0.5 * (g(x - tt) + g(x + tt))
-    ax.plot(x + 0.045 * d, 0.3 * u + 0.16 * d, color=cm(d / (n - 1)), lw=0.9 if d else 1.2, zorder=n - d)
-guardar(fig, ax, "portada-III.pdf")
-print("portada-I.pdf, portada-II.pdf, portada-III.pdf escritas en", CARPETA)
+print("portada-I.pdf, portada-II.pdf, portada-III.pdf escritas en", CAR)
