@@ -20,4 +20,4 @@ Forma sugerida de citar:
   Departamento de Matemática, FCEN-UBA, 2026. https://github.com/jfbonder/imc
 
 Excepciones: los datos de la carpeta datos/ tienen cada uno su propia licencia
-(ver datos/README.md); el código tiene licencia MIT (ver LICENSE).
+(ver datos/README.md); el código tiene licencia MIT (ver LICENSE-code).
